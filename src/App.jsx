@@ -367,28 +367,77 @@ function ScrollRevealText({ text, className = "mx-auto max-w-6xl text-center tex
 
 function OrbitingProfessionVisual() {
   return (
-    <div className="relative mx-auto grid h-[360px] w-full max-w-[420px] place-items-center overflow-hidden rounded-[3rem] border border-white/10 bg-white/[0.035] p-6 shadow-2xl backdrop-blur-xl sm:h-[460px]">
-      <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,rgba(163,230,53,0.22),transparent_38%),radial-gradient(circle_at_80%_20%,rgba(249,115,22,0.22),transparent_32%)]" />
-      <div className="absolute h-[82%] w-[82%] rounded-full border border-dashed border-white/15" />
-      <div className="absolute h-[62%] w-[62%] rounded-full border border-white/10" />
-      <div className="orbit-ring absolute grid h-[76%] w-[76%] place-items-center rounded-full">
-        {creativeOrbitItems.map((item, index) => {
-          const angle = (360 / creativeOrbitItems.length) * index;
-          return (
-            <div key={item.label} className="absolute left-1/2 top-1/2" style={{ transform: `rotate(${angle}deg) translateX(150px)` }}>
-              <div className="orbit-counter -translate-x-1/2 -translate-y-1/2 rounded-3xl border border-white/10 bg-black/70 px-4 py-3 text-center shadow-2xl backdrop-blur-xl">
-                <p className="text-lg font-black text-lime-300">{item.symbol}</p>
-                <p className="mt-1 text-[9px] font-black uppercase tracking-[0.2em] text-white/45">{item.label}</p>
-              </div>
-            </div>
-          );
-        })}
+    <div className="relative mx-auto w-full max-w-[420px]">
+      {/* MOBILE VERSION — clean, no orbit cards, no eclipse */}
+      <div className="relative mx-auto grid aspect-square w-full max-w-[280px] place-items-center overflow-hidden rounded-[2rem] border border-white/10 bg-white/[0.035] p-6 shadow-2xl backdrop-blur-xl sm:hidden">
+        <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,rgba(163,230,53,0.22),transparent_42%),radial-gradient(circle_at_80%_20%,rgba(249,115,22,0.16),transparent_34%)]" />
+
+        <div className="absolute inset-[10%] rounded-full border border-dashed border-white/10" />
+        <div className="absolute inset-[22%] rounded-full border border-white/10" />
+
+        <div className="relative z-10 grid aspect-square w-[58%] min-w-[145px] place-items-center rounded-full bg-black shadow-[0_0_70px_rgba(190,252,53,0.18)] ring-1 ring-lime-300/10">
+          <div className="text-center">
+            <p className="text-[10px] font-black uppercase tracking-[0.42em] text-lime-300">
+              Creative
+            </p>
+
+            <h3 className="mt-3 text-3xl font-black tracking-[-0.08em] text-white">
+              Builder
+            </h3>
+
+            <p className="mt-4 text-[10px] font-black uppercase tracking-[0.22em] text-white/40">
+              Web • GHL • SEO
+            </p>
+          </div>
+        </div>
       </div>
-      <div className="relative z-10 grid h-44 w-44 place-items-center rounded-full border border-lime-300/20 bg-black/70 text-center shadow-[0_0_80px_rgba(163,230,53,0.18)] backdrop-blur-xl sm:h-52 sm:w-52">
-        <div>
-          <p className="text-xs font-black uppercase tracking-[0.35em] text-lime-300">Creative</p>
-          <p className="mt-3 text-4xl font-black leading-none tracking-[-0.08em] text-white">Builder</p>
-          <p className="mt-3 text-xs font-semibold uppercase tracking-[0.2em] text-white/35">Web • GHL • SEO</p>
+
+      {/* TABLET / DESKTOP VERSION — orbit effect only on bigger screens */}
+      <div className="relative mx-auto hidden h-[460px] w-full max-w-[420px] place-items-center overflow-hidden rounded-[3rem] border border-white/10 bg-white/[0.035] p-6 shadow-2xl backdrop-blur-xl sm:grid">
+        <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,rgba(163,230,53,0.22),transparent_38%),radial-gradient(circle_at_80%_20%,rgba(249,115,22,0.22),transparent_32%)]" />
+
+        <div className="absolute h-[82%] w-[82%] rounded-full border border-dashed border-white/15" />
+        <div className="absolute h-[62%] w-[62%] rounded-full border border-white/10" />
+
+        <div className="orbit-ring absolute grid h-[76%] w-[76%] place-items-center rounded-full">
+          {creativeOrbitItems.map((item, index) => {
+            const angle = (360 / creativeOrbitItems.length) * index;
+
+            return (
+              <div
+                key={item.label}
+                className="absolute left-1/2 top-1/2"
+                style={{
+                  transform: `rotate(${angle}deg) translateX(150px)`,
+                }}
+              >
+                <div className="orbit-counter -translate-x-1/2 -translate-y-1/2 rounded-3xl border border-white/10 bg-black/70 px-4 py-3 text-center shadow-2xl backdrop-blur-xl">
+                  <p className="text-lg font-black text-lime-300">
+                    {item.symbol}
+                  </p>
+                  <p className="mt-1 text-[9px] font-black uppercase tracking-[0.2em] text-white/45">
+                    {item.label}
+                  </p>
+                </div>
+              </div>
+            );
+          })}
+        </div>
+
+        <div className="relative z-10 grid aspect-square w-[44%] min-w-[165px] place-items-center rounded-full bg-black shadow-[0_0_80px_rgba(190,252,53,0.18)] ring-1 ring-lime-300/10">
+          <div className="text-center">
+            <p className="text-xs font-black uppercase tracking-[0.45em] text-lime-300">
+              Creative
+            </p>
+
+            <h3 className="mt-3 text-4xl font-black tracking-[-0.08em] text-white">
+              Builder
+            </h3>
+
+            <p className="mt-4 text-xs font-black uppercase tracking-[0.24em] text-white/40">
+              Web • GHL • SEO
+            </p>
+          </div>
         </div>
       </div>
     </div>
@@ -777,6 +826,15 @@ export default function JanrenzoPortfolio() {
   const [navScrolled, setNavScrolled] = useState(false);
   const filteredItems = useMemo(() => activeFilter === "All" ? portfolioItems : portfolioItems.filter((item) => item.category === activeFilter), [activeFilter]);
 
+  const navLinks = [
+    { label: "Portfolio", href: "/portfolio" },
+    { label: "Work", href: "#work" },
+    { label: "Tools", href: "#tools" },
+    { label: "Services", href: "#services" },
+    { label: "Process", href: "#process" },
+    { label: "Contact", href: "#contact" },
+  ];
+
   useEffect(() => {
     const onScroll = () => setNavScrolled(window.scrollY > 60);
     onScroll();
@@ -852,9 +910,41 @@ export default function JanrenzoPortfolio() {
           <div><p className="text-sm font-semibold leading-none">Janrenzo Facto</p><p className="mt-1 text-xs text-white/45">Freelance Web Designer</p></div>
         </div>
         <div className="hidden items-center gap-7 text-sm text-white/65 md:flex">
-          <a href="#portfolio-gallery" className="transition hover:text-white">Portfolio</a><a href="#work" className="transition hover:text-white">Work</a><a href="#tools" className="transition hover:text-white">Tools</a><a href="#services" className="transition hover:text-white">Services</a><a href="#process" className="transition hover:text-white">Process</a><a href="#contact" className="transition hover:text-white">Contact</a>
+          {navLinks.map((link) => (
+            <a key={link.label} href={link.href} className="transition hover:text-white">
+              {link.label}
+            </a>
+          ))}
         </div>
-        <Button as="a" href="#contact" className="hidden bg-white hover:bg-lime-300 sm:inline-flex">Hire Me <ArrowIcon className="ml-2" /></Button>
+
+        <details className="group relative md:hidden">
+          <summary className="grid h-11 w-11 cursor-pointer list-none place-items-center rounded-full border border-white/10 bg-white/[0.06] text-xl font-black text-white [&::-webkit-details-marker]:hidden">
+            <span className="group-open:hidden">☰</span>
+            <span className="hidden group-open:block">×</span>
+          </summary>
+
+          <div className="absolute right-0 top-[calc(100%+0.75rem)] z-[999] w-[min(82vw,320px)] rounded-[1.75rem] border border-white/10 bg-black/95 p-3 shadow-2xl backdrop-blur-2xl">
+            <nav className="grid gap-2">
+              {navLinks.map((link) => (
+                <a
+                  key={link.label}
+                  href={link.href}
+                  className="rounded-2xl px-4 py-3 text-sm font-black uppercase tracking-[0.14em] text-white/70 transition hover:bg-white/10 hover:text-lime-300"
+                >
+                  {link.label}
+                </a>
+              ))}
+
+              <a
+                href="#contact"
+                className="mt-2 rounded-full bg-lime-300 px-4 py-4 text-center text-sm font-black uppercase tracking-[0.14em] text-black"
+              >
+                Hire Me
+              </a>
+            </nav>
+          </div>
+        </details>
+
       </nav>
       <section ref={heroRef} className="hero-section relative min-h-screen overflow-hidden px-5 pb-16 pt-28 sm:px-8 lg:px-12 lg:pt-32" style={{ "--hero-progress": 0, "--hero-content-y": "0vh", "--hero-text-y": "0vh", "--hero-card-x": "0vw", "--hero-card-y": "0vh", "--hero-card-scale": 1, "--hero-main-opacity": 1, "--hero-awards-opacity": 0, "--hero-awards-y": "90px" }}>
         <div className="pointer-events-none absolute inset-0 overflow-hidden">
@@ -867,43 +957,43 @@ export default function JanrenzoPortfolio() {
 
         <div className="hero-sticky relative z-10 flex min-h-[calc(100vh-9rem)] flex-col">
           <div className="hero-content relative z-10 grid flex-1 items-center gap-8 lg:grid-cols-[1.02fr_0.98fr]">
-          <div className="hero-text-block animate-[fadeUp_0.7s_ease-out_both]">
-            <div className="mb-7 flex items-center gap-3 text-xs font-black uppercase tracking-[0.26em] text-lime-300/90">
-              <span className="h-px w-10 bg-lime-300/70" />
-              Available Worldwide for Freelance Projects
+            <div className="hero-text-block animate-[fadeUp_0.7s_ease-out_both]">
+              <div className="mb-7 flex items-center gap-3 text-xs font-black uppercase tracking-[0.26em] text-lime-300/90">
+                <span className="h-px w-10 bg-lime-300/70" />
+                Available Worldwide for Freelance Projects
+              </div>
+              <h1 className="hero-headline text-[12vw] font-black uppercase leading-[0.86] tracking-[-0.08em] sm:text-[8.2vw] lg:text-[5.8vw] xl:text-[5.25vw]">
+                <span className="hero-word-box"><span>Websites</span></span>
+                <span className="hero-word-box hero-word-box-light"><span>That Sell.</span></span>
+                <span className="hero-word-box hero-word-box-muted"><span>Systems</span></span>
+                <span className="hero-word-box hero-word-box-muted"><span>That Scale.</span></span>
+              </h1>
+              <p className="mt-8 max-w-2xl text-lg leading-relaxed text-white/65 sm:text-xl">I help businesses turn their websites, funnels, and automations into clean, fast, conversion-focused digital systems — from sitemap to layout, content, build, launch, and optimization.</p>
+              <div className="mt-10 flex flex-col gap-4 sm:flex-row"><Button as="a" href="#portfolio-gallery">View My Work <PlayIcon className="ml-2" /></Button><Button as="a" href="#contact" variant="outline">Let’s Build Your Site</Button></div>
             </div>
-            <h1 className="hero-headline text-[12vw] font-black uppercase leading-[0.86] tracking-[-0.08em] sm:text-[8.2vw] lg:text-[5.8vw] xl:text-[5.25vw]">
-              <span className="hero-word-box"><span>Websites</span></span>
-              <span className="hero-word-box hero-word-box-light"><span>That Sell.</span></span>
-              <span className="hero-word-box hero-word-box-muted"><span>Systems</span></span>
-              <span className="hero-word-box hero-word-box-muted"><span>That Scale.</span></span>
-            </h1>
-            <p className="mt-8 max-w-2xl text-lg leading-relaxed text-white/65 sm:text-xl">I help businesses turn their websites, funnels, and automations into clean, fast, conversion-focused digital systems — from sitemap to layout, content, build, launch, and optimization.</p>
-            <div className="mt-10 flex flex-col gap-4 sm:flex-row"><Button as="a" href="#portfolio-gallery">View My Work <PlayIcon className="ml-2" /></Button><Button as="a" href="#contact" variant="outline">Let’s Build Your Site</Button></div>
-          </div>
 
-          <div className="hero-card-shell relative animate-[fadeUp_0.7s_ease-out_0.15s_both]">
-            <div className="absolute -inset-6 rounded-[3rem] bg-white/5 blur-[70px]" />
-            <div className="hero-project-card relative overflow-hidden rounded-[2.3rem] border border-white/10 bg-black/35 p-4 shadow-2xl backdrop-blur-xl">
-              <div className="relative min-h-[380px] overflow-hidden rounded-[1.8rem] bg-[#151515] lg:min-h-[460px]">
-                <img src={profileImage} alt="Janrenzo Facto profile" className="absolute inset-0 h-full w-full object-cover object-[center_32%] scale-100 grayscale-[10%]" />
-                <div className="absolute inset-0 bg-gradient-to-t from-black via-black/25 to-black/10" />
-                <div className="absolute left-5 top-5 rounded-full border border-white/10 bg-black/45 px-4 py-2 text-xs font-black uppercase tracking-[0.22em] text-white/70 backdrop-blur-xl">Digital Portfolio</div>
-                <div className="absolute bottom-5 left-5 right-5 rounded-[1.5rem] border border-white/10 bg-black/55 p-5 backdrop-blur-xl">
-                  <div className="flex items-center justify-between gap-5">
-                    <div>
-                      <p className="text-sm font-black uppercase tracking-[0.22em] text-lime-300">Hire for project</p>
-                      <p className="mt-2 text-2xl font-black tracking-[-0.05em]">WordPress • GHL • SEO</p>
+            <div className="hero-card-shell relative animate-[fadeUp_0.7s_ease-out_0.15s_both]">
+              <div className="absolute -inset-6 rounded-[3rem] bg-white/5 blur-[70px]" />
+              <div className="hero-project-card relative overflow-hidden rounded-[2.3rem] border border-white/10 bg-black/35 p-4 shadow-2xl backdrop-blur-xl">
+                <div className="relative min-h-[380px] overflow-hidden rounded-[1.8rem] bg-[#151515] lg:min-h-[460px]">
+                  <img src={profileImage} alt="Janrenzo Facto profile" className="absolute inset-0 h-full w-full object-cover object-[center_32%] scale-100 grayscale-[10%]" />
+                  <div className="absolute inset-0 bg-gradient-to-t from-black via-black/25 to-black/10" />
+                  <div className="absolute left-5 top-5 rounded-full border border-white/10 bg-black/45 px-4 py-2 text-xs font-black uppercase tracking-[0.22em] text-white/70 backdrop-blur-xl">Digital Portfolio</div>
+                  <div className="absolute bottom-5 left-5 right-5 rounded-[1.5rem] border border-white/10 bg-black/55 p-5 backdrop-blur-xl">
+                    <div className="flex items-center justify-between gap-5">
+                      <div>
+                        <p className="text-sm font-black uppercase tracking-[0.22em] text-lime-300">Hire for project</p>
+                        <p className="mt-2 text-2xl font-black tracking-[-0.05em]">WordPress • GHL • SEO</p>
+                      </div>
+                      <span className="grid h-12 w-12 shrink-0 place-items-center rounded-full border border-white/15 text-white/70"><ArrowIcon /></span>
                     </div>
-                    <span className="grid h-12 w-12 shrink-0 place-items-center rounded-full border border-white/15 text-white/70"><ArrowIcon /></span>
                   </div>
                 </div>
               </div>
             </div>
           </div>
+          <HeroAwards />
         </div>
-        <HeroAwards />
-      </div>
       </section>
 
       <div className="overflow-hidden border-y border-white/10 bg-lime-300 py-5 text-black"><div className="flex animate-[marquee_18s_linear_infinite] gap-12 whitespace-nowrap text-3xl font-black uppercase tracking-[-0.04em] sm:text-5xl">{Array.from({ length: 8 }).map((_, index) => <span key={index}>WordPress • GHL • Funnels • SEO • Frontend • Speed •</span>)}</div></div>

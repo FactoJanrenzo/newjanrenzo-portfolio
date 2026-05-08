@@ -1,1 +1,29 @@
 @import "tailwindcss";
+
+@media (max-width: 639px) {
+  .builder-mobile-fix {
+    width: min(100%, 280px) !important;
+    aspect-ratio: 1 / 1 !important;
+    display: grid !important;
+    place-items: center !important;
+    overflow: hidden !important;
+  }
+
+  .builder-mobile-fix .absolute:not(.builder-main-circle) {
+    display: none !important;
+  }
+
+  .builder-mobile-fix .builder-main-circle {
+    position: relative !important;
+    inset: auto !important;
+    transform: none !important;
+    margin: 0 auto !important;
+    width: 58% !important;
+    min-width: 145px !important;
+    aspect-ratio: 1 / 1 !important;
+    display: grid !important;
+    place-items: center !important;
+    border-radius: 9999px !important;
+    z-index: 10 !important;
+  }
+}
