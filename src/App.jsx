@@ -367,77 +367,54 @@ function ScrollRevealText({ text, className = "mx-auto max-w-6xl text-center tex
 
 function OrbitingProfessionVisual() {
   return (
-    <div className="relative mx-auto w-full max-w-[420px]">
-      {/* MOBILE VERSION — clean, no orbit cards, no eclipse */}
-      <div className="relative mx-auto grid aspect-square w-full max-w-[280px] place-items-center overflow-hidden rounded-[2rem] border border-white/10 bg-white/[0.035] p-6 shadow-2xl backdrop-blur-xl sm:hidden">
-        <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,rgba(163,230,53,0.22),transparent_42%),radial-gradient(circle_at_80%_20%,rgba(249,115,22,0.16),transparent_34%)]" />
+    <div className="relative mx-auto grid h-[340px] w-full max-w-[320px] place-items-center overflow-hidden rounded-[2.5rem] border border-white/10 bg-white/[0.035] p-5 shadow-2xl backdrop-blur-xl sm:h-[460px] sm:max-w-[420px] sm:rounded-[3rem] sm:p-6">
+      {/* Background glow */}
+      <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,rgba(163,230,53,0.22),transparent_38%),radial-gradient(circle_at_80%_20%,rgba(249,115,22,0.22),transparent_32%)]" />
 
-        <div className="absolute inset-[10%] rounded-full border border-dashed border-white/10" />
-        <div className="absolute inset-[22%] rounded-full border border-white/10" />
+      {/* Rings */}
+      <div className="absolute h-[82%] w-[82%] rounded-full border border-dashed border-white/15" />
+      <div className="absolute h-[62%] w-[62%] rounded-full border border-white/10" />
+      <div className="absolute h-[44%] w-[44%] rounded-full border border-lime-300/10" />
 
-        <div className="relative z-10 grid aspect-square w-[58%] min-w-[145px] place-items-center rounded-full bg-black shadow-[0_0_70px_rgba(190,252,53,0.18)] ring-1 ring-lime-300/10">
-          <div className="text-center">
-            <p className="text-[10px] font-black uppercase tracking-[0.42em] text-lime-300">
-              Creative
-            </p>
+      {/* Orbit items — mobile safe, desktop enhanced */}
+      <div className="orbit-ring absolute grid h-[72%] w-[72%] place-items-center rounded-full [--orbit-radius:96px] sm:h-[76%] sm:w-[76%] sm:[--orbit-radius:150px]">
+        {creativeOrbitItems.map((item, index) => {
+          const angle = (360 / creativeOrbitItems.length) * index;
 
-            <h3 className="mt-3 text-3xl font-black tracking-[-0.08em] text-white">
-              Builder
-            </h3>
+          return (
+            <div
+              key={item.label}
+              className="orbit-item absolute left-1/2 top-1/2"
+              style={{ "--angle": `${angle}deg` }}
+            >
+              <div className="orbit-counter grid h-11 w-11 place-items-center rounded-full border border-white/10 bg-black/75 text-center shadow-2xl backdrop-blur-xl sm:h-auto sm:w-auto sm:rounded-3xl sm:px-4 sm:py-3">
+                <p className="text-sm font-black text-lime-300 sm:text-lg">
+                  {item.symbol}
+                </p>
 
-            <p className="mt-4 text-[10px] font-black uppercase tracking-[0.22em] text-white/40">
-              Web • GHL • SEO
-            </p>
-          </div>
-        </div>
+                <p className="mt-1 hidden text-[9px] font-black uppercase tracking-[0.2em] text-white/45 sm:block">
+                  {item.label}
+                </p>
+              </div>
+            </div>
+          );
+        })}
       </div>
 
-      {/* TABLET / DESKTOP VERSION — orbit effect only on bigger screens */}
-      <div className="relative mx-auto hidden h-[460px] w-full max-w-[420px] place-items-center overflow-hidden rounded-[3rem] border border-white/10 bg-white/[0.035] p-6 shadow-2xl backdrop-blur-xl sm:grid">
-        <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,rgba(163,230,53,0.22),transparent_38%),radial-gradient(circle_at_80%_20%,rgba(249,115,22,0.22),transparent_32%)]" />
+      {/* Main center circle */}
+      <div className="relative z-10 grid aspect-square w-[43%] min-w-[126px] place-items-center rounded-full bg-black shadow-[0_0_80px_rgba(190,252,53,0.2)] ring-1 ring-lime-300/10 sm:w-[44%] sm:min-w-[165px]">
+        <div className="text-center">
+          <p className="text-[10px] font-black uppercase tracking-[0.38em] text-lime-300 sm:text-xs sm:tracking-[0.45em]">
+            Creative
+          </p>
 
-        <div className="absolute h-[82%] w-[82%] rounded-full border border-dashed border-white/15" />
-        <div className="absolute h-[62%] w-[62%] rounded-full border border-white/10" />
+          <h3 className="mt-3 text-3xl font-black tracking-[-0.08em] text-white sm:text-4xl">
+            Builder
+          </h3>
 
-        <div className="orbit-ring absolute grid h-[76%] w-[76%] place-items-center rounded-full">
-          {creativeOrbitItems.map((item, index) => {
-            const angle = (360 / creativeOrbitItems.length) * index;
-
-            return (
-              <div
-                key={item.label}
-                className="absolute left-1/2 top-1/2"
-                style={{
-                  transform: `rotate(${angle}deg) translateX(150px)`,
-                }}
-              >
-                <div className="orbit-counter -translate-x-1/2 -translate-y-1/2 rounded-3xl border border-white/10 bg-black/70 px-4 py-3 text-center shadow-2xl backdrop-blur-xl">
-                  <p className="text-lg font-black text-lime-300">
-                    {item.symbol}
-                  </p>
-                  <p className="mt-1 text-[9px] font-black uppercase tracking-[0.2em] text-white/45">
-                    {item.label}
-                  </p>
-                </div>
-              </div>
-            );
-          })}
-        </div>
-
-        <div className="relative z-10 grid aspect-square w-[44%] min-w-[165px] place-items-center rounded-full bg-black shadow-[0_0_80px_rgba(190,252,53,0.18)] ring-1 ring-lime-300/10">
-          <div className="text-center">
-            <p className="text-xs font-black uppercase tracking-[0.45em] text-lime-300">
-              Creative
-            </p>
-
-            <h3 className="mt-3 text-4xl font-black tracking-[-0.08em] text-white">
-              Builder
-            </h3>
-
-            <p className="mt-4 text-xs font-black uppercase tracking-[0.24em] text-white/40">
-              Web • GHL • SEO
-            </p>
-          </div>
+          <p className="mt-4 text-[10px] font-black uppercase tracking-[0.18em] text-white/40 sm:text-xs sm:tracking-[0.24em]">
+            Web • GHL • SEO
+          </p>
         </div>
       </div>
     </div>
@@ -1437,33 +1414,39 @@ export default function JanrenzoPortfolio() {
         }
 
         .orbit-ring {
-          animation: orbitSpin 18s linear infinite;
-          transform-origin: center;
-        }
+  animation: orbitSpin 18s linear infinite;
+  transform-origin: center;
+}
 
-        .orbit-counter {
-          animation: orbitCounterSpin 18s linear infinite;
-          transform-origin: center;
-        }
+.orbit-item {
+  transform: rotate(var(--angle)) translateX(var(--orbit-radius));
+  transform-origin: 0 0;
+}
 
-        @media (max-width: 640px) {
-          .orbit-ring > div { transform: rotate(var(--angle, 0deg)) translateX(112px) !important; }
-        }
+.orbit-counter {
+  animation: orbitCounterSpin 18s linear infinite;
+  transform-origin: center;
+}
 
-        @keyframes orbitSpin { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
-        @keyframes orbitCounterSpin { from { transform: translate(-50%, -50%) rotate(0deg); } to { transform: translate(-50%, -50%) rotate(-360deg); } }
-        @media (prefers-reduced-motion: reduce) {
-          .hero-content,
-          .hero-dot,
-          .hero-wave,
-          .hero-project-card,
-          .hero-layer,
-          .hero-wireframe,
-          .orbit-ring,
-          .orbit-counter {
-            animation: none !important;
-          }
-        }
+@keyframes orbitSpin {
+  from {
+    transform: rotate(0deg);
+  }
+
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes orbitCounterSpin {
+  from {
+    transform: translate(-50%, -50%) rotate(0deg);
+  }
+
+  to {
+    transform: translate(-50%, -50%) rotate(-360deg);
+  }
+}
 
         @keyframes fadeUp { from { opacity: 0; transform: translateY(26px); } to { opacity: 1; transform: translateY(0); } }
       `}</style>
