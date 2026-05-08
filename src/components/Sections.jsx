@@ -213,8 +213,8 @@ export function QuickContactSection() {
           <div className="relative">
             <p className="mb-5 text-xs uppercase tracking-[0.4em] text-lime-300">Quick Contact</p>
             <ScrollRevealText text="Got a website idea? Let's turn it into something premium." className="max-w-4xl text-5xl font-black leading-[0.9] tracking-[-0.07em] sm:text-7xl" />
-            <p className="mt-7 max-w-2xl text-lg leading-relaxed text-white/60">Use the contact page below to send your project details. When this goes live on Netlify, submissions can be saved in your dashboard and sent to your email.</p>
-            <div className="mt-10 flex flex-col gap-4 sm:flex-row"><a href="#contact" className="inline-flex items-center justify-center rounded-full bg-lime-300 px-8 py-4 text-sm font-black uppercase tracking-[0.12em] text-black transition hover:bg-white">Start a Project <ArrowIcon className="ml-2" /></a><a href="mailto:janrenzofacto@gmail.com" className="inline-flex items-center justify-center rounded-full border border-white/20 bg-white/5 px-8 py-4 text-sm font-black uppercase tracking-[0.12em] text-white transition hover:bg-white hover:text-black"><MailIcon className="mr-2" /> Email Me</a></div>
+            <p className="mt-7 max-w-2xl text-lg leading-relaxed text-white/60">Use the contact page to send your project details. When this goes live on Netlify, submissions can be saved in your dashboard and sent to your email.</p>
+            <div className="mt-10 flex flex-col gap-4 sm:flex-row"><a href="/contact" className="inline-flex items-center justify-center rounded-full bg-lime-300 px-8 py-4 text-sm font-black uppercase tracking-[0.12em] text-black transition hover:bg-white">Start a Project <ArrowIcon className="ml-2" /></a><a href="mailto:janrenzofacto@gmail.com" className="inline-flex items-center justify-center rounded-full border border-white/20 bg-white/5 px-8 py-4 text-sm font-black uppercase tracking-[0.12em] text-white transition hover:bg-white hover:text-black"><MailIcon className="mr-2" /> Email Me</a></div>
           </div>
         </div>
         <div className="rounded-[3rem] border border-black/10 bg-lime-300 p-8 sm:p-10">
@@ -234,7 +234,7 @@ export function ContactSection() {
         <div className="lg:sticky lg:top-8">
           <p className="mb-5 text-xs uppercase tracking-[0.4em] text-lime-300">Contact Page</p>
           <ScrollRevealText text="Let's build your next website." className="text-6xl font-black leading-[0.85] tracking-[-0.08em] sm:text-8xl" />
-          <p className="mt-8 max-w-xl text-lg leading-relaxed text-white/60">Fill out the form with your project details, preferred timeline, and the kind of website or funnel you need. This section is designed to become your dedicated contact page when we package the site for Netlify.</p>
+          <p className="mt-8 max-w-xl text-lg leading-relaxed text-white/60">Fill out the form with your project details, preferred timeline, and the kind of website or funnel you need. This page gives potential clients a clear place to start a project with you.</p>
           <div className="mt-10 grid gap-3">
             {["WordPress + GHL Website Systems", "Available Worldwide", "janrenzofacto@gmail.com"].map((value, index) => <div key={value} className="rounded-3xl border border-white/10 bg-white/[0.04] p-5"><p className="text-xs uppercase tracking-[0.28em] text-white/35">{["Primary Service", "Availability", "Email"][index]}</p><p className={`mt-2 text-xl font-black ${index === 1 ? "text-lime-200" : ""} ${index === 2 ? "break-all" : ""}`}>{value}</p></div>)}
           </div>

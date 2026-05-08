@@ -6,7 +6,7 @@ export const navLinks = [
   { label: "Tools", href: "#tools" },
   { label: "Services", href: "#services" },
   { label: "Process", href: "#process" },
-  { label: "Contact", href: "#contact" },
+  { label: "Contact", href: "/contact" },
 ];
 
 export const portfolioItems = [

@@ -28,7 +28,7 @@ const portfolioItems = [
     image: "/portfolio/power-outage.jpg",
   },
   {
-    title: "Mother’s Day Service Post",
+    title: "Mother's Day Service Post",
     category: "Event Creative",
     image: "/portfolio/mothers-day.jpg",
   },
@@ -137,13 +137,13 @@ export default function PortfolioPage() {
             <Link to="/portfolio" className="text-lime-300">
               Portfolio
             </Link>
-            <a href="/#contact" className="transition hover:text-white">
+            <Link to="/contact" className="transition hover:text-white">
               Contact
-            </a>
+            </Link>
           </nav>
 
           <Link
-            to="/#contact"
+            to="/contact"
             className="hidden rounded-full bg-lime-300 px-5 py-3 text-xs font-black uppercase tracking-[0.12em] text-black transition hover:bg-white sm:inline-flex"
           >
             Hire Me
@@ -210,7 +210,7 @@ export default function PortfolioPage() {
             </Link>
 
             <Link
-              to="/#contact"
+              to="/contact"
               className="inline-flex justify-center rounded-full border border-white/15 bg-white/[0.04] px-7 py-4 text-sm font-black uppercase tracking-[0.14em] text-white transition hover:bg-white hover:text-black"
             >
               Start a Project

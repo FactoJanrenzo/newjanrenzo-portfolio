@@ -54,7 +54,7 @@ function Header({ navScrolled }) {
         <div className="absolute right-0 top-[calc(100%+0.75rem)] z-[999] w-[min(82vw,320px)] rounded-[1.75rem] border border-white/10 bg-black/95 p-3 shadow-2xl backdrop-blur-2xl">
           <div className="grid gap-2">
             {navLinks.map((link) => <a key={link.label} href={link.href} className="rounded-2xl px-4 py-3 text-sm font-black uppercase tracking-[0.14em] text-white/70 transition hover:bg-white/10 hover:text-lime-300">{link.label}</a>)}
-            <a href="#contact" className="mt-2 rounded-full bg-lime-300 px-4 py-4 text-center text-sm font-black uppercase tracking-[0.14em] text-black">Hire Me</a>
+            <a href="/contact" className="mt-2 rounded-full bg-lime-300 px-4 py-4 text-center text-sm font-black uppercase tracking-[0.14em] text-black">Hire Me</a>
           </div>
         </div>
       </details>
@@ -88,7 +88,7 @@ function HeroSection({ heroRef }) {
               <span className="hero-word-box hero-word-box-muted"><span>That Scale.</span></span>
             </h1>
             <p className="mt-8 max-w-2xl text-lg leading-relaxed text-white/65 sm:text-xl">I help businesses turn their websites, funnels, and automations into clean, fast, conversion-focused digital systems, from sitemap to layout, content, build, launch, and optimization.</p>
-            <div className="mt-10 flex flex-col gap-4 sm:flex-row"><Button as="a" href="#portfolio-gallery">View My Work <PlayIcon className="ml-2" /></Button><Button as="a" href="#contact" variant="outline">Let's Build Your Site</Button></div>
+            <div className="mt-10 flex flex-col gap-4 sm:flex-row"><Button as="a" href="#portfolio-gallery">View My Work <PlayIcon className="ml-2" /></Button><Button as="a" href="/contact" variant="outline">Let's Build Your Site</Button></div>
           </div>
 
           <div className="hero-card-shell relative animate-[fadeUp_0.7s_ease-out_0.15s_both]">
