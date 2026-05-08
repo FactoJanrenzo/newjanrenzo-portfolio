@@ -20,6 +20,17 @@ export default function ContactForm() {
 
       if (!response.ok) throw new Error("Form submission failed");
 
+      const payload = Object.fromEntries(formData.entries());
+      try {
+        await fetch("/.netlify/functions/send-contact-emails", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(payload),
+        });
+      } catch (error) {
+        console.warn("Contact email function failed", error);
+      }
+
       setFormStatus("success");
       form.reset();
       window.location.href = "/thank-you.html";

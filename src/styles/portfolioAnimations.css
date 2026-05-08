@@ -28,6 +28,15 @@
   filter: blur(0);
 }
 
+@media (max-width: 767px) {
+  .reveal-on-scroll {
+    opacity: 1;
+    transform: none;
+    filter: none;
+    transition: none;
+  }
+}
+
 .portfolio-page article,
 .portfolio-page button,
 .portfolio-page a {
