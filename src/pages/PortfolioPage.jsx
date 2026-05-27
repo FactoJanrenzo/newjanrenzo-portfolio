@@ -1,7 +1,10 @@
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
+import PageHeader from "../components/PageHeader";
+import { GeneratedPortfolioVisual } from "../components/PortfolioShowcase";
+import { websitePortfolio } from "../data/siteContent";
 
-const portfolioItems = [
+const graphicPortfolioItems = [
   {
     title: "Business Website Promo",
     category: "Web Design",
@@ -71,6 +74,9 @@ function PortfolioModal({ item, onClose }) {
 
   if (!item) return null;
 
+  const isGenerated = item.generated || !item.image;
+  const isScrollableImage = Boolean(item.scrollableImage && item.image);
+
   return (
     <div
       className="fixed inset-0 z-[9999] grid place-items-center bg-black/90 p-4 backdrop-blur-xl"
@@ -83,7 +89,7 @@ function PortfolioModal({ item, onClose }) {
         <div className="flex items-center justify-between gap-4 border-b border-white/10 px-2 pb-3">
           <div>
             <p className="text-xs font-black uppercase tracking-[0.24em] text-lime-300">
-              {item.category}
+              {item.category || item.type}
             </p>
             <h2 className="mt-1 text-xl font-black tracking-[-0.04em] text-white sm:text-2xl">
               {item.title}
@@ -100,11 +106,25 @@ function PortfolioModal({ item, onClose }) {
         </div>
 
         <div className="grid min-h-0 flex-1 place-items-center overflow-hidden pt-3">
-          <img
-            src={item.image}
-            alt={item.title}
-            className="max-h-[76vh] w-full rounded-[1.5rem] object-contain"
-          />
+          {isGenerated ? (
+            <div className="h-full max-h-[76vh] w-full max-w-5xl">
+              <GeneratedPortfolioVisual item={item} />
+            </div>
+          ) : isScrollableImage ? (
+            <div className="h-full w-full overflow-y-auto rounded-[1.5rem] bg-black">
+              <img
+                src={item.image}
+                alt={item.title}
+                className="mx-auto h-auto w-full max-w-5xl rounded-[1.5rem]"
+              />
+            </div>
+          ) : (
+            <img
+              src={item.image}
+              alt={item.title}
+              className="max-h-[76vh] w-full rounded-[1.5rem] object-contain"
+            />
+          )}
         </div>
       </div>
     </div>
@@ -116,40 +136,7 @@ export default function PortfolioPage() {
 
   return (
     <main className="min-h-screen overflow-x-hidden bg-[#050605] text-white">
-      <header className="fixed left-3 right-3 top-4 z-50 mx-auto max-w-7xl rounded-full border border-white/10 bg-black/55 px-4 py-3 backdrop-blur-2xl sm:left-6 sm:right-6">
-        <div className="flex items-center justify-between gap-4">
-          <Link to="/" className="flex items-center gap-3">
-            <div className="grid h-10 w-10 place-items-center rounded-full bg-lime-300 text-sm font-black text-black">
-              JF
-            </div>
-            <div>
-              <p className="text-sm font-black leading-none">Janrenzo Facto</p>
-              <p className="mt-1 text-[10px] uppercase tracking-[0.18em] text-white/35">
-                Available Worldwide
-              </p>
-            </div>
-          </Link>
-
-          <nav className="hidden items-center gap-7 text-sm text-white/65 md:flex">
-            <Link to="/" className="transition hover:text-white">
-              Home
-            </Link>
-            <Link to="/portfolio" className="text-lime-300">
-              Portfolio
-            </Link>
-            <Link to="/contact" className="transition hover:text-white">
-              Contact
-            </Link>
-          </nav>
-
-          <Link
-            to="/contact"
-            className="hidden rounded-full bg-lime-300 px-5 py-3 text-xs font-black uppercase tracking-[0.12em] text-black transition hover:bg-white sm:inline-flex"
-          >
-            Hire Me
-          </Link>
-        </div>
-      </header>
+      <PageHeader active="Portfolio" />
 
       <section className="px-5 pb-16 pt-32 sm:px-8 lg:px-12">
         <div className="mx-auto max-w-7xl">
@@ -170,8 +157,61 @@ export default function PortfolioPage() {
             </p>
           </div>
 
-          <div className="mt-12 grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
-            {portfolioItems.map((item) => (
+          <div className="mt-12">
+            <p className="mb-5 text-xs font-black uppercase tracking-[0.28em] text-white/35">
+              Website Projects
+            </p>
+            <div className="grid gap-5 lg:grid-cols-3">
+              {websitePortfolio.map((item) => (
+                <button
+                  key={item.title}
+                  type="button"
+                  onClick={() =>
+                    setActiveItem({
+                      ...item,
+                      category: item.type,
+                      generated: !item.image,
+                    })
+                  }
+                  className="group overflow-hidden rounded-[2rem] border border-white/10 bg-white/[0.035] p-4 text-left transition hover:-translate-y-1 hover:border-lime-300/40 hover:bg-white/[0.06]"
+                >
+                  {item.image ? (
+                    <div className="overflow-hidden rounded-[1.5rem] bg-black">
+                      <img
+                        src={item.image}
+                        alt={item.title}
+                        className="aspect-[4/3] h-full w-full object-cover object-top transition duration-700 group-hover:scale-[1.02]"
+                        loading="lazy"
+                      />
+                    </div>
+                  ) : (
+                    <GeneratedPortfolioVisual
+                      item={{ ...item, category: item.type }}
+                      compact
+                    />
+                  )}
+                  <div className="p-4">
+                    <p className="text-xs font-black uppercase tracking-[0.24em] text-lime-300">
+                      {item.type}
+                    </p>
+                    <h2 className="mt-3 text-2xl font-black tracking-[-0.05em]">
+                      {item.title}
+                    </h2>
+                    <p className="mt-4 text-sm text-white/45">
+                      {item.scrollableImage ? "Click to scroll the website preview." : item.meta}
+                    </p>
+                  </div>
+                </button>
+              ))}
+            </div>
+          </div>
+
+          <div className="mt-12">
+            <p className="mb-5 text-xs font-black uppercase tracking-[0.28em] text-white/35">
+              Graphic & Campaign Work
+            </p>
+            <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
+            {graphicPortfolioItems.map((item) => (
               <button
                 key={item.title}
                 type="button"
@@ -199,6 +239,7 @@ export default function PortfolioPage() {
                 </div>
               </button>
             ))}
+            </div>
           </div>
 
           <div className="mt-12 flex flex-col gap-4 sm:flex-row">

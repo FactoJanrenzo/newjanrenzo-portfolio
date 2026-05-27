@@ -1,11 +1,10 @@
 export const profileImage = "/profile.webp";
 
 export const navLinks = [
+  { label: "About", href: "/about" },
   { label: "Portfolio", href: "/portfolio" },
-  { label: "Work", href: "#work" },
-  { label: "Tools", href: "#tools" },
-  { label: "Services", href: "#services" },
-  { label: "Process", href: "#process" },
+  { label: "Services", href: "/services" },
+  { label: "Work", href: "/#featured-work" },
   { label: "Contact", href: "/contact" },
 ];
 
@@ -89,6 +88,14 @@ export const portfolioGraphics = [
 ];
 
 export const websitePortfolio = [
+  {
+    title: "Junk N Tow Website",
+    type: "Junk Removal / Cash Cars",
+    accent: "from-lime-300 to-orange-400",
+    meta: "Website / Lead CTA / Service Business",
+    image: "/portfolio/junk-n-tow-website-preview.webp",
+    scrollableImage: true,
+  },
   { title: "Clinic Growth Landing Page", type: "Healthcare / Wellness", accent: "from-lime-300 to-emerald-400", meta: "WordPress / GHL / Lead Form" },
   { title: "Real Estate Brand Funnel", type: "Real Estate", accent: "from-orange-500 to-amber-300", meta: "Elementor / SEO / API Support" },
   { title: "Service Business Website", type: "Local Business", accent: "from-sky-400 to-lime-300", meta: "Responsive / CTA / PageSpeed" },

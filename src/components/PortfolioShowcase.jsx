@@ -8,6 +8,7 @@ function GeneratedPortfolioVisual({ item, compact = false }) {
   const title = item?.title || "Portfolio Preview";
   const category = item?.category || item?.type || "Website Preview";
   const meta = item?.meta || "WordPress / Design / Lead Flow";
+  const previewLabel = item?.image ? "Image Preview" : "Generated Preview";
 
   return (
     <div className={`relative h-full min-h-[260px] w-full overflow-hidden rounded-[1.5rem] bg-[#111] ${compact ? "aspect-[4/3]" : "aspect-[16/10]"}`}>
@@ -15,7 +16,7 @@ function GeneratedPortfolioVisual({ item, compact = false }) {
       <div className="absolute inset-0 bg-[linear-gradient(to_right,rgba(255,255,255,0.06)_1px,transparent_1px),linear-gradient(to_bottom,rgba(255,255,255,0.06)_1px,transparent_1px)] bg-[size:42px_42px] opacity-35" />
       <div className="absolute left-6 right-6 top-6 flex items-center justify-between rounded-full border border-white/10 bg-black/35 px-4 py-3 backdrop-blur-xl">
         <div className="flex items-center gap-2"><span className="h-3 w-3 rounded-full bg-orange-500" /><span className="h-3 w-3 rounded-full bg-lime-300" /><span className="h-3 w-3 rounded-full bg-white/30" /></div>
-        <span className="text-[10px] font-black uppercase tracking-[0.24em] text-white/45">Generated Preview</span>
+        <span className="text-[10px] font-black uppercase tracking-[0.24em] text-white/45">{previewLabel}</span>
       </div>
       <div className="absolute bottom-6 left-6 right-6">
         <p className="mb-3 text-xs font-black uppercase tracking-[0.24em] text-lime-300">{category}</p>
@@ -53,13 +54,22 @@ function PortfolioImageCard({ item, onOpen }) {
 
 function WebsiteMockup({ item, onOpen }) {
   return (
-    <button type="button" onClick={() => onOpen({ ...item, generated: true, category: item.type })} className="group relative overflow-hidden rounded-[2rem] border border-white/10 bg-white/[0.04] p-4 text-left backdrop-blur-xl transition hover:border-lime-300/35 hover:bg-white/[0.06]" data-cursor="project">
+    <button type="button" onClick={() => onOpen({ ...item, generated: !item.image, category: item.type })} className="group relative overflow-hidden rounded-[2rem] border border-white/10 bg-white/[0.04] p-4 text-left backdrop-blur-xl transition hover:border-lime-300/35 hover:bg-white/[0.06]" data-cursor="project">
       <div className="overflow-hidden rounded-[1.4rem] border border-white/10 bg-[#101010]">
         <div className="flex items-center gap-2 border-b border-white/10 bg-white/[0.03] px-4 py-3">
           <span className="h-3 w-3 rounded-full bg-orange-500" /><span className="h-3 w-3 rounded-full bg-lime-300" /><span className="h-3 w-3 rounded-full bg-white/30" />
-          <span className="ml-auto rounded-full bg-black/50 px-3 py-1 text-[10px] uppercase tracking-[0.2em] text-white/35">Open Preview</span>
+          <span className="ml-auto rounded-full bg-black/50 px-3 py-1 text-[10px] uppercase tracking-[0.2em] text-white/35">{item.image ? "Image Preview" : "Open Preview"}</span>
         </div>
-        <GeneratedPortfolioVisual item={{ ...item, category: item.type }} compact />
+        {item.image ? (
+          <img
+            src={item.image}
+            alt={item.title}
+            className="aspect-[4/3] h-full w-full object-cover object-top transition duration-700 group-hover:scale-[1.02]"
+            loading="lazy"
+          />
+        ) : (
+          <GeneratedPortfolioVisual item={{ ...item, category: item.type }} compact />
+        )}
       </div>
       <div className="pt-6">
         <p className="mb-2 text-xs font-black uppercase tracking-[0.24em] text-lime-300">{item.type}</p>
@@ -105,6 +115,7 @@ function PreviewModal({ activePreview, onClose }) {
   if (!activePreview || typeof document === "undefined") return null;
 
   const showGenerated = activePreview.generated || !activePreview.image || activePreview.imageLoaded === false || !modalImageLoaded;
+  const showScrollableImage = Boolean(activePreview.scrollableImage && activePreview.image);
 
   return createPortal(
     <div className="portfolio-modal fixed inset-0 z-[2147483647] flex items-center justify-center bg-black/95 p-4 backdrop-blur-2xl sm:p-6" onMouseDown={onClose} role="dialog" aria-modal="true">
@@ -121,6 +132,16 @@ function PreviewModal({ activePreview, onClose }) {
           {!showGenerated && !modalImageReady && <div className="absolute inset-0 grid place-items-center text-xs font-black uppercase tracking-[0.28em] text-white/35">Loading Preview</div>}
           {showGenerated ? (
             <div className="h-full max-h-[calc(92vh-120px)] w-full max-w-[980px]"><GeneratedPortfolioVisual item={activePreview} /></div>
+          ) : showScrollableImage ? (
+            <div className="h-full w-full overflow-y-auto rounded-[1.2rem] bg-black">
+              <img
+                src={activePreview.image}
+                alt={activePreview.title}
+                onLoad={() => setModalImageReady(true)}
+                onError={() => setModalImageLoaded(false)}
+                className="mx-auto h-auto w-full max-w-[980px] rounded-[1.2rem]"
+              />
+            </div>
           ) : (
             <img src={activePreview.image} alt={activePreview.title} onLoad={() => setModalImageReady(true)} onError={() => setModalImageLoaded(false)} className={`block h-auto max-h-[calc(92vh-120px)] w-auto max-w-full rounded-[1.2rem] object-contain transition-opacity duration-300 ${modalImageReady ? "opacity-100" : "opacity-0"}`} />
           )}

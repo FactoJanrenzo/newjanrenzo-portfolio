@@ -1,4 +1,4 @@
-import { Link } from "react-router-dom";
+import PageHeader from "../components/PageHeader";
 import { ContactSection, FaqSection } from "../components/Sections";
 
 export default function ContactPage() {
@@ -10,40 +10,12 @@ export default function ContactPage() {
           "Space Grotesk, Inter, Arial Black, Helvetica Neue, sans-serif",
       }}
     >
-      <header className="fixed left-3 right-3 top-4 z-50 mx-auto max-w-7xl rounded-full border border-white/10 bg-black/70 px-4 py-3 backdrop-blur-2xl sm:left-6 sm:right-6">
-        <div className="flex items-center justify-between gap-4">
-          <Link to="/" className="flex items-center gap-3">
-            <div className="grid h-10 w-10 place-items-center rounded-full bg-lime-300 text-sm font-black text-black">
-              JF
-            </div>
-            <div>
-              <p className="text-sm font-black leading-none">Janrenzo Facto</p>
-              <p className="mt-1 text-[10px] uppercase tracking-[0.18em] text-white/35">
-                Project Inquiry
-              </p>
-            </div>
-          </Link>
-
-          <nav className="hidden items-center gap-7 text-sm text-white/65 md:flex">
-            <Link to="/" className="transition hover:text-white">
-              Home
-            </Link>
-            <Link to="/portfolio" className="transition hover:text-white">
-              Portfolio
-            </Link>
-            <Link to="/contact" className="text-lime-300">
-              Contact
-            </Link>
-          </nav>
-
-          <a
-            href="mailto:janrenzofacto@gmail.com"
-            className="hidden rounded-full bg-lime-300 px-5 py-3 text-xs font-black uppercase tracking-[0.12em] text-black transition hover:bg-white sm:inline-flex"
-          >
-            Email Me
-          </a>
-        </div>
-      </header>
+      <PageHeader
+        active="Contact"
+        subtitle="Project Inquiry"
+        ctaLabel="Email Me"
+        ctaHref="mailto:janrenzofacto@gmail.com"
+      />
 
       <section className="px-5 pb-6 pt-32 sm:px-8 lg:px-12">
         <div className="mx-auto max-w-7xl">
