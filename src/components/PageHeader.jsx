@@ -1,106 +1,182 @@
-import { Link } from "react-router-dom";
+import { useEffect, useRef, useState } from "react";
+import { Briefcase, Home, Mail, User, Wrench } from "lucide-react";
+import { Link, NavLink } from "react-router-dom";
+import { brandAvatarImage, navLinks, siteConfig } from "../data/siteContent";
+import Dock from "./Dock";
 
-const pageNavItems = [
-  { label: "Home", href: "/" },
-  { label: "About", href: "/about" },
-  { label: "Portfolio", href: "/portfolio" },
-  { label: "Services", href: "/services" },
-  { label: "Contact", href: "/contact" },
+const dockIcons = {
+  About: User,
+  Portfolio: Briefcase,
+  Services: Wrench,
+  Contact: Mail,
+};
+
+const dockItems = [
+  { label: "Home", href: "/", icon: Home },
+  ...navLinks.map((link) => ({ ...link, icon: dockIcons[link.label] })),
 ];
 
-function SmartLink({ href, className, children }) {
-  const isRoute = href.startsWith("/") && !href.includes("#");
-  if (isRoute) {
-    return (
-      <Link to={href} className={className}>
-        {children}
-      </Link>
-    );
+function setMeta(selector, attributes) {
+  let element = document.head.querySelector(selector);
+  if (!element) {
+    element = document.createElement("meta");
+    document.head.appendChild(element);
   }
+  Object.entries(attributes).forEach(([name, value]) => element.setAttribute(name, value));
+}
+
+export function PageMeta({
+  title,
+  description = siteConfig.description,
+  path = "/",
+  image = siteConfig.socialImage,
+  noIndex = false,
+}) {
+  useEffect(() => {
+    const pageTitle = `${title} | ${siteConfig.name}`;
+    const canonicalUrl = `${siteConfig.url}${path === "/" ? "" : path}`;
+    const socialImage = image.startsWith("http") ? image : `${siteConfig.url}${image}`;
+    document.title = pageTitle;
+    setMeta('meta[name="description"]', { name: "description", content: description });
+    setMeta('meta[name="robots"]', { name: "robots", content: noIndex ? "noindex, nofollow" : "index, follow" });
+    setMeta('meta[property="og:title"]', { property: "og:title", content: pageTitle });
+    setMeta('meta[property="og:description"]', { property: "og:description", content: description });
+    setMeta('meta[property="og:url"]', { property: "og:url", content: canonicalUrl });
+    setMeta('meta[property="og:image"]', { property: "og:image", content: socialImage });
+    setMeta('meta[property="og:type"]', { property: "og:type", content: "website" });
+    setMeta('meta[name="twitter:card"]', { name: "twitter:card", content: "summary_large_image" });
+    setMeta('meta[name="twitter:title"]', { name: "twitter:title", content: pageTitle });
+    setMeta('meta[name="twitter:description"]', { name: "twitter:description", content: description });
+    setMeta('meta[name="twitter:image"]', { name: "twitter:image", content: socialImage });
+
+    let canonical = document.head.querySelector('link[rel="canonical"]');
+    if (!canonical) {
+      canonical = document.createElement("link");
+      canonical.rel = "canonical";
+      document.head.appendChild(canonical);
+    }
+    canonical.href = canonicalUrl;
+  }, [description, image, noIndex, path, title]);
+
+  return null;
+}
+
+export default function PageHeader() {
+  const [menuOpen, setMenuOpen] = useState(false);
+  const [compact, setCompact] = useState(false);
+  const menuButtonRef = useRef(null);
+
+  useEffect(() => {
+    const updateHeader = () => setCompact(window.scrollY > 32);
+    updateHeader();
+    window.addEventListener("scroll", updateHeader, { passive: true });
+    return () => window.removeEventListener("scroll", updateHeader);
+  }, []);
+
+  useEffect(() => {
+    if (!menuOpen) return undefined;
+    const handleKeyDown = (event) => {
+      if (event.key === "Escape") {
+        setMenuOpen(false);
+        menuButtonRef.current?.focus();
+      }
+    };
+    window.addEventListener("keydown", handleKeyDown);
+    return () => window.removeEventListener("keydown", handleKeyDown);
+  }, [menuOpen]);
 
   return (
-    <a href={href} className={className}>
-      {children}
-    </a>
+    <header className={`v2-site-header ${compact ? "is-compact" : ""}`}>
+      <a href="#main-content" className="skip-link">
+        Skip to content
+      </a>
+      <div className="site-header-shell">
+        <Link to="/" onClick={() => setMenuOpen(false)} className="flex min-w-0 items-center gap-3 rounded-md focus-ring">
+          <img src={brandAvatarImage} alt="" width="40" height="40" className="site-header-avatar h-10 w-10 shrink-0 rounded-full border border-lime-300/70 object-cover object-center ring-2 ring-lime-300/10" />
+          <span className="min-w-0">
+            <span className="block truncate text-sm font-bold text-white">{siteConfig.name}</span>
+            <span className="mt-0.5 block truncate text-xs text-white/65">{siteConfig.role}</span>
+          </span>
+        </Link>
+
+        <nav aria-label="Primary navigation" className="hidden min-w-0 items-center md:flex">
+          <Dock items={dockItems} />
+        </nav>
+
+        <div className="flex items-center gap-2">
+          <Link to="/contact" className="button-primary site-header-cta hidden sm:inline-flex">
+            Start a Project
+          </Link>
+          <button
+            ref={menuButtonRef}
+            type="button"
+            className="menu-button focus-ring md:hidden"
+            aria-label={menuOpen ? "Close navigation menu" : "Open navigation menu"}
+            aria-expanded={menuOpen}
+            aria-controls="mobile-navigation"
+            onClick={() => setMenuOpen((open) => !open)}
+          >
+            <span className="sr-only">{menuOpen ? "Close menu" : "Open menu"}</span>
+            <span aria-hidden="true" className={menuOpen ? "menu-icon is-open" : "menu-icon"}>
+              <span />
+              <span />
+            </span>
+          </button>
+        </div>
+
+        <nav
+          id="mobile-navigation"
+          aria-label="Mobile navigation"
+          aria-hidden={!menuOpen}
+          inert={!menuOpen}
+          className={`mobile-navigation-panel md:hidden ${menuOpen ? "is-open" : ""}`}
+        >
+          <div className="grid gap-1">
+            {navLinks.map((link) => (
+              <NavLink key={link.label} to={link.href} onClick={() => setMenuOpen(false)} className={({ isActive }) => `mobile-nav-link focus-ring ${isActive ? "bg-lime-300 text-black" : "text-white/75"}`}>
+                {link.label}
+              </NavLink>
+            ))}
+            <Link to="/contact" onClick={() => setMenuOpen(false)} className="button-primary mt-2 justify-center sm:hidden">
+              Start a Project
+            </Link>
+          </div>
+        </nav>
+      </div>
+    </header>
   );
 }
 
-export default function PageHeader({
-  active = "Home",
-  subtitle = "Available Worldwide",
-  ctaLabel = "Hire Me",
-  ctaHref = "/contact",
-}) {
+export function SiteFooter() {
   return (
-    <header className="fixed left-3 right-3 top-4 z-50 mx-auto max-w-7xl rounded-full border border-white/10 bg-black/70 px-4 py-3 backdrop-blur-2xl sm:left-6 sm:right-6">
-      <div className="flex items-center justify-between gap-4">
-        <Link to="/" className="flex min-w-0 items-center gap-3">
-          <div className="grid h-10 w-10 shrink-0 place-items-center rounded-full bg-lime-300 text-sm font-black text-black">
-            JF
-          </div>
-          <div className="min-w-0">
-            <p className="truncate text-sm font-black leading-none">
-              Janrenzo Facto
-            </p>
-            <p className="mt-1 truncate text-[10px] uppercase tracking-[0.18em] text-white/35">
-              {subtitle}
-            </p>
-          </div>
-        </Link>
+    <footer className="border-t border-white/10 bg-black text-white">
+      <div className="site-container grid gap-10 py-12 lg:grid-cols-[1fr_auto] lg:items-end">
+        <div>
+          <Link to="/" className="inline-flex items-center gap-3 rounded-md focus-ring">
+            <img src={brandAvatarImage} alt="" width="40" height="40" loading="lazy" decoding="async" className="h-10 w-10 rounded-full border border-lime-300/70 object-cover object-center ring-2 ring-lime-300/10" />
+            <span>
+              <span className="block text-sm font-bold">{siteConfig.name}</span>
+              <span className="mt-1 block text-xs text-white/65">{siteConfig.role}</span>
+            </span>
+          </Link>
+          <p className="mt-5 max-w-xl text-sm leading-6 text-white/65">
+            WordPress websites, landing pages, GoHighLevel funnels, and lead systems for businesses ready to grow.
+          </p>
+        </div>
 
-        <nav className="hidden items-center gap-7 text-sm text-white/65 md:flex">
-          {pageNavItems.map((item) => (
-            <SmartLink
-              key={item.label}
-              href={item.href}
-              className={
-                item.label === active
-                  ? "text-lime-300"
-                  : "transition hover:text-white"
-              }
-            >
-              {item.label}
-            </SmartLink>
-          ))}
-        </nav>
-
-        <SmartLink
-          href={ctaHref}
-          className="hidden rounded-full bg-lime-300 px-5 py-3 text-xs font-black uppercase tracking-[0.12em] text-black transition hover:bg-white sm:inline-flex"
-        >
-          {ctaLabel}
-        </SmartLink>
-
-        <details className="group relative md:hidden">
-          <summary className="grid h-11 w-11 cursor-pointer list-none place-items-center rounded-full border border-white/10 bg-white/[0.06] text-xs font-black uppercase tracking-[0.08em] text-white [&::-webkit-details-marker]:hidden">
-            <span className="group-open:hidden">Menu</span>
-            <span className="hidden group-open:block">x</span>
-          </summary>
-          <div className="absolute right-0 top-[calc(100%+0.75rem)] z-[999] w-[min(82vw,320px)] rounded-[1.75rem] border border-white/10 bg-black/95 p-3 shadow-2xl backdrop-blur-2xl">
-            <div className="grid gap-2">
-              {pageNavItems.map((item) => (
-                <SmartLink
-                  key={item.label}
-                  href={item.href}
-                  className={`rounded-2xl px-4 py-3 text-sm font-black uppercase tracking-[0.14em] transition hover:bg-white/10 ${
-                    item.label === active
-                      ? "text-lime-300"
-                      : "text-white/70 hover:text-lime-300"
-                  }`}
-                >
-                  {item.label}
-                </SmartLink>
-              ))}
-              <SmartLink
-                href={ctaHref}
-                className="mt-2 rounded-full bg-lime-300 px-4 py-4 text-center text-sm font-black uppercase tracking-[0.14em] text-black"
-              >
-                {ctaLabel}
-              </SmartLink>
-            </div>
-          </div>
-        </details>
+        <div className="lg:text-right">
+          <nav aria-label="Footer navigation" className="flex flex-wrap gap-x-5 gap-y-3 lg:justify-end">
+            {navLinks.map((link) => (
+              <Link key={link.label} to={link.href} className="rounded-sm text-sm text-white/70 transition hover:text-lime-300 focus-ring">
+                {link.label}
+              </Link>
+            ))}
+          </nav>
+          <p className="mt-6 text-xs text-white/65">
+            &copy; 2026 {siteConfig.name}. <span className="ml-2 text-lime-300/80">v{siteConfig.version}</span>
+          </p>
+        </div>
       </div>
-    </header>
+    </footer>
   );
 }

@@ -1,8 +1,20 @@
 import { useState } from "react";
-import { ArrowIcon } from "./Icons";
+
+function Field({ label, required = false, children }) {
+  return (
+    <label className="block min-w-0">
+      <span className="mb-2 block text-xs font-bold uppercase tracking-[0.12em] text-white/60">
+        {label}{required && <span className="text-lime-300"> *</span>}
+      </span>
+      {children}
+    </label>
+  );
+}
 
 export default function ContactForm() {
   const [formStatus, setFormStatus] = useState("idle");
+  const [inquiryType, setInquiryType] = useState("");
+  const isProjectInquiry = inquiryType === "Project inquiry";
 
   const handleSubmit = async (event) => {
     event.preventDefault();
@@ -17,83 +29,97 @@ export default function ContactForm() {
         headers: { "Content-Type": "application/x-www-form-urlencoded" },
         body: new URLSearchParams(formData).toString(),
       });
+      if (!response.ok) throw new Error(`Form submission failed with ${response.status}`);
 
-      if (!response.ok) throw new Error("Form submission failed");
-
-      const payload = Object.fromEntries(formData.entries());
-      try {
-        await fetch("/.netlify/functions/send-contact-emails", {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify(payload),
-        });
-      } catch (error) {
-        console.warn("Contact email function failed", error);
-      }
-
-      setFormStatus("success");
       form.reset();
-      window.location.href = "/thank-you.html";
+      setInquiryType("");
+      setFormStatus("success");
     } catch {
       setFormStatus("error");
     }
   };
 
   return (
-    <form name="contact" method="POST" data-netlify="true" netlify-honeypot="bot-field" onSubmit={handleSubmit} className="space-y-4 text-left">
+    <form name="contact" method="POST" data-netlify="true" netlify-honeypot="bot-field" onSubmit={handleSubmit} aria-busy={formStatus === "sending"} className="grid gap-5">
       <input type="hidden" name="form-name" value="contact" />
-      <p style={{ position: "absolute", overflow: "hidden", clip: "rect(0 0 0 0)", height: "1px", width: "1px", margin: "-1px", padding: 0, border: 0 }}>
-        <label>Don't fill this out if you're human: <input name="bot-field" tabIndex="-1" autoComplete="off" /></label>
+      <p hidden>
+        <label>Do not fill this field if you are human: <input name="bot-field" tabIndex="-1" autoComplete="off" /></label>
       </p>
 
-      <div className="grid gap-4 sm:grid-cols-2">
-        <label className="group block">
-          <span className="mb-2 block text-xs font-black uppercase tracking-[0.24em] text-white/40">Name</span>
-          <input name="name" required placeholder="Your full name" className="w-full rounded-3xl border border-white/10 bg-white/[0.04] px-5 py-4 text-white outline-none transition placeholder:text-white/25 focus:border-lime-300/60 focus:bg-white/[0.07]" />
-        </label>
-        <label className="group block">
-          <span className="mb-2 block text-xs font-black uppercase tracking-[0.24em] text-white/40">Email</span>
-          <input name="email" type="email" required placeholder="you@example.com" className="w-full rounded-3xl border border-white/10 bg-white/[0.04] px-5 py-4 text-white outline-none transition placeholder:text-white/25 focus:border-lime-300/60 focus:bg-white/[0.07]" />
-        </label>
+      <Field label="I'm reaching out about" required>
+        <select className="field-control" name="inquiryType" required value={inquiryType} onChange={(event) => setInquiryType(event.target.value)}>
+          <option value="" disabled>Choose one</option>
+          <option>Project inquiry</option>
+          <option>Employment opportunity</option>
+          <option>Collaboration</option>
+        </select>
+      </Field>
+
+      <div className="grid min-w-0 gap-5 sm:grid-cols-2">
+        <Field label="Name" required>
+          <input className="field-control" name="name" autoComplete="name" maxLength="100" required placeholder="Your full name" />
+        </Field>
+        <Field label="Email" required>
+          <input className="field-control" name="email" type="email" autoComplete="email" maxLength="254" required placeholder="you@example.com" />
+        </Field>
       </div>
 
-      <label className="group block">
-        <span className="mb-2 block text-xs font-black uppercase tracking-[0.24em] text-white/40">Subject</span>
-        <input name="subject" required placeholder="Website redesign, landing page, GHL setup..." className="w-full rounded-3xl border border-white/10 bg-white/[0.04] px-5 py-4 text-white outline-none transition placeholder:text-white/25 focus:border-lime-300/60 focus:bg-white/[0.07]" />
-      </label>
+      <Field label="Subject" required>
+        <input className="field-control" name="subject" maxLength="160" required placeholder="What would you like to discuss?" />
+      </Field>
 
-      <div className="grid gap-4 sm:grid-cols-2">
-        <label className="group block">
-          <span className="mb-2 block text-xs font-black uppercase tracking-[0.24em] text-white/40">Project Type</span>
-          <select name="projectType" className="w-full rounded-3xl border border-white/10 bg-[#121212] px-5 py-4 text-white outline-none transition focus:border-lime-300/60 focus:bg-[#171717]">
-            <option>WordPress Website</option>
-            <option>Landing Page</option>
-            <option>GoHighLevel Funnel</option>
-            <option>SEO / Speed Optimization</option>
-            <option>Frontend Customization</option>
-          </select>
-        </label>
-        <label className="group block">
-          <span className="mb-2 block text-xs font-black uppercase tracking-[0.24em] text-white/40">Budget Range</span>
-          <select name="budget" className="w-full rounded-3xl border border-white/10 bg-[#121212] px-5 py-4 text-white outline-none transition focus:border-lime-300/60 focus:bg-[#171717]">
-            <option>Still planning</option>
-            <option>$300 - $700</option>
-            <option>$700 - $1,500</option>
-            <option>$1,500+</option>
-          </select>
-        </label>
+      {isProjectInquiry && (
+        <fieldset className="grid min-w-0 gap-5 border-y border-white/10 py-6">
+          <legend className="px-2 text-xs font-bold uppercase tracking-[0.12em] text-lime-300">Optional project context</legend>
+          <div className="grid min-w-0 gap-5 sm:grid-cols-3">
+            <Field label="Project type">
+              <select className="field-control" name="projectType" defaultValue="">
+                <option value="">Choose one</option>
+                <option>WordPress Website</option>
+                <option>Landing Page</option>
+                <option>GoHighLevel Funnel</option>
+                <option>Website Optimization</option>
+                <option>Frontend Customization</option>
+              </select>
+            </Field>
+            <Field label="Budget range">
+              <select className="field-control" name="budget" defaultValue="">
+                <option value="">Choose one</option>
+                <option>Still planning</option>
+                <option>$300 - $700</option>
+                <option>$700 - $1,500</option>
+                <option>$1,500+</option>
+              </select>
+            </Field>
+            <Field label="Preferred timeline">
+              <select className="field-control" name="timeline" defaultValue="">
+                <option value="">Choose one</option>
+                <option>As soon as possible</option>
+                <option>Within 2-4 weeks</option>
+                <option>Within 1-2 months</option>
+                <option>Flexible / planning</option>
+              </select>
+            </Field>
+          </div>
+          <Field label="Current website URL">
+            <input className="field-control" name="websiteUrl" type="url" inputMode="url" maxLength="2048" placeholder="https://yourwebsite.com" />
+          </Field>
+        </fieldset>
+      )}
+
+      <Field label="Message" required>
+        <textarea className="field-control min-h-40 resize-y" name="message" maxLength="3000" required placeholder="Share the goal, relevant context, timeline, and the next step you have in mind." />
+      </Field>
+
+      <p className="text-xs leading-5 text-white/70">Your details are used only to review and respond to this inquiry.</p>
+
+      <div aria-live="polite">
+        {formStatus === "success" && <p className="rounded-md border border-lime-300/30 bg-lime-300/10 px-4 py-4 text-sm text-lime-100">Your inquiry was sent. I will review the details and reply with the next step.</p>}
+        {formStatus === "error" && <p className="rounded-md border border-red-400/30 bg-red-500/10 px-4 py-4 text-sm text-red-100">The form could not be sent. Please email janrenzofacto@gmail.com directly.</p>}
       </div>
 
-      <label className="group block">
-        <span className="mb-2 block text-xs font-black uppercase tracking-[0.24em] text-white/40">Project Details</span>
-        <textarea name="message" required rows="6" placeholder="Tell me about your website, funnel, timeline, goals, and what you want to improve." className="w-full resize-none rounded-[2rem] border border-white/10 bg-white/[0.04] px-5 py-4 text-white outline-none transition placeholder:text-white/25 focus:border-lime-300/60 focus:bg-white/[0.07]" />
-      </label>
-
-      {formStatus === "success" && <div className="rounded-3xl border border-lime-300/30 bg-lime-300/10 px-5 py-4 text-sm font-bold text-lime-200">Message sent successfully. I'll review your inquiry and respond as soon as possible.</div>}
-      {formStatus === "error" && <div className="rounded-3xl border border-red-400/30 bg-red-500/10 px-5 py-4 text-sm font-bold text-red-200">Something went wrong. Please email me directly at janrenzofacto@gmail.com.</div>}
-
-      <button type="submit" disabled={formStatus === "sending"} className="group inline-flex w-full items-center justify-center rounded-full bg-lime-300 px-8 py-5 text-sm font-black uppercase tracking-[0.14em] text-black transition hover:bg-white disabled:cursor-not-allowed disabled:opacity-60 sm:w-auto">
-        {formStatus === "sending" ? "Sending..." : "Send Message"} <ArrowIcon className="ml-2 transition group-hover:translate-x-1 group-hover:-translate-y-1" />
+      <button type="submit" disabled={formStatus === "sending"} className="button-primary w-full disabled:cursor-not-allowed disabled:opacity-60 sm:w-fit">
+        {formStatus === "sending" ? "Sending..." : "Send Inquiry"}
       </button>
     </form>
   );

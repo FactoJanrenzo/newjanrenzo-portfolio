@@ -1,52 +1,4 @@
-import { useEffect, useMemo, useRef, useState } from "react";
-
-export function CustomCursor() {
-  const outerRef = useRef(null);
-  const [cursorMode, setCursorMode] = useState("default");
-  const rafRef = useRef(null);
-  const mouseRef = useRef({ x: -100, y: -100 });
-
-  useEffect(() => {
-    const render = () => {
-      if (outerRef.current) {
-        outerRef.current.style.transform = `translate3d(${mouseRef.current.x}px, ${mouseRef.current.y}px, 0)`;
-      }
-      rafRef.current = null;
-    };
-
-    const move = (event) => {
-      mouseRef.current = { x: event.clientX, y: event.clientY };
-      if (!rafRef.current) rafRef.current = requestAnimationFrame(render);
-    };
-
-    const detect = (event) => {
-      const target = event.target;
-      if (!(target instanceof Element)) return;
-      if (target.closest("button, a")) setCursorMode("click");
-      else if (target.closest("article, [data-cursor='project']")) setCursorMode("view");
-      else setCursorMode("default");
-    };
-
-    window.addEventListener("mousemove", move, { passive: true });
-    window.addEventListener("mouseover", detect);
-    return () => {
-      window.removeEventListener("mousemove", move);
-      window.removeEventListener("mouseover", detect);
-      if (rafRef.current) cancelAnimationFrame(rafRef.current);
-    };
-  }, []);
-
-  const isActive = cursorMode !== "default";
-
-  return (
-    <div ref={outerRef} className="pointer-events-none fixed left-0 top-0 z-[9999] hidden mix-blend-difference lg:block">
-      <div className={`grid -translate-x-1/2 -translate-y-1/2 place-items-center rounded-full border border-white/60 bg-white text-black transition-all duration-200 ease-out ${isActive ? "h-24 w-24 scale-100" : "h-5 w-5 scale-100"}`}>
-        {isActive && <span className="text-[10px] font-black uppercase tracking-[0.22em]">{cursorMode === "view" ? "View" : "Click"}</span>}
-      </div>
-      <div className="absolute left-0 top-0 h-10 w-10 -translate-x-1/2 -translate-y-1/2 rounded-full border border-white/25 transition-transform duration-300" />
-    </div>
-  );
-}
+import { useEffect, useMemo, useState } from "react";
 
 export function ScrollToTopButton() {
   const [visible, setVisible] = useState(false);
@@ -61,10 +13,11 @@ export function ScrollToTopButton() {
       const viewportHeight = window.innerHeight || doc.clientHeight;
       const maxScroll = Math.max(1, scrollHeight - viewportHeight);
       const distanceToBottom = Math.max(0, maxScroll - scrollTop);
+      const footerTop = document.querySelector("footer")?.getBoundingClientRect().top ?? Infinity;
       const bottomThreshold = Math.max(220, viewportHeight * 0.24);
       const boostedProgress = (scrollTop + viewportHeight * 0.18) / maxScroll;
       setProgress(distanceToBottom <= bottomThreshold ? 1 : Math.min(1, Math.max(0, boostedProgress)));
-      setVisible(scrollTop > 620);
+      setVisible(scrollTop > 620 && footerTop > viewportHeight - 24);
     };
 
     onScroll();
@@ -76,12 +29,17 @@ export function ScrollToTopButton() {
     };
   }, []);
 
+  const scrollToTop = () => {
+    const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    window.scrollTo({ top: 0, behavior: reducedMotion ? "auto" : "smooth" });
+  };
+
   return (
     <button
       type="button"
       aria-label="Scroll back to top"
-      onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}
-      className={`scroll-top fixed bottom-6 right-6 z-[80] grid h-16 w-16 place-items-center rounded-full p-[3px] text-white shadow-2xl transition-all duration-300 hover:text-black lg:bottom-8 lg:right-8 ${visible ? "translate-y-0 opacity-100" : "pointer-events-none translate-y-5 opacity-0"}`}
+      onClick={scrollToTop}
+      className={`scroll-top fixed bottom-5 right-5 z-[80] grid h-14 w-14 place-items-center rounded-full p-[3px] text-white shadow-2xl transition-all duration-300 hover:text-black lg:bottom-7 lg:right-7 ${visible ? "translate-y-0 opacity-100" : "pointer-events-none translate-y-5 opacity-0"}`}
       style={{ "--scroll-progress": `${Math.round(progress * 360)}deg` }}
     >
       <span className="absolute inset-0 rounded-full bg-[conic-gradient(currentColor_var(--scroll-progress),rgba(255,255,255,0.14)_0deg)]" />
@@ -132,7 +90,7 @@ export function HeroAwards() {
       {[["5+", "Years WordPress"], ["GHL", "Funnels + CRM"], ["SEO", "Speed + Structure"]].map(([value, label]) => (
         <div key={label} className="rounded-[1.6rem] border border-white/10 bg-black/40 px-6 py-5 shadow-2xl backdrop-blur-xl">
           <p className="text-4xl font-black tracking-[-0.06em] text-lime-300">{value}</p>
-          <p className="mt-2 text-xs font-black uppercase tracking-[0.24em] text-white/45">{label}</p>
+          <p className="mt-2 text-xs font-black uppercase tracking-[0.24em] text-white/65">{label}</p>
         </div>
       ))}
     </div>

@@ -1,266 +1,116 @@
-import { useEffect, useState } from "react";
-import { Link } from "react-router-dom";
-import PageHeader from "../components/PageHeader";
-import { GeneratedPortfolioVisual } from "../components/PortfolioShowcase";
-import { websitePortfolio } from "../data/siteContent";
+import { useEffect, useMemo, useState } from "react";
+import { Link, useLocation, useNavigate } from "react-router-dom";
+import PageHeader, { PageMeta, SiteFooter } from "../components/PageHeader";
+import { ProjectVisual } from "../components/PortfolioShowcase";
+import WorkReel from "../components/WorkReel";
+import { archiveProjects, featuredProjects, publicProjects } from "../data/siteContent";
 
-const graphicPortfolioItems = [
-  {
-    title: "Business Website Promo",
-    category: "Web Design",
-    image: "/portfolio/website-business.jpg",
-  },
-  {
-    title: "Vortex VA Hiring Creative",
-    category: "Recruitment Graphic",
-    image: "/portfolio/vortex-hiring-va.jpg",
-  },
-  {
-    title: "Vortex Quote Design",
-    category: "Brand Social",
-    image: "/portfolio/vortex-quote.jpg",
-  },
-  {
-    title: "Mushroom Benefits Campaign",
-    category: "Health Creative",
-    image: "/portfolio/mushroom-benefits.jpg",
-  },
-  {
-    title: "Power Outage Solar Creative",
-    category: "Solar Marketing",
-    image: "/portfolio/power-outage.jpg",
-  },
-  {
-    title: "Mother's Day Service Post",
-    category: "Event Creative",
-    image: "/portfolio/mothers-day.jpg",
-  },
-  {
-    title: "Empowerment Night",
-    category: "Church Event",
-    image: "/portfolio/empowerment-night.jpg",
-  },
-  {
-    title: "Leaders Convergence",
-    category: "Event Branding",
-    image: "/portfolio/leaders-convergence.jpg",
-  },
-  {
-    title: "Power Night",
-    category: "Social Media",
-    image: "/portfolio/power-night.jpg",
-  },
-];
+const archiveCategories = ["All Work", "Websites & Funnels", "Graphic Design", "Campaign Creative", "Presentation Design", "Video & Motion"];
 
-function PortfolioModal({ item, onClose }) {
-  useEffect(() => {
-    if (!item) return;
-
-    document.body.style.overflow = "hidden";
-    document.documentElement.style.overflow = "hidden";
-
-    const handleKeyDown = (event) => {
-      if (event.key === "Escape") onClose();
-    };
-
-    window.addEventListener("keydown", handleKeyDown);
-
-    return () => {
-      document.body.style.overflow = "";
-      document.documentElement.style.overflow = "";
-      window.removeEventListener("keydown", handleKeyDown);
-    };
-  }, [item, onClose]);
-
-  if (!item) return null;
-
-  const isGenerated = item.generated || !item.image;
-  const isScrollableImage = Boolean(item.scrollableImage && item.image);
-
+function DesignArchiveCard({ project }) {
   return (
-    <div
-      className="fixed inset-0 z-[9999] grid place-items-center bg-black/90 p-4 backdrop-blur-xl"
-      onMouseDown={onClose}
-    >
-      <div
-        className="relative flex max-h-[92vh] w-full max-w-6xl flex-col overflow-hidden rounded-[2rem] border border-white/10 bg-[#0b0b0b] p-3 shadow-2xl"
-        onMouseDown={(event) => event.stopPropagation()}
-      >
-        <div className="flex items-center justify-between gap-4 border-b border-white/10 px-2 pb-3">
-          <div>
-            <p className="text-xs font-black uppercase tracking-[0.24em] text-lime-300">
-              {item.category || item.type}
-            </p>
-            <h2 className="mt-1 text-xl font-black tracking-[-0.04em] text-white sm:text-2xl">
-              {item.title}
-            </h2>
-          </div>
-
-          <button
-            type="button"
-            onClick={onClose}
-            className="grid h-11 w-11 shrink-0 place-items-center rounded-full bg-white text-xl font-black text-black transition hover:bg-lime-300"
-          >
-            ×
-          </button>
+    <article className="surface-card surface-card-interactive flex min-w-0 flex-col overflow-hidden">
+      <Link to={`/portfolio/${project.id}`} aria-label={`View ${project.title} case study`} className="block focus-ring">
+        <ProjectVisual project={project} />
+      </Link>
+      <div className="flex flex-1 flex-col p-5">
+        <div className="flex flex-wrap items-center gap-2">
+          <span className="tag border-lime-300/25 text-lime-200">{project.category}</span>
+          <span className="text-xs font-semibold text-white/65">{project.status}</span>
         </div>
-
-        <div className="grid min-h-0 flex-1 place-items-center overflow-hidden pt-3">
-          {isGenerated ? (
-            <div className="h-full max-h-[76vh] w-full max-w-5xl">
-              <GeneratedPortfolioVisual item={item} />
-            </div>
-          ) : isScrollableImage ? (
-            <div className="h-full w-full overflow-y-auto rounded-[1.5rem] bg-black">
-              <img
-                src={item.image}
-                alt={item.title}
-                className="mx-auto h-auto w-full max-w-5xl rounded-[1.5rem]"
-              />
-            </div>
-          ) : (
-            <img
-              src={item.image}
-              alt={item.title}
-              className="max-h-[76vh] w-full rounded-[1.5rem] object-contain"
-            />
-          )}
-        </div>
+        {project.cardDetail && <p className="mt-4 text-xs font-bold uppercase tracking-[0.08em] text-white/65">{project.cardDetail}</p>}
+        <h3 className="mt-5 text-xl font-bold leading-tight">{project.title}</h3>
+        <p className="mt-3 text-sm leading-6 text-white/70">{project.description}</p>
+        <p className="mt-5 border-t border-white/10 pt-4 text-xs font-semibold uppercase tracking-[0.08em] text-white/65">Role / {project.services[0]}</p>
+        <Link to={`/portfolio/${project.id}`} className="project-action mt-auto inline-flex min-h-11 items-center pt-6 text-sm font-bold text-white underline decoration-lime-300 decoration-2 underline-offset-4 focus-ring">
+          View Case Study
+        </Link>
       </div>
-    </div>
+    </article>
   );
 }
 
 export default function PortfolioPage() {
-  const [activeItem, setActiveItem] = useState(null);
+  const location = useLocation();
+  const navigate = useNavigate();
+  const [activeCategory, setActiveCategory] = useState("All Work");
+  const [visibleCount, setVisibleCount] = useState(6);
+  const visibleProjects = useMemo(
+    () => activeCategory === "All Work" ? archiveProjects : archiveProjects.filter((project) => project.category === activeCategory),
+    [activeCategory],
+  );
+  const displayedProjects = visibleProjects.slice(0, visibleCount);
+
+  useEffect(() => {
+    let legacyId;
+    try {
+      legacyId = decodeURIComponent(location.hash.slice(1));
+    } catch {
+      return;
+    }
+    if (legacyId && publicProjects.some((project) => project.id === legacyId)) {
+      navigate(`/portfolio/${legacyId}`, { replace: true });
+    }
+  }, [location.hash, navigate]);
 
   return (
-    <main className="min-h-screen overflow-x-hidden bg-[#050605] text-white">
-      <PageHeader active="Portfolio" />
+    <>
+      <PageMeta title="Selected Work" description="Selected website, funnel, presentation, graphic design, campaign, and video work by Janrenzo Facto, with concepts clearly labeled." path="/portfolio" />
+      <PageHeader />
+      <main id="main-content" className="min-w-0 overflow-x-clip bg-[#070806] text-white">
+        <WorkReel projects={featuredProjects} />
 
-      <section className="px-5 pb-16 pt-32 sm:px-8 lg:px-12">
-        <div className="mx-auto max-w-7xl">
-          <p className="mb-5 text-xs font-black uppercase tracking-[0.4em] text-lime-300">
-            Selected Works
-          </p>
+        <section className="site-section border-b border-white/10 bg-[#0a0b09]">
+          <div className="site-container min-w-0">
+            <div className="grid gap-7 lg:grid-cols-[1fr_0.75fr] lg:items-end">
+              <div>
+                <p className="section-kicker">Project archive</p>
+                <h2 className="section-title">More work, clearly labeled by status.</h2>
+              </div>
+              <p className="max-w-xl text-lg leading-8 text-white/70 lg:justify-self-end">
+                Development previews, template explorations, presentations, and supporting creative work remain available without competing with the verified selection above.
+              </p>
+            </div>
 
-          <div className="grid gap-6 lg:grid-cols-[1.1fr_0.9fr] lg:items-end">
-            <h1 className="text-6xl font-black leading-[0.88] tracking-[-0.08em] sm:text-8xl lg:text-9xl">
-              Portfolio
-              <span className="block text-white/25">Gallery</span>
-            </h1>
+            <div className="mt-10 flex max-w-full flex-wrap gap-2 border-b border-white/10 pb-4" role="group" aria-label="Filter design work by category">
+              {archiveCategories.map((category) => {
+                const count = category === "All Work" ? archiveProjects.length : archiveProjects.filter((project) => project.category === category).length;
+                const active = activeCategory === category;
+                return (
+                  <button key={category} type="button" onClick={() => { setActiveCategory(category); setVisibleCount(6); }} aria-pressed={active} className={`filter-button min-h-11 shrink-0 rounded-full border px-4 text-xs font-bold uppercase tracking-[0.08em] transition ${active ? "border-lime-300 bg-lime-300 text-black" : "border-white/20 bg-white/[0.03] text-white/75 hover:border-white/40 hover:text-white"}`}>
+                    {category} <span className="ml-2 opacity-55">{count}</span>
+                  </button>
+                );
+              })}
+            </div>
 
-            <p className="max-w-2xl text-lg leading-relaxed text-white/55">
-              A collection of website visuals, social creatives, event graphics,
-              and campaign design work built with clarity, premium layout,
-              and conversion in mind.
-            </p>
-          </div>
+            <p className="sr-only" role="status" aria-live="polite">Showing {displayedProjects.length} of {visibleProjects.length} projects in {activeCategory}.</p>
 
-          <div className="mt-12">
-            <p className="mb-5 text-xs font-black uppercase tracking-[0.28em] text-white/35">
-              Website Projects
-            </p>
-            <div className="grid gap-5 lg:grid-cols-3">
-              {websitePortfolio.map((item) => (
-                <button
-                  key={item.title}
-                  type="button"
-                  onClick={() =>
-                    setActiveItem({
-                      ...item,
-                      category: item.type,
-                      generated: !item.image,
-                    })
-                  }
-                  className="group overflow-hidden rounded-[2rem] border border-white/10 bg-white/[0.035] p-4 text-left transition hover:-translate-y-1 hover:border-lime-300/40 hover:bg-white/[0.06]"
-                >
-                  {item.image ? (
-                    <div className="overflow-hidden rounded-[1.5rem] bg-black">
-                      <img
-                        src={item.image}
-                        alt={item.title}
-                        className="aspect-[4/3] h-full w-full object-cover object-top transition duration-700 group-hover:scale-[1.02]"
-                        loading="lazy"
-                      />
-                    </div>
-                  ) : (
-                    <GeneratedPortfolioVisual
-                      item={{ ...item, category: item.type }}
-                      compact
-                    />
-                  )}
-                  <div className="p-4">
-                    <p className="text-xs font-black uppercase tracking-[0.24em] text-lime-300">
-                      {item.type}
-                    </p>
-                    <h2 className="mt-3 text-2xl font-black tracking-[-0.05em]">
-                      {item.title}
-                    </h2>
-                    <p className="mt-4 text-sm text-white/45">
-                      {item.scrollableImage ? "Click to scroll the website preview." : item.meta}
-                    </p>
-                  </div>
+            <div className="mt-8 grid min-w-0 gap-5 sm:grid-cols-2 lg:grid-cols-3">
+              {displayedProjects.map((project) => <DesignArchiveCard key={project.id} project={project} />)}
+            </div>
+
+            {displayedProjects.length < visibleProjects.length && (
+              <div className="mt-10 flex justify-center">
+                <button type="button" onClick={() => setVisibleCount((count) => count + 6)} className="button-secondary focus-ring">
+                  Show More Work ({visibleProjects.length - displayedProjects.length})
                 </button>
-              ))}
+              </div>
+            )}
+          </div>
+        </section>
+
+        <section className="bg-lime-300 py-14 text-black sm:py-16">
+          <div className="site-container flex flex-col gap-7 lg:flex-row lg:items-end lg:justify-between">
+            <div>
+              <p className="text-xs font-bold uppercase tracking-[0.12em] text-black/55">Have a project in mind?</p>
+              <h2 className="mt-4 max-w-3xl text-4xl font-bold leading-tight sm:text-5xl">Build the next piece around a clear business goal.</h2>
             </div>
+            <Link to="/contact" className="button-primary shrink-0 bg-black text-lime-300 hover:bg-white hover:text-black">Start a Project</Link>
           </div>
-
-          <div className="mt-12">
-            <p className="mb-5 text-xs font-black uppercase tracking-[0.28em] text-white/35">
-              Graphic & Campaign Work
-            </p>
-            <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
-            {graphicPortfolioItems.map((item) => (
-              <button
-                key={item.title}
-                type="button"
-                onClick={() => setActiveItem(item)}
-                className="group overflow-hidden rounded-[2rem] border border-white/10 bg-white/[0.035] text-left transition hover:-translate-y-1 hover:border-lime-300/40 hover:bg-white/[0.06]"
-              >
-                <div className="aspect-[4/5] overflow-hidden bg-white/5">
-                  <img
-                    src={item.image}
-                    alt={item.title}
-                    className="h-full w-full object-cover transition duration-700 group-hover:scale-105"
-                  />
-                </div>
-
-                <div className="p-5">
-                  <p className="text-xs font-black uppercase tracking-[0.24em] text-lime-300">
-                    {item.category}
-                  </p>
-                  <h2 className="mt-3 text-2xl font-black tracking-[-0.05em]">
-                    {item.title}
-                  </h2>
-                  <p className="mt-4 text-sm text-white/45">
-                    Click to preview the full design.
-                  </p>
-                </div>
-              </button>
-            ))}
-            </div>
-          </div>
-
-          <div className="mt-12 flex flex-col gap-4 sm:flex-row">
-            <Link
-              to="/"
-              className="inline-flex justify-center rounded-full bg-white px-7 py-4 text-sm font-black uppercase tracking-[0.14em] text-black transition hover:bg-lime-300"
-            >
-              Back to Home
-            </Link>
-
-            <Link
-              to="/contact"
-              className="inline-flex justify-center rounded-full border border-white/15 bg-white/[0.04] px-7 py-4 text-sm font-black uppercase tracking-[0.14em] text-white transition hover:bg-white hover:text-black"
-            >
-              Start a Project
-            </Link>
-          </div>
-        </div>
-      </section>
-
-      <PortfolioModal item={activeItem} onClose={() => setActiveItem(null)} />
-    </main>
+        </section>
+      </main>
+      <SiteFooter />
+    </>
   );
 }

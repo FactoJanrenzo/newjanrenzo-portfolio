@@ -1,23 +1,16 @@
 import { StrictMode } from "react";
 import { createRoot } from "react-dom/client";
-import { BrowserRouter, Route, Routes } from "react-router-dom";
+import { BrowserRouter } from "react-router-dom";
+import "@fontsource-variable/space-grotesk";
 import "./index.css";
-import App from "./App.jsx";
-import AboutPage from "./pages/AboutPage.jsx";
-import ContactPage from "./pages/ContactPage.jsx";
-import PortfolioPage from "./pages/PortfolioPage.jsx";
-import ServicesPage from "./pages/ServicesPage.jsx";
+import "./styles/portfolioAnimations.css";
+import "./styles/workExperience.css";
+import SiteShell from "./components/SiteShell.jsx";
 
 createRoot(document.getElementById("root")).render(
   <StrictMode>
     <BrowserRouter>
-      <Routes>
-        <Route path="/" element={<App />} />
-        <Route path="/about" element={<AboutPage />} />
-        <Route path="/services" element={<ServicesPage />} />
-        <Route path="/portfolio" element={<PortfolioPage />} />
-        <Route path="/contact" element={<ContactPage />} />
-      </Routes>
+      <SiteShell />
     </BrowserRouter>
   </StrictMode>
 );

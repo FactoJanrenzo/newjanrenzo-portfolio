@@ -4,13 +4,16 @@ export default function ScrollRevealText({
   text,
   className = "mx-auto max-w-6xl text-center text-4xl font-black leading-[1.02] tracking-[-0.06em] sm:text-6xl lg:text-8xl",
   activeClass = "text-white",
-  inactiveClass = "text-white/12",
+  inactiveClass = "text-white/45",
 }) {
   const ref = useRef(null);
   const words = useMemo(() => text.split(" "), [text]);
   const [activeWords, setActiveWords] = useState(0);
+  const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 
   useEffect(() => {
+    if (reducedMotion) return undefined;
+
     const update = () => {
       if (!ref.current) return;
       const rect = ref.current.getBoundingClientRect();
@@ -18,7 +21,8 @@ export default function ScrollRevealText({
       const start = viewHeight * 0.86;
       const end = viewHeight * 0.28;
       const progress = Math.min(1, Math.max(0, (start - rect.top) / (start - end)));
-      setActiveWords(Math.round(progress * words.length));
+      const nextActiveWords = Math.round(progress * words.length);
+      setActiveWords((current) => Math.max(current, nextActiveWords));
     };
 
     update();
@@ -28,12 +32,14 @@ export default function ScrollRevealText({
       window.removeEventListener("scroll", update);
       window.removeEventListener("resize", update);
     };
-  }, [words.length]);
+  }, [reducedMotion, words.length]);
+
+  const visibleWords = reducedMotion ? words.length : activeWords;
 
   return (
     <h2 ref={ref} className={className}>
       {words.map((word, index) => (
-        <span key={`${word}-${index}`} className={`transition-colors duration-300 ${index < activeWords ? activeClass : inactiveClass}`}>{word}{" "}</span>
+        <span key={`${word}-${index}`} className={`transition-colors duration-300 ${index < visibleWords ? activeClass : inactiveClass}`}>{word}{" "}</span>
       ))}
     </h2>
   );
