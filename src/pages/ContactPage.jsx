@@ -9,12 +9,12 @@ export default function ContactPage() {
       <PageHeader />
       <main id="main-content" className="min-w-0 overflow-x-clip bg-[#070806] text-white">
         <section className="site-grid-bg border-b border-white/10 py-16 sm:py-20">
-          <div className="site-container grid gap-8 lg:grid-cols-[1fr_0.72fr] lg:items-end">
-            <div>
+          <div className="site-container page-intro grid gap-8 lg:grid-cols-[1fr_0.72fr] lg:items-end">
+            <div className="page-intro-copy">
               <p className="section-kicker">Project / role / collaboration</p>
               <h1 className="page-title">Tell me what you want to build next.</h1>
             </div>
-            <p className="max-w-xl text-lg leading-8 text-white/70 lg:justify-self-end">
+            <p className="page-intro-support max-w-xl text-lg leading-8 text-white/70 lg:justify-self-end">
               Share the goal and the context that matters. I will review the details and respond with a practical next step.
             </p>
           </div>

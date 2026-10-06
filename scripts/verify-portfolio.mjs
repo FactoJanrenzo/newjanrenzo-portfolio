@@ -7,15 +7,14 @@ import { featuredProjects, publicProjects, workProjects } from "../src/data/site
 const repositoryRoot = dirname(dirname(fileURLToPath(import.meta.url)));
 const expectedFeaturedIds = [
   "junk-n-tow-website",
+  "vital-factory-supplement-funnel",
   "umlc-church-monitoring-dashboard",
-  "millsco-amazon-aplus-content",
-  "commercial-solar-reel",
-  "changing-weather-reel",
-  "untold-story-editorial",
-  "leaders-convergence",
+  "seo-for-real-estate-homepage",
+  "beauty-rocio-cosmetic-institute",
 ];
 
 assert.deepEqual(featuredProjects.map(({ id }) => id), expectedFeaturedIds, "Featured projects must match the verified launch set.");
+assert(featuredProjects.every(({ category }) => category === "Websites & Funnels"), "Featured work must stay focused on websites and funnels.");
 assert.equal(new Set(workProjects.map(({ id }) => id)).size, workProjects.length, "Project IDs must be unique.");
 assert(workProjects.every(({ visibility }) => ["featured", "archive", "private"].includes(visibility)), "Every project must declare a supported visibility.");
 assert(!publicProjects.some(({ visibility }) => visibility === "private"), "Private projects must not appear in the public project collection.");
@@ -40,6 +39,10 @@ const contactForm = readFileSync(join(repositoryRoot, "src", "components", "Cont
 assert(!contactForm.includes("/.netlify/functions/"), "ContactForm must not call a public email function.");
 assert(contactForm.includes('fetch("/"'), "ContactForm must submit through Netlify Forms.");
 assert(contactForm.includes("response.ok"), "ContactForm must check the Netlify Forms response.");
+assert(!/data-netlify|netlify-honeypot/.test(contactForm), "The prerendered ContactForm must not carry Netlify attributes; Netlify would rewrite it and break hydration.");
+
+const redirects = readFileSync(join(repositoryRoot, "public", "_redirects"), "utf8");
+assert(!/^\/\*\s/m.test(redirects), "A catch-all rewrite would turn unknown URLs into soft 404s; prerendered pages and 404.html cover every route.");
 
 const documentShell = readFileSync(join(repositoryRoot, "index.html"), "utf8");
 for (const fieldName of ["inquiryType", "name", "email", "subject", "message", "bot-field"]) {

@@ -1,5 +1,5 @@
 import { StrictMode } from "react";
-import { createRoot } from "react-dom/client";
+import { createRoot, hydrateRoot } from "react-dom/client";
 import { BrowserRouter } from "react-router-dom";
 import "@fontsource-variable/space-grotesk";
 import "./index.css";
@@ -7,10 +7,16 @@ import "./styles/portfolioAnimations.css";
 import "./styles/workExperience.css";
 import SiteShell from "./components/SiteShell.jsx";
 
-createRoot(document.getElementById("root")).render(
+const rootElement = document.getElementById("root");
+// Production pages are prerendered at build time; the dev server serves an empty root.
+const prerendered = rootElement.hasChildNodes();
+const app = (
   <StrictMode>
     <BrowserRouter>
-      <SiteShell />
+      <SiteShell prerendered={prerendered} />
     </BrowserRouter>
   </StrictMode>
 );
+
+if (prerendered) hydrateRoot(rootElement, app);
+else createRoot(rootElement).render(app);

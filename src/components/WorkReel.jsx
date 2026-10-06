@@ -38,13 +38,13 @@ export default function WorkReel({ projects }) {
   return (
     <section className="site-grid-bg border-b border-white/10 py-16 sm:py-20 lg:py-24">
       <div className="site-container">
-        <div className="grid gap-8 lg:grid-cols-[1fr_0.72fr] lg:items-end">
-          <div>
-            <p className="section-kicker">Selected work / 07</p>
-            <h1 className="page-title max-w-5xl">A focused edit of work that is ready to be judged.</h1>
+        <div className="page-intro grid gap-8 lg:grid-cols-[1fr_0.72fr] lg:items-end">
+          <div className="page-intro-copy">
+            <p className="section-kicker">Selected web work / {String(projects.length).padStart(2, "0")}</p>
+            <h1 className="page-title max-w-5xl">Websites, landing pages, and web apps.</h1>
           </div>
-          <p className="max-w-xl text-lg leading-8 text-white/65 lg:justify-self-end">
-            Verified websites, product interfaces, campaign systems, and motion work—presented with role, status, and context instead of unsupported outcomes.
+          <p className="page-intro-support max-w-xl text-lg leading-8 text-white/65 lg:justify-self-end">
+            A focused edit of web projects, each shown with the role, status, and decisions behind the build. More web work and design &amp; motion projects follow below.
           </p>
         </div>
 

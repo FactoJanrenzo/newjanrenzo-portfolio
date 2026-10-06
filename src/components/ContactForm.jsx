@@ -40,7 +40,9 @@ export default function ContactForm() {
   };
 
   return (
-    <form name="contact" method="POST" data-netlify="true" netlify-honeypot="bot-field" onSubmit={handleSubmit} aria-busy={formStatus === "sending"} className="grid gap-5">
+    // Netlify registers this form from the static copy in index.html; netlify attributes here would make
+    // Netlify rewrite the prerendered markup and break hydration.
+    <form name="contact" method="POST" onSubmit={handleSubmit} aria-busy={formStatus === "sending"} className="grid gap-5">
       <input type="hidden" name="form-name" value="contact" />
       <p hidden>
         <label>Do not fill this field if you are human: <input name="bot-field" tabIndex="-1" autoComplete="off" /></label>

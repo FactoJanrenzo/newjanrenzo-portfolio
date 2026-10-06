@@ -1,4 +1,4 @@
-import { lazy, Suspense, useEffect } from "react";
+import { lazy, Suspense, useEffect, useRef } from "react";
 import { Navigate, Route, Routes, useLocation } from "react-router-dom";
 import { ScrollToTopButton } from "./PageEffects.jsx";
 
@@ -10,8 +10,15 @@ const ProjectCaseStudyPage = lazy(() => import("../pages/ProjectCaseStudyPage.js
 const ServicesPage = lazy(() => import("../pages/ServicesPage.jsx"));
 const NotFoundPage = lazy(() => import("../pages/NotFoundPage.jsx"));
 
-export default function SiteShell() {
+const isInViewport = (element) => {
+  const bounds = element.getBoundingClientRect();
+  return bounds.top < window.innerHeight && bounds.bottom > 0;
+};
+
+export default function SiteShell({ prerendered = false }) {
   const location = useLocation();
+  // Prerendered content is already painted, so the first pass must not hide what is on screen.
+  const keepPaintedContent = useRef(prerendered);
 
   useEffect(() => {
     if (!location.hash) window.scrollTo({ top: 0, behavior: "auto" });
@@ -30,12 +37,14 @@ export default function SiteShell() {
       const root = document.getElementById("main-content");
       if (!root) return;
       const targets = root.querySelectorAll("section:not(:first-child), article, .motion-card");
+      const keepPainted = keepPaintedContent.current;
+      keepPaintedContent.current = false;
       Array.from(targets).forEach((target, index) => {
         if (registered.has(target)) return;
         registered.add(target);
         target.classList.add("reveal-on-scroll");
         target.style.setProperty("--delay", `${Math.min(index * 30, 180)}ms`);
-        if (reducedMotion) target.classList.add("is-visible");
+        if (reducedMotion || (keepPainted && isInViewport(target))) target.classList.add("is-visible");
         else observer.observe(target);
       });
     };
@@ -88,17 +97,19 @@ export default function SiteShell() {
     <div data-site-version="3.0.0" className="portfolio-page min-h-screen">
       <ScrollToTopButton />
       <Suspense fallback={<main id="main-content" className="min-h-screen bg-[#070806]" aria-busy="true" />}>
-        <Routes>
-          <Route path="/" element={<HomePage />} />
-          <Route path="/about" element={<AboutPage />} />
-          <Route path="/services" element={<ServicesPage />} />
-          <Route path="/portfolio" element={<PortfolioPage />} />
-          <Route path="/portfolio/power-outage-solar" element={<Navigate to="/portfolio/sunday-family-cell-celebration" replace />} />
-          <Route path="/portfolio/:projectId" element={<ProjectCaseStudyPage />} />
-          <Route path="/work" element={<Navigate to="/portfolio" replace />} />
-          <Route path="/contact" element={<ContactPage />} />
-          <Route path="*" element={<NotFoundPage />} />
-        </Routes>
+        <div key={location.pathname} className="route-transition">
+          <Routes>
+            <Route path="/" element={<HomePage />} />
+            <Route path="/about" element={<AboutPage />} />
+            <Route path="/services" element={<ServicesPage />} />
+            <Route path="/portfolio" element={<PortfolioPage />} />
+            <Route path="/portfolio/power-outage-solar" element={<Navigate to="/portfolio/sunday-family-cell-celebration" replace />} />
+            <Route path="/portfolio/:projectId" element={<ProjectCaseStudyPage />} />
+            <Route path="/work" element={<Navigate to="/portfolio" replace />} />
+            <Route path="/contact" element={<ContactPage />} />
+            <Route path="*" element={<NotFoundPage />} />
+          </Routes>
+        </div>
       </Suspense>
     </div>
   );

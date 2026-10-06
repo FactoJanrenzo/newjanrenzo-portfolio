@@ -150,7 +150,7 @@ export default function ProjectCaseStudyPage() {
       <PageHeader />
       <main id="main-content" className="min-w-0 overflow-x-clip bg-[#f3f4ee] text-[#090a08]">
         <section className="border-b border-black/12">
-          <div className="site-container py-12 sm:py-16 lg:py-20">
+          <div className="site-container page-intro py-12 sm:py-16 lg:py-20">
             <Link to="/portfolio" className="focus-ring inline-flex min-h-11 items-center gap-2 text-sm font-bold text-black/55 hover:text-black">
               <span aria-hidden="true">&#8592;</span> Work Index
             </Link>
@@ -252,7 +252,7 @@ export default function ProjectCaseStudyPage() {
                   {project.deliverables.map((item) => <li key={item}>- {item}</li>)}
                 </ul>
               </DetailBlock>
-              <DetailBlock title="Result"><strong>{project.result}</strong></DetailBlock>
+              <DetailBlock title="Outcome"><strong>{project.result}</strong></DetailBlock>
             </div>
           </div>
         </section>

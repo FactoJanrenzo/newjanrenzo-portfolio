@@ -16,7 +16,7 @@ export default function AboutPage() {
       <main id="main-content" className="min-w-0 overflow-x-clip bg-[#070806] text-white">
         <section className="site-grid-bg border-b border-white/10">
           <div className="site-container grid min-w-0 gap-10 py-14 lg:grid-cols-[1fr_0.8fr] lg:items-center lg:py-20">
-            <div>
+            <div className="page-intro">
               <p className="section-kicker">About Janrenzo</p>
               <h1 className="page-title">A web designer who thinks through the build.</h1>
               <p className="mt-7 max-w-2xl text-lg leading-8 text-white/60 sm:text-xl sm:leading-9">

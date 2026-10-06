@@ -17,7 +17,7 @@ export default function ServicesPage() {
       <main id="main-content" className="min-w-0 overflow-x-clip bg-[#070806] text-white">
         <section className="services-hero site-grid-bg border-b border-white/10 py-16 sm:py-20 lg:py-24">
           <div className="site-container grid min-w-0 gap-12 lg:grid-cols-[minmax(0,1fr)_minmax(18rem,0.55fr)] lg:items-end lg:gap-16">
-            <div className="min-w-0">
+            <div className="page-intro min-w-0">
               <p className="section-kicker">What I build</p>
               <h1 className="page-title max-w-4xl">Websites and lead systems for businesses ready to grow.</h1>
               <p className="mt-7 max-w-2xl text-lg leading-8 text-white/70 sm:text-xl sm:leading-9">

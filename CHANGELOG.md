@@ -1,5 +1,16 @@
 # Changelog
 
+## Unreleased
+
+- Prerendered every route to static HTML at build time with page-specific titles, descriptions, canonical URLs, and social tags, then hydrated it on the client.
+- Replaced the catch-all SPA rewrite with explicit page rewrites, legacy 301 redirects, and a real 404 status for unknown URLs.
+- Added self-drawing Lottie icons to the process steps, lazy-loaded with the CSP-safe light player, played once, replayed on hover, and shown as a still frame for reduced motion.
+- Moved button, tag, kicker, and card base styles into the components layer so utility overrides apply, fixing invisible tags and buttons on light and lime sections.
+- Rewrote case-study outcomes around what was delivered, removed the broken Beauty Rocío development link, and removed internal notes from the work history.
+- Refocused featured work on five website, landing-page, and web-app projects, and split the portfolio archive into More web work and a filterable Design & motion section led by MillsCo.
+- Trimmed the homepage by removing the Connected toolkit orbit section (backed up in tmp/), moving the tool strip into Services, and starting it when the section is revealed.
+- Added a homepage testimonial section that appears once real client quotes are added to siteContent.js.
+
 ## v2.7.0 - 2026-08-14
 
 - Added four AI-generated presentation design case studies with honest project labels and local optimized slide galleries.

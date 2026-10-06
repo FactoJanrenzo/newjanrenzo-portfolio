@@ -1,4 +1,5 @@
 import { useEffect, useMemo, useRef, useState } from "react";
+import usePrefersReducedMotion from "../hooks/usePrefersReducedMotion";
 
 export default function ScrollRevealText({
   text,
@@ -9,7 +10,7 @@ export default function ScrollRevealText({
   const ref = useRef(null);
   const words = useMemo(() => text.split(" "), [text]);
   const [activeWords, setActiveWords] = useState(0);
-  const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+  const reducedMotion = usePrefersReducedMotion();
 
   useEffect(() => {
     if (reducedMotion) return undefined;

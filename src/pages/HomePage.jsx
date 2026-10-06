@@ -1,18 +1,12 @@
-import { Link } from "react-router-dom";
 import PageHeader, { PageMeta, SiteFooter } from "../components/PageHeader";
 import { HeroParticleField, HeroScrollAccents } from "../components/PageEffects";
 import { ProjectVisual } from "../components/PortfolioShowcase";
 import ScrollRevealText from "../components/ScrollRevealText";
-import { FinalCta, ProcessSection, ServicesOverview } from "../components/Sections";
+import { FinalCta, ProcessSection, ServicesOverview, TestimonialsSection } from "../components/Sections";
 import { credibilityItems, featuredProjects, profileImage, siteConfig, skillGroups } from "../data/siteContent";
+import { Link } from "react-router-dom";
 
 const capabilityTools = [...new Set(skillGroups.flatMap((group) => group.items))];
-const orbitItems = [
-  { symbol: "WP", label: "WordPress" },
-  { symbol: "GHL", label: "Lead systems" },
-  { symbol: "FE", label: "Frontend" },
-  { symbol: "SEO", label: "Optimization" },
-];
 
 function HeroSection() {
   return (
@@ -87,7 +81,7 @@ function FeaturedWorkSection() {
             <p className="text-sm font-bold text-[#568400]">Selected work</p>
             <ScrollRevealText text="Proof through the work itself." className="section-title mt-4" activeClass="text-black" inactiveClass="text-black/50" />
             <p className="mt-6 max-w-2xl text-lg leading-8 text-black/60">
-              Seven verified projects spanning web, product interfaces, ecommerce creative, motion, and campaign design—without invented results.
+              Websites, landing pages, and web apps, each with the role, status, and decisions behind the build.
             </p>
           </div>
           <Link to="/portfolio" className="button-secondary w-fit border-black/20 bg-transparent text-black hover:border-black hover:bg-black hover:text-white">Explore All Work</Link>
@@ -95,7 +89,7 @@ function FeaturedWorkSection() {
 
         <div className="mt-12 grid min-w-0 gap-4 md:grid-cols-2 lg:grid-cols-12">
           {featuredProjects.map((project, index) => (
-            <article key={project.id} className={`surface-card-interactive flex w-full min-w-0 flex-col overflow-hidden rounded-lg border border-black/12 bg-white ${index < 2 || index > 4 ? "lg:col-span-6" : "lg:col-span-4"}`}>
+            <article key={project.id} className={`surface-card-interactive flex w-full min-w-0 flex-col overflow-hidden rounded-lg border border-black/12 bg-white ${index < 2 ? "lg:col-span-6" : "lg:col-span-4"} ${index === featuredProjects.length - 1 && featuredProjects.length % 2 === 1 ? "md:col-span-2 lg:col-span-4" : ""}`}>
               <ProjectVisual project={project} />
               <div className="flex flex-1 flex-col p-5 sm:p-6">
                 <div className="flex flex-wrap items-center gap-2">
@@ -114,6 +108,13 @@ function FeaturedWorkSection() {
             </article>
           ))}
         </div>
+
+        <div className="mt-10 flex flex-col gap-3 border-t border-black/12 pt-7 sm:flex-row sm:items-center sm:justify-between">
+          <p className="max-w-2xl text-sm leading-6 text-black/65">
+            Also in the portfolio: Amazon A+ content live on nine listings, short-form video, presentations, and campaign graphics.
+          </p>
+          <Link to="/portfolio#design-motion" className="project-action inline-flex min-h-11 shrink-0 items-center rounded-sm text-sm font-bold text-black underline decoration-[#74a918] decoration-2 underline-offset-4">See Design &amp; Motion Work</Link>
+        </div>
       </div>
     </section>
   );
@@ -121,16 +122,19 @@ function FeaturedWorkSection() {
 
 function ServicesSection() {
   return (
-    <section className="site-section border-y border-white/10 bg-[#080907]">
+    <section className="site-section overflow-hidden border-y border-white/10 bg-[#080907]">
       <div className="site-container">
         <div className="mb-12 grid gap-6 lg:grid-cols-[0.8fr_1.2fr] lg:items-end">
           <ScrollRevealText text="Three ways I can help." className="section-title" />
           <p className="max-w-2xl text-lg leading-8 text-white/70 lg:justify-self-end">
-            Each service is organized around the business problem, the deliverable, and the path to launch, not a long software list.
+            Each service is organized around the business problem, the deliverable, and the path to launch. The tools follow the project.
           </p>
         </div>
         <ServicesOverview />
         <Link to="/services" className="button-secondary mt-8">View Service Details</Link>
+      </div>
+      <div className="mt-14 w-full border-y border-white/10">
+        <ToolMarquee items={capabilityTools} />
       </div>
     </section>
   );
@@ -154,65 +158,6 @@ function ToolMarquee({ items }) {
   );
 }
 
-function OrbitingCapabilitiesVisual() {
-  return (
-    <div className="relative mx-auto grid h-[340px] w-full max-w-[320px] place-items-center overflow-hidden sm:h-[460px] sm:max-w-[420px]">
-      <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,rgba(184,251,69,0.18),transparent_38%)]" />
-      <div className="absolute h-[82%] w-[82%] rounded-full border border-dashed border-white/15" />
-      <div className="absolute h-[62%] w-[62%] rounded-full border border-white/10" />
-      <div className="absolute h-[44%] w-[44%] rounded-full border border-lime-300/10" />
-
-      <div className="orbit-ring absolute grid h-[72%] w-[72%] place-items-center rounded-full [--orbit-radius:96px] motion-reduce:animate-none sm:h-[76%] sm:w-[76%] sm:[--orbit-radius:150px]">
-        {orbitItems.map((item, index) => (
-          <div
-            key={item.label}
-            className="orbit-item absolute left-1/2 top-1/2"
-            style={{
-              "--angle": `${(360 / orbitItems.length) * index}deg`,
-              "--counter-angle": `${(360 / orbitItems.length) * index * -1}deg`,
-            }}
-          >
-            <div className="orbit-counter grid h-11 w-11 place-items-center rounded-full border border-white/10 bg-black/80 text-center shadow-2xl backdrop-blur-xl motion-reduce:animate-none sm:h-auto sm:w-auto sm:rounded-3xl sm:px-4 sm:py-3">
-              <p className="text-sm font-black text-lime-300 sm:text-lg">{item.symbol}</p>
-              <p className="mt-1 hidden text-[9px] font-black uppercase tracking-[0.2em] text-white/65 sm:block">{item.label}</p>
-            </div>
-          </div>
-        ))}
-      </div>
-
-      <div className="relative z-10 grid aspect-square w-[43%] min-w-[126px] place-items-center rounded-full bg-black shadow-[0_0_80px_rgba(190,252,53,0.2)] ring-1 ring-lime-300/10 sm:w-[44%] sm:min-w-[165px]">
-        <div className="text-center">
-          <p className="text-[10px] font-black uppercase tracking-[0.38em] text-lime-300 sm:text-xs sm:tracking-[0.45em]">Connected</p>
-          <h3 className="mt-3 text-3xl font-black text-white sm:text-4xl">Systems</h3>
-          <p className="mt-4 text-[10px] font-black uppercase tracking-[0.18em] text-white/65 sm:text-xs sm:tracking-[0.24em]">Web / GHL / SEO</p>
-        </div>
-      </div>
-    </div>
-  );
-}
-
-function CapabilitiesMotionSection() {
-  return (
-    <section className="site-section overflow-hidden border-b border-white/10 bg-[#0c0d0b]">
-      <div className="site-container">
-        <div className="grid min-w-0 items-center gap-12 lg:grid-cols-[1fr_0.8fr]">
-          <div className="min-w-0">
-            <p className="section-kicker">Connected toolkit</p>
-            <ScrollRevealText text="The right tools around one clear customer journey." className="section-title max-w-[13ch]" />
-            <p className="mt-6 max-w-2xl text-lg leading-8 text-white/70">
-              WordPress, GoHighLevel, frontend work, and optimization are selected around the project outcome rather than treated as separate layers.
-            </p>
-          </div>
-          <OrbitingCapabilitiesVisual />
-        </div>
-      </div>
-      <div className="mt-12 w-full border-y border-white/10">
-        <ToolMarquee items={capabilityTools} />
-      </div>
-    </section>
-  );
-}
-
 export default function HomePage() {
   return (
     <>
@@ -222,8 +167,8 @@ export default function HomePage() {
         <HeroSection />
         <CredibilityStrip />
         <FeaturedWorkSection />
+        <TestimonialsSection />
         <ServicesSection />
-        <CapabilitiesMotionSection />
         <ProcessSection light />
         <FinalCta />
       </main>
