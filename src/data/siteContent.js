@@ -94,6 +94,12 @@ export const processSteps = [
 
 export const professionalHistory = [
   {
+    period: "Current",
+    role: "Contractor, Map + CRM Lead-Ingestion Pipeline",
+    company: "ICW",
+    text: "Building a pipeline that moves map-sourced business leads into the CRM, validating each stage with state-level configuration and controlled test batches before scaling.",
+  },
+  {
     period: "May-Dec 2025",
     role: "Web Developer, GoHighLevel Automation Specialist & Graphic Designer",
     company: "Clinic Envy",
@@ -129,7 +135,7 @@ const createFigmaWebsiteProject = ({
   solution,
   deliverables,
   imageSlug,
-  result = "Completed Figma design mockup. Results not publicly available.",
+  result = "Completed full homepage design in Figma.",
 }) => ({
   id,
   title,
@@ -154,6 +160,11 @@ const createFigmaWebsiteProject = ({
 const websiteProjects = [
   {
     id: "junk-n-tow-website",
+    client: "A+ Junk N Tow",
+    headline: "A cash-for-cars website built around one repeated estimate action.",
+    chip: "Live preview",
+    frameLabel: "dev-janrenzofacto.pantheonsite.io",
+    meta: "WordPress · Lead-generation website · Responsive build",
     title: "A+ Junk N Tow Website",
     category: "Websites & Funnels",
     status: "Website Project",
@@ -166,7 +177,7 @@ const websiteProjects = [
     strategy: "Lead with the offer, repeat the estimate action, and explain pickup and payment in a simple three-step flow.",
     solution: "A service-focused page with clear contact paths, process guidance, vehicle-condition messaging, and FAQ content.",
     deliverables: ["Full website layout", "Responsive page structure", "Estimate CTA flow", "Service content sections"],
-    result: "Live development preview. Public performance metrics unavailable.",
+    result: "Full website built and running on a live development environment.",
     image: "/portfolio/junk-n-tow-website-preview.webp",
     liveUrl: "https://dev-janrenzofacto.pantheonsite.io/",
     liveLabel: "Live Development Preview",
@@ -176,28 +187,35 @@ const websiteProjects = [
   },
   {
     id: "beauty-rocio-cosmetic-institute",
+    client: "Beauty Rocío",
+    headline: "A cosmetic institute's services and products, organized into one clear site.",
+    chip: "In development",
+    frameLabel: "In development",
+    meta: "WordPress · Content structure",
     title: "Beauty Rocío Cosmetic Institute",
     category: "Websites & Funnels",
-    status: "Development Preview",
+    status: "In Development",
     projectType: "Cosmetic institute website development",
     industry: "Beauty and wellness",
-    description: "An in-progress WordPress website for a cosmetic institute, currently available as a public development environment.",
+    description: "An in-progress WordPress website for a cosmetic institute, organized around the brand, its services, its products, and a clear path to contact.",
     services: ["WordPress development", "Content structure", "Responsive review"],
     tools: ["WordPress", "Frontend styling", "Responsive design"],
     challenge: "Shape an early cosmetic-institute website into a clearer presentation of the brand, services, products, and contact information.",
-    strategy: "Organize the existing health, beauty, product, and institute content while identifying visible development issues before launch.",
-    solution: "A public development preview that documents the current visual direction and remaining layout and environment work.",
+    strategy: "Organize the existing health, beauty, product, and institute content into a clear page hierarchy, and resolve layout details before launch.",
+    solution: "A full-page WordPress layout that groups the institute's services and products into scannable sections with a consistent visual direction.",
     deliverables: ["Development website", "Service content sections", "Product presentation", "Responsive review"],
-    result: "Development environment currently contains a visible server warning and unfinished layout details. Public performance metrics unavailable.",
+    result: "In development. The full-page capture shows the current design direction ahead of launch.",
     image: "/portfolio/beauty-rocio-preview.webp",
-    liveUrl: "https://dev-cosmetic-institute-beauty-rocio.pantheonsite.io/",
-    liveLabel: "Live Development Preview",
-    liveStatus: "Development environment",
     scrollableImage: true,
     featured: true,
   },
   {
     id: "vital-factory-supplement-funnel",
+    client: "Vital Factory",
+    headline: "A direct-response supplement page that moves visitors from education to offer.",
+    chip: "Live preview",
+    frameLabel: "dev-vital-factory.pantheonsite.io",
+    meta: "WordPress · Landing page",
     title: "Vital Factory Supplement Landing Page",
     category: "Websites & Funnels",
     status: "Development Preview",
@@ -210,7 +228,7 @@ const websiteProjects = [
     strategy: "Use a direct-response flow with a clear product hero, repeated offer actions, supporting education, guarantees, and FAQ-style content.",
     solution: "A long-form WordPress sales-page development preview with product-focused sections and responsive presentation.",
     deliverables: ["Landing-page layout", "Responsive frontend", "Offer CTA structure", "Product education sections"],
-    result: "Live development preview. Health, review, and performance claims shown on the source site have not been independently verified.",
+    result: "Landing page built and running on a live development environment. Product health and review claims on the page belong to the client.",
     image: "/portfolio/vital-factory-preview.webp",
     liveUrl: "https://dev-vital-factory.pantheonsite.io/",
     liveLabel: "Live Development Preview",
@@ -218,6 +236,11 @@ const websiteProjects = [
   },
   {
     id: "umlc-church-monitoring-dashboard",
+    client: "UMLC",
+    headline: "A church dashboard that keeps attendance, disciples, and meetings in one view.",
+    chip: "Live app",
+    device: "laptop",
+    meta: "React · Supabase · Vercel",
     title: "UMLC Church Monitoring Dashboard",
     category: "Websites & Funnels",
     status: "Vibe-Coded Web App",
@@ -230,7 +253,7 @@ const websiteProjects = [
     strategy: "Use persistent navigation, clear overview metrics, an attendance calendar, and focused activity panels to keep the most important ministry signals visible.",
     solution: "A dark responsive dashboard with role-oriented navigation, attendance tracking, member and leader monitoring, login activity, invitation actions, and Supabase-backed data workflows.",
     deliverables: ["Dashboard application", "Responsive interface", "Attendance calendar", "Member monitoring", "Invitation workflow"],
-    result: "Live web application built from scratch through a vibe-coding workflow. Public usage or outcome metrics are not available.",
+    result: "Live web application built from scratch with an AI-assisted (vibe-coding) workflow, deployed on Vercel with Supabase-backed data.",
     image: "/portfolio/umlc-church-monitoring-dashboard.webp",
     liveUrl: "https://umlcsite.vercel.app/dashboard",
     liveLabel: "Live Dashboard",
@@ -241,6 +264,11 @@ const websiteProjects = [
   },
   {
     id: "seo-for-real-estate-homepage",
+    client: "SEO for Real Estate",
+    headline: "A seller lead-generation homepage that keeps the offer form in view.",
+    chip: "Figma",
+    frameLabel: "Figma · Homepage design",
+    meta: "Homepage UI design · Conversion structure",
     title: "SEO for Real Estate Homepage",
     category: "Websites & Funnels",
     status: "Figma Mockup",
@@ -253,7 +281,7 @@ const websiteProjects = [
     strategy: "Lead with the homeowner problem, keep the offer form visible, and support it with process, trust, service-area, and repeat-CTA sections.",
     solution: "A complete desktop homepage mockup with a clear lead form, visual process, seller-focused content, testimonial placement, and closing offer section.",
     deliverables: ["Full homepage mockup", "Lead-form hierarchy", "Long-form desktop layout", "Reusable content sections"],
-    result: "Completed Figma design mockup. Results not publicly available.",
+    result: "Completed full homepage design in Figma.",
     image: "/portfolio/seo-for-real-estate-homepage.webp",
     scrollableImage: true,
     mockupOnly: true,
@@ -272,7 +300,7 @@ const websiteProjects = [
     strategy: "Use one primary appointment action, a concise service overview, and strong visual separation between the hero, introduction, proof, and footer.",
     solution: "A complete desktop homepage mockup with prominent navigation, appointment CTA, service cards, company introduction, and contact-ready footer.",
     deliverables: ["Full homepage mockup", "Service-card system", "Appointment CTA hierarchy", "Desktop page layout"],
-    result: "Completed Figma design mockup. Template counters, logos, and placeholder copy shown in the artwork are presentation content, not verified business results.",
+    result: "Completed full homepage design in Figma. Counters, logos, and copy in the artwork are placeholder content.",
     image: "/portfolio/tax-company-mockup.webp",
     scrollableImage: true,
     mockupOnly: true,
@@ -298,7 +326,7 @@ const websiteProjects = [
     solution: "A tall homepage template with a branded hero, property presentation, service sections, agent introduction, and repeated inquiry paths.",
     deliverables: ["Full homepage mockup", "Agent-brand direction", "Property content layout", "Buyer and seller CTA structure"],
     imageSlug: "agent-male",
-    result: "Completed Figma template exploration. Placeholder counters, testimonials, and awards shown in the artwork are not claimed results.",
+    result: "Completed homepage template in Figma. Counters, testimonials, and awards in the artwork are placeholder content.",
   }),
   createFigmaWebsiteProject({
     id: "investor-02-homepage",
@@ -310,7 +338,7 @@ const websiteProjects = [
     solution: "A dark, conversion-oriented homepage direction with a visible lead form, seller benefits, process blocks, and reassurance sections.",
     deliverables: ["Full homepage mockup", "Lead-form composition", "Offer-page hierarchy", "Long-form responsive direction"],
     imageSlug: "investor-02",
-    result: "Completed Figma mockup exploration. Placeholder testimonials and performance numbers shown in the design are not claimed results.",
+    result: "Completed homepage design in Figma. Testimonials and numbers in the artwork are placeholder content.",
   }),
   createFigmaWebsiteProject({
     id: "investor-03-homepage",
@@ -322,7 +350,7 @@ const websiteProjects = [
     solution: "A clean homepage mockup with a prominent seller form, warm visual accents, trust sections, and a structured long-form journey.",
     deliverables: ["Full homepage mockup", "Form-first hero", "Seller journey sections", "Responsive layout direction"],
     imageSlug: "investor-03",
-    result: "Completed Figma mockup exploration. Placeholder testimonials and performance numbers shown in the design are not claimed results.",
+    result: "Completed homepage design in Figma. Testimonials and numbers in the artwork are placeholder content.",
   }),
   createFigmaWebsiteProject({
     id: "investor-04-homepage",
@@ -334,7 +362,7 @@ const websiteProjects = [
     solution: "A polished homepage direction with a serif-led hierarchy, seller-focused messaging, process content, and structured contact moments.",
     deliverables: ["Full homepage mockup", "Editorial type direction", "Offer-page structure", "Responsive layout direction"],
     imageSlug: "investor-04",
-    result: "Completed Figma mockup exploration. Placeholder testimonials and performance numbers shown in the design are not claimed results.",
+    result: "Completed homepage design in Figma. Testimonials and numbers in the artwork are placeholder content.",
   }),
   createFigmaWebsiteProject({
     id: "industry-01-homepage",
@@ -346,7 +374,7 @@ const websiteProjects = [
     solution: "A long-form homepage mockup with an assertive seller hero, lead-form placement, process sections, and reassurance content.",
     deliverables: ["Full homepage mockup", "Visual identity direction", "Lead-form hierarchy", "Seller education sections"],
     imageSlug: "industry-01",
-    result: "Completed Figma mockup exploration. Placeholder testimonials and performance numbers shown in the design are not claimed results.",
+    result: "Completed homepage design in Figma. Testimonials and numbers in the artwork are placeholder content.",
   }),
   createFigmaWebsiteProject({
     id: "investor-05-homepage",
@@ -358,7 +386,7 @@ const websiteProjects = [
     solution: "A long-form homepage mockup with dark and light section contrast, property imagery, process blocks, and multiple conversion points.",
     deliverables: ["Full homepage mockup", "Long-form page structure", "Seller proof sections", "Repeated CTA pattern"],
     imageSlug: "investor-05",
-    result: "Completed Figma mockup exploration. Placeholder testimonials and performance numbers shown in the design are not claimed results.",
+    result: "Completed homepage design in Figma. Testimonials and numbers in the artwork are placeholder content.",
   }),
   {
     id: "local-service-system",
@@ -374,7 +402,7 @@ const websiteProjects = [
     strategy: "Group services by customer need and repeat one primary inquiry action across the page.",
     solution: "A practice website system with service summaries, trust content, process, and contact sections.",
     deliverables: ["Page system", "Mobile layout", "Service hierarchy", "CTA pattern"],
-    result: "Practice project. Results not available.",
+    result: "Practice project exploring a reusable page system for local service businesses.",
     visualTheme: "local-service",
   },
 ];
@@ -405,7 +433,7 @@ const createDesignProject = ({
   strategy,
   solution,
   deliverables: [projectType],
-  result: "Results not publicly available.",
+  result: "Finished artwork prepared for digital and social use.",
   image,
   featured,
 });
@@ -436,7 +464,7 @@ const createPresentationProject = ({
   strategy,
   solution,
   deliverables,
-  result: "AI-generated presentation design. No client or performance results claimed.",
+  result: `Complete ${slideCount}-slide deck designed with an AI-assisted visual workflow.`,
   image: `/portfolio/presentations/${assetSlug}-slide-01.webp`,
   imageFit: "contain",
   cardLabel: "AI-Generated Design",
@@ -478,7 +506,7 @@ const createVideoProject = ({
   strategy,
   solution,
   deliverables,
-  result: "No client or performance results claimed.",
+  result: "Finished video edit, exported for its target format.",
   video: `/portfolio/videos/${assetSlug}.mp4`,
   poster: `/portfolio/videos/${assetSlug}.webp`,
   videoOrientation,
@@ -500,7 +528,7 @@ const designProjects = [
     strategy: "Combine a shared catalog banner, title-specific artwork, classroom-focused messaging, and repeatable square modules that stay recognizable across product pages.",
     solution: "A reusable A+ module family applied across multiple Amazon listings, with each title receiving its own cover-led product imagery inside a consistent publishing system.",
     deliverables: ["Amazon A+ banners", "Square image modules", "Title-specific product visuals", "Reusable catalog content system"],
-    result: "Live A+ modules verified on nine Amazon listings. Sales and conversion results are not publicly available.",
+    result: "A+ content live on nine Amazon listings, verified on each product page.",
     image: "/portfolio/amazon-aplus-millsco-showcase.webp",
     imageFit: "contain",
     cardMeta: "9 verified live listings",
@@ -710,15 +738,25 @@ const designProjects = [
   }),
 ];
 
-const featuredProjectIds = new Set([
+const webCategory = "Websites & Funnels";
+
+// Featured work stays on websites and funnels, in this display order.
+const featuredProjectIds = [
   "junk-n-tow-website",
+  "vital-factory-supplement-funnel",
   "umlc-church-monitoring-dashboard",
+  "seo-for-real-estate-homepage",
+  "beauty-rocio-cosmetic-institute",
+];
+
+// Strongest design and motion pieces lead their section; the rest keep their order below.
+const designHighlightIds = [
   "millsco-amazon-aplus-content",
   "commercial-solar-reel",
   "changing-weather-reel",
   "untold-story-editorial",
   "leaders-convergence",
-]);
+];
 
 const privateProjectIds = new Set(["james-christian-cosmetic-website"]);
 const privateProjects = [{ id: "james-christian-cosmetic-website", title: "Private project" }];
@@ -726,7 +764,7 @@ const privateProjects = [{ id: "james-christian-cosmetic-website", title: "Priva
 export const workProjects = [...websiteProjects, ...designProjects, ...privateProjects].map((project) => {
   const visibility = privateProjectIds.has(project.id)
     ? "private"
-    : featuredProjectIds.has(project.id)
+    : featuredProjectIds.includes(project.id)
       ? "featured"
       : "archive";
 
@@ -734,8 +772,21 @@ export const workProjects = [...websiteProjects, ...designProjects, ...privatePr
 });
 
 export const publicProjects = workProjects.filter((project) => project.visibility !== "private");
-export const featuredProjects = publicProjects.filter((project) => project.visibility === "featured");
-export const archiveProjects = publicProjects.filter((project) => project.visibility === "archive");
+export const featuredProjects = featuredProjectIds.map((id) => publicProjects.find((project) => project.id === id));
+const archiveProjects = publicProjects.filter((project) => project.visibility === "archive");
+export const moreWebProjects = archiveProjects.filter((project) => project.category === webCategory);
+
+const highlightRank = (id) => {
+  const rank = designHighlightIds.indexOf(id);
+  return rank === -1 ? designHighlightIds.length : rank;
+};
+export const designWorkProjects = archiveProjects
+  .filter((project) => project.category !== webCategory)
+  .sort((first, second) => highlightRank(first.id) - highlightRank(second.id));
+
+// Real client quotes only, shared with permission: { quote, name, role, company, projectId }.
+// The homepage testimonial section stays hidden while this list is empty.
+export const testimonials = [];
 
 export const contactSteps = [
   "I review the goals, current website, timeline, and required integrations.",

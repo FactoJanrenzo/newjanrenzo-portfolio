@@ -1,45 +1,67 @@
-import { useEffect, useMemo, useState } from "react";
-import { Link, useLocation, useNavigate } from "react-router-dom";
+import { useEffect, useState } from "react";
+import { useLocation, useNavigate } from "react-router-dom";
 import PageHeader, { PageMeta, SiteFooter } from "../components/PageHeader";
-import { ProjectVisual } from "../components/PortfolioShowcase";
-import WorkReel from "../components/WorkReel";
-import { archiveProjects, featuredProjects, publicProjects } from "../data/siteContent";
+import { FinalCta, HeroOrbs } from "../components/Sections";
+import { WorkCard, WorkShowcase } from "../components/WorkCards";
+import { designWorkProjects, featuredProjects, moreWebProjects, publicProjects } from "../data/siteContent";
 
-const archiveCategories = ["All Work", "Websites & Funnels", "Graphic Design", "Campaign Creative", "Presentation Design", "Video & Motion"];
+const designCategories = ["All", "Campaign Creative", "Graphic Design", "Video & Motion", "Presentation Design"];
+const pageSize = 6;
 
-function DesignArchiveCard({ project }) {
+function ProjectArchive({ id, kicker, title, description, projects, categories }) {
+  const [activeCategory, setActiveCategory] = useState("All");
+  const [visibleCount, setVisibleCount] = useState(pageSize);
+  const filters = categories?.filter((category) => category === "All" || projects.some((project) => project.category === category));
+  const visibleProjects = activeCategory === "All" ? projects : projects.filter((project) => project.category === activeCategory);
+  const displayedProjects = visibleProjects.slice(0, visibleCount);
+
   return (
-    <article className="surface-card surface-card-interactive flex min-w-0 flex-col overflow-hidden">
-      <Link to={`/portfolio/${project.id}`} aria-label={`View ${project.title} case study`} className="block focus-ring">
-        <ProjectVisual project={project} />
-      </Link>
-      <div className="flex flex-1 flex-col p-5">
-        <div className="flex flex-wrap items-center gap-2">
-          <span className="tag border-lime-300/25 text-lime-200">{project.category}</span>
-          <span className="text-xs font-semibold text-white/65">{project.status}</span>
+    <section id={id} className="section" aria-labelledby={`${id}-title`}>
+      <div className="wrap">
+        <div className="section-head reveal">
+          <div>
+            <p className="kicker">{kicker}</p>
+            <h2 className="h2" id={`${id}-title`}>{title}</h2>
+            <p className="lead">{description}</p>
+          </div>
         </div>
-        {project.cardDetail && <p className="mt-4 text-xs font-bold uppercase tracking-[0.08em] text-white/65">{project.cardDetail}</p>}
-        <h3 className="mt-5 text-xl font-bold leading-tight">{project.title}</h3>
-        <p className="mt-3 text-sm leading-6 text-white/70">{project.description}</p>
-        <p className="mt-5 border-t border-white/10 pt-4 text-xs font-semibold uppercase tracking-[0.08em] text-white/65">Role / {project.services[0]}</p>
-        <Link to={`/portfolio/${project.id}`} className="project-action mt-auto inline-flex min-h-11 items-center pt-6 text-sm font-bold text-white underline decoration-lime-300 decoration-2 underline-offset-4 focus-ring">
-          View Case Study
-        </Link>
+
+        {filters && (
+          <div className="filters" role="group" aria-label={`Filter ${kicker.toLowerCase()} by category`}>
+            {filters.map((category) => {
+              const count = category === "All" ? projects.length : projects.filter((project) => project.category === category).length;
+              return (
+                <button key={category} type="button" className="filter" aria-pressed={activeCategory === category} onClick={() => { setActiveCategory(category); setVisibleCount(pageSize); }}>
+                  {category} <span>{count}</span>
+                </button>
+              );
+            })}
+          </div>
+        )}
+
+        <p className="visually-hidden" role="status" aria-live="polite">
+          Showing {displayedProjects.length} of {visibleProjects.length} projects{filters ? ` in ${activeCategory === "All" ? kicker : activeCategory}` : ""}.
+        </p>
+
+        <div className="archive-grid">
+          {displayedProjects.map((project, index) => <WorkCard key={project.id} project={project} delay={(index % 3) * 70} />)}
+        </div>
+
+        {displayedProjects.length < visibleProjects.length && (
+          <div className="more">
+            <button type="button" className="btn btn-ghost" onClick={() => setVisibleCount((count) => count + pageSize)}>
+              Show more work ({visibleProjects.length - displayedProjects.length})
+            </button>
+          </div>
+        )}
       </div>
-    </article>
+    </section>
   );
 }
 
 export default function PortfolioPage() {
   const location = useLocation();
   const navigate = useNavigate();
-  const [activeCategory, setActiveCategory] = useState("All Work");
-  const [visibleCount, setVisibleCount] = useState(6);
-  const visibleProjects = useMemo(
-    () => activeCategory === "All Work" ? archiveProjects : archiveProjects.filter((project) => project.category === activeCategory),
-    [activeCategory],
-  );
-  const displayedProjects = visibleProjects.slice(0, visibleCount);
 
   useEffect(() => {
     let legacyId;
@@ -55,60 +77,37 @@ export default function PortfolioPage() {
 
   return (
     <>
-      <PageMeta title="Selected Work" description="Selected website, funnel, presentation, graphic design, campaign, and video work by Janrenzo Facto, with concepts clearly labeled." path="/portfolio" />
+      <PageMeta title="Selected Work" description="Websites, landing pages, and web apps by Janrenzo Facto, plus Amazon A+ content, video, and campaign design, with every project labeled by status." path="/portfolio" />
       <PageHeader />
-      <main id="main-content" className="min-w-0 overflow-x-clip bg-[#070806] text-white">
-        <WorkReel projects={featuredProjects} />
-
-        <section className="site-section border-b border-white/10 bg-[#0a0b09]">
-          <div className="site-container min-w-0">
-            <div className="grid gap-7 lg:grid-cols-[1fr_0.75fr] lg:items-end">
-              <div>
-                <p className="section-kicker">Project archive</p>
-                <h2 className="section-title">More work, clearly labeled by status.</h2>
-              </div>
-              <p className="max-w-xl text-lg leading-8 text-white/70 lg:justify-self-end">
-                Development previews, template explorations, presentations, and supporting creative work remain available without competing with the verified selection above.
-              </p>
-            </div>
-
-            <div className="mt-10 flex max-w-full flex-wrap gap-2 border-b border-white/10 pb-4" role="group" aria-label="Filter design work by category">
-              {archiveCategories.map((category) => {
-                const count = category === "All Work" ? archiveProjects.length : archiveProjects.filter((project) => project.category === category).length;
-                const active = activeCategory === category;
-                return (
-                  <button key={category} type="button" onClick={() => { setActiveCategory(category); setVisibleCount(6); }} aria-pressed={active} className={`filter-button min-h-11 shrink-0 rounded-full border px-4 text-xs font-bold uppercase tracking-[0.08em] transition ${active ? "border-lime-300 bg-lime-300 text-black" : "border-white/20 bg-white/[0.03] text-white/75 hover:border-white/40 hover:text-white"}`}>
-                    {category} <span className="ml-2 opacity-55">{count}</span>
-                  </button>
-                );
-              })}
-            </div>
-
-            <p className="sr-only" role="status" aria-live="polite">Showing {displayedProjects.length} of {visibleProjects.length} projects in {activeCategory}.</p>
-
-            <div className="mt-8 grid min-w-0 gap-5 sm:grid-cols-2 lg:grid-cols-3">
-              {displayedProjects.map((project) => <DesignArchiveCard key={project.id} project={project} />)}
-            </div>
-
-            {displayedProjects.length < visibleProjects.length && (
-              <div className="mt-10 flex justify-center">
-                <button type="button" onClick={() => setVisibleCount((count) => count + 6)} className="button-secondary focus-ring">
-                  Show More Work ({visibleProjects.length - displayedProjects.length})
-                </button>
-              </div>
-            )}
+      <main id="main-content">
+        <section className="page-hero" aria-labelledby="portfolio-title">
+          <HeroOrbs />
+          <div className="wrap">
+            <p className="kicker rise">Selected web work / {String(featuredProjects.length).padStart(2, "0")}</p>
+            <h1 className="page-title rise" id="portfolio-title" style={{ "--d": "80ms" }}>Websites, landing pages, and web apps.</h1>
+            <p className="lead rise" style={{ "--d": "160ms" }}>A focused edit of web projects, each shown with the role, status, and decisions behind the build. More web work and design &amp; motion projects follow below.</p>
+            <WorkShowcase projects={featuredProjects} eager />
           </div>
         </section>
 
-        <section className="bg-lime-300 py-14 text-black sm:py-16">
-          <div className="site-container flex flex-col gap-7 lg:flex-row lg:items-end lg:justify-between">
-            <div>
-              <p className="text-xs font-bold uppercase tracking-[0.12em] text-black/55">Have a project in mind?</p>
-              <h2 className="mt-4 max-w-3xl text-4xl font-bold leading-tight sm:text-5xl">Build the next piece around a clear business goal.</h2>
-            </div>
-            <Link to="/contact" className="button-primary shrink-0 bg-black text-lime-300 hover:bg-white hover:text-black">Start a Project</Link>
-          </div>
-        </section>
+        <ProjectArchive
+          id="more-web-work"
+          kicker="More web work"
+          title="Homepage designs and template explorations."
+          description="Completed Figma homepage designs for real-estate, tax, and service businesses, each labeled by status."
+          projects={moreWebProjects}
+        />
+
+        <ProjectArchive
+          id="design-motion"
+          kicker="Design & motion"
+          title="Ecommerce creative, video, and campaign design."
+          description="Amazon A+ content, short-form video, presentations, and campaign graphics, kept separate from the web work."
+          projects={designWorkProjects}
+          categories={designCategories}
+        />
+
+        <FinalCta kicker="Have a project in mind?" title="Build the next piece around a clear goal." />
       </main>
       <SiteFooter />
     </>

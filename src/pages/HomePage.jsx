@@ -1,213 +1,121 @@
+import { ArrowRight } from "lucide-react";
 import { Link } from "react-router-dom";
+import CountUp from "../components/CountUp";
 import PageHeader, { PageMeta, SiteFooter } from "../components/PageHeader";
-import { HeroParticleField, HeroScrollAccents } from "../components/PageEffects";
-import { ProjectVisual } from "../components/PortfolioShowcase";
-import ScrollRevealText from "../components/ScrollRevealText";
-import { FinalCta, ProcessSection, ServicesOverview } from "../components/Sections";
-import { credibilityItems, featuredProjects, profileImage, siteConfig, skillGroups } from "../data/siteContent";
+import { ExperienceList, FinalCta, HeroOrbs, HeroPortrait, ProcessSection, ServicesList, TestimonialsSection } from "../components/Sections";
+import { WorkShowcase } from "../components/WorkCards";
+import { designWorkProjects, featuredProjects, publicProjects } from "../data/siteContent";
 
-const capabilityTools = [...new Set(skillGroups.flatMap((group) => group.items))];
-const orbitItems = [
-  { symbol: "WP", label: "WordPress" },
-  { symbol: "GHL", label: "Lead systems" },
-  { symbol: "FE", label: "Frontend" },
-  { symbol: "SEO", label: "Optimization" },
-];
+const amazonListings = designWorkProjects.find((project) => project.id === "millsco-amazon-aplus-content")?.sampleLinks.length ?? 0;
+const designTiles = [
+  { id: "millsco-amazon-aplus-content", label: "Amazon A+ · MillsCo" },
+  { id: "commercial-solar-reel", label: "Video" },
+  { id: "untold-story-editorial", label: "Editorial graphic" },
+].map((tile) => ({ ...tile, project: designWorkProjects.find((project) => project.id === tile.id) })).filter((tile) => tile.project);
+const homeTools = ["WordPress", "Elementor", "Divi", "ACF", "GoHighLevel", "HTML / CSS / JS", "PageSpeed", "SEO structure"];
 
-function HeroSection() {
+function Hero() {
   return (
-    <section
-      className="hero-section site-grid-bg relative min-h-[calc(100svh-5rem)] overflow-hidden border-b border-white/10"
-    >
-      <div className="pointer-events-none absolute inset-0 overflow-hidden" aria-hidden="true">
-        <div className="absolute inset-0 bg-[radial-gradient(circle_at_18%_18%,rgba(184,251,69,0.10),transparent_28%),radial-gradient(circle_at_82%_32%,rgba(255,255,255,0.045),transparent_25%),linear-gradient(135deg,rgba(7,8,6,0.82),rgba(16,18,15,0.7))]" />
-        <HeroParticleField />
-        <HeroScrollAccents />
-        <div className="absolute inset-x-0 bottom-0 h-1/2 bg-gradient-to-t from-[#070806] via-[#070806]/45 to-transparent" />
-      </div>
-
-      <div className="hero-sticky site-container relative z-10">
-        <div className="hero-content grid min-w-0 gap-10 py-12 lg:min-h-[calc(100vh-5rem)] lg:grid-cols-[1.08fr_0.92fr] lg:items-center lg:py-14">
-          <div className="hero-text-block min-w-0">
-            <p className="section-kicker">{siteConfig.availability}</p>
-            <h1 className="hero-headline display-title" aria-label="Websites and lead systems for businesses ready to grow.">
-              <span className="hero-word-box"><span>Websites and</span></span>
-              <span className="hero-word-box hero-word-box-light"><span>lead systems</span></span>
-              <span className="hero-word-box hero-word-box-muted"><span>for businesses</span></span>
-              <span className="hero-word-box hero-word-box-muted"><span>ready to grow.</span></span>
-            </h1>
-            <p className="mt-7 max-w-2xl text-lg leading-8 text-white/62 sm:text-xl sm:leading-9">
-              I design and build fast WordPress websites, landing pages, and GoHighLevel funnels that make your offer clearer, build trust, and generate better inquiries.
-            </p>
-            <div className="mt-9 flex flex-col gap-3 sm:flex-row">
-              <Link to="/contact" className="button-primary">Start a Project</Link>
-              <Link to="/about#experience" className="button-secondary">Hiring? View Experience</Link>
-            </div>
-          </div>
-
-          <div className="hero-card-shell relative min-h-[390px] min-w-0 overflow-hidden rounded-2xl border border-white/10 bg-[#11130f] sm:min-h-[520px] lg:min-h-[650px]">
-            <div className="absolute inset-0 bg-[linear-gradient(rgba(255,255,255,0.025)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,0.025)_1px,transparent_1px)] bg-[size:52px_52px]" />
-            <p aria-hidden="true" className="absolute left-5 top-6 z-10 text-6xl font-bold uppercase leading-none text-white/[0.06] sm:text-8xl">Janrenzo</p>
-            <img src={profileImage} alt="Janrenzo Facto wearing a light gray suit" width="1280" height="1600" decoding="async" className="portrait-mask absolute inset-0 h-full w-full object-cover object-[center_23%]" fetchPriority="high" />
-            <div className="absolute inset-x-0 bottom-0 z-10 flex items-end justify-between gap-4 p-5 sm:p-7">
-              <div>
-                <p className="text-sm font-bold text-white">Janrenzo Facto</p>
-                <p className="mt-1 text-xs text-white/70">WordPress / GoHighLevel / Frontend</p>
-              </div>
-              <span className="tag border-lime-300/30 text-lime-200">Available worldwide</span>
-            </div>
-          </div>
-        </div>
-      </div>
-    </section>
-  );
-}
-
-function CredibilityStrip() {
-  return (
-    <section aria-label="Experience and capabilities" className="border-b border-white/10 bg-[#0b0c0a]">
-      <div className="site-container grid sm:grid-cols-2 lg:grid-cols-4">
-        {credibilityItems.map((item) => (
-          <div key={item.value} className="motion-card min-w-0 border-b border-white/10 py-6 sm:px-5 sm:odd:border-r lg:border-b-0 lg:border-r lg:first:pl-0 lg:last:border-r-0 lg:last:pr-0">
-            <p className="text-lg font-bold text-white">{item.value}</p>
-            <p className="mt-1 text-sm text-white/70">{item.label}</p>
-          </div>
-        ))}
-      </div>
-    </section>
-  );
-}
-
-function FeaturedWorkSection() {
-  return (
-    <section className="site-section bg-[#f3f4ee] text-black">
-      <div className="site-container">
-        <div className="grid gap-7 lg:grid-cols-[1fr_auto] lg:items-end">
+    <section className="hero" aria-labelledby="hero-title">
+      <HeroOrbs />
+      <div className="wrap">
+        <div className="hero-grid">
+          <HeroPortrait />
           <div>
-            <p className="text-sm font-bold text-[#568400]">Selected work</p>
-            <ScrollRevealText text="Proof through the work itself." className="section-title mt-4" activeClass="text-black" inactiveClass="text-black/50" />
-            <p className="mt-6 max-w-2xl text-lg leading-8 text-black/60">
-              Seven verified projects spanning web, product interfaces, ecommerce creative, motion, and campaign design—without invented results.
+            <p className="kicker rise">Freelance web designer</p>
+            <h1 id="hero-title" className="hero-name rise" style={{ "--d": "80ms" }}>Janrenzo Facto</h1>
+            <p className="value rise" style={{ "--d": "160ms" }}>Websites and lead systems for businesses ready to grow.</p>
+            <p className="lead rise" style={{ "--d": "220ms" }}>
+              I design and build fast WordPress websites, landing pages, and GoHighLevel funnels that make your offer clearer, build trust, and generate better inquiries. Most recently I built WordPress service pages and supported GoHighLevel funnels at <strong>Clinic Envy</strong>, after Elementor and SEO work for a <strong>real-estate brand</strong> and 5+ years of freelance WordPress projects.
             </p>
+            <div className="ctas rise" style={{ "--d": "280ms" }}>
+              <Link to="/contact" className="btn btn-accent">Start a project <ArrowRight aria-hidden="true" /></Link>
+              <Link to="/portfolio" className="btn btn-ghost">View selected work</Link>
+            </div>
+            <p className="reply rise" style={{ "--d": "320ms" }}>Usually replies within 1–2 business days</p>
           </div>
-          <Link to="/portfolio" className="button-secondary w-fit border-black/20 bg-transparent text-black hover:border-black hover:bg-black hover:text-white">Explore All Work</Link>
         </div>
 
-        <div className="mt-12 grid min-w-0 gap-4 md:grid-cols-2 lg:grid-cols-12">
-          {featuredProjects.map((project, index) => (
-            <article key={project.id} className={`surface-card-interactive flex w-full min-w-0 flex-col overflow-hidden rounded-lg border border-black/12 bg-white ${index < 2 || index > 4 ? "lg:col-span-6" : "lg:col-span-4"}`}>
-              <ProjectVisual project={project} />
-              <div className="flex flex-1 flex-col p-5 sm:p-6">
-                <div className="flex flex-wrap items-center gap-2">
-                  <span className="tag border-black/15 text-black/55">{project.status}</span>
-                  <span className="text-xs font-semibold text-black/65">{project.projectType}</span>
-                </div>
-                <h3 className={`mt-5 font-bold leading-tight ${index === 0 ? "text-3xl" : "text-2xl"}`}>{project.title}</h3>
-                <p className="mt-3 text-sm leading-6 text-black/58">{project.description}</p>
-                <div className="mt-auto pt-6">
-                  <p className="text-xs font-semibold text-black/65">{project.services.join(" / ")}</p>
-                  <div className="mt-5 flex flex-wrap items-center gap-x-4 gap-y-2">
-                    <Link to={`/portfolio/${project.id}`} className="project-action inline-flex min-h-11 items-center rounded-sm text-sm font-bold text-black underline decoration-[#74a918] decoration-2 underline-offset-4">View Case Study</Link>
-                  </div>
-                </div>
-              </div>
-            </article>
-          ))}
-        </div>
+        <ul className="stats reveal" aria-label="At a glance">
+          <li className="stat"><b><CountUp value={5} /><sup>+</sup></b><span>years building WordPress websites</span></li>
+          <li className="stat"><b><CountUp value={publicProjects.length} /></b><span>projects in the portfolio</span></li>
+          <li className="stat"><b><CountUp value={amazonListings} /></b><span>live Amazon listings with my A+ content</span></li>
+          <li className="stat"><b>3–6</b><span>weeks for a typical website build</span></li>
+        </ul>
       </div>
     </section>
   );
 }
 
-function ServicesSection() {
+function SelectedWork() {
   return (
-    <section className="site-section border-y border-white/10 bg-[#080907]">
-      <div className="site-container">
-        <div className="mb-12 grid gap-6 lg:grid-cols-[0.8fr_1.2fr] lg:items-end">
-          <ScrollRevealText text="Three ways I can help." className="section-title" />
-          <p className="max-w-2xl text-lg leading-8 text-white/70 lg:justify-self-end">
-            Each service is organized around the business problem, the deliverable, and the path to launch, not a long software list.
-          </p>
+    <section className="section" aria-labelledby="work-title">
+      <div className="wrap">
+        <div className="section-head reveal">
+          <div>
+            <p className="kicker">Selected work</p>
+            <h2 className="h2" id="work-title">Websites built to make the next step obvious.</h2>
+          </div>
+          <Link to="/portfolio" className="link-arrow">All work <ArrowRight aria-hidden="true" /></Link>
         </div>
-        <ServicesOverview />
-        <Link to="/services" className="button-secondary mt-8">View Service Details</Link>
-      </div>
-    </section>
-  );
-}
 
-function ToolMarquee({ items }) {
-  return (
-    <div className="tool-marquee py-3" aria-label="Tools and capabilities">
-      <div className="tool-marquee-track flex w-max">
-        {[0, 1].map((groupIndex) => (
-          <div key={groupIndex} className="flex shrink-0 gap-3 pr-3" aria-hidden={groupIndex === 1 ? "true" : undefined}>
-            {items.map((tool) => (
-              <span key={`${groupIndex}-${tool}`} className="rounded-full border border-white/10 bg-white/[0.04] px-5 py-3 text-sm font-bold uppercase tracking-[0.16em] text-white/75 backdrop-blur transition hover:border-lime-300/50 hover:text-lime-200">
-                {tool}
-              </span>
+        <WorkShowcase projects={featuredProjects} />
+
+        <div className="also reveal">
+          <div>
+            <p className="kicker">Also in the portfolio</p>
+            <h3 className="h3">Ecommerce creative, video, and campaign design.</h3>
+            <p>Amazon A+ content live on {amazonListings} listings, short-form video, presentations, and campaign graphics.</p>
+            <Link to="/portfolio#design-motion" className="link-arrow">See design &amp; motion work <ArrowRight aria-hidden="true" /></Link>
+          </div>
+          <div className="tiles">
+            {designTiles.map(({ id, label, project }) => (
+              <Link key={id} to={`/portfolio/${id}`} className="tile" aria-label={`${project.title} case study`}>
+                <img src={project.poster ?? project.image} alt="" loading="lazy" decoding="async" />
+                <span className="glass" aria-hidden="true">{label}</span>
+              </Link>
             ))}
           </div>
-        ))}
+        </div>
       </div>
-    </div>
+    </section>
   );
 }
 
-function OrbitingCapabilitiesVisual() {
+function Services() {
   return (
-    <div className="relative mx-auto grid h-[340px] w-full max-w-[320px] place-items-center overflow-hidden sm:h-[460px] sm:max-w-[420px]">
-      <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,rgba(184,251,69,0.18),transparent_38%)]" />
-      <div className="absolute h-[82%] w-[82%] rounded-full border border-dashed border-white/15" />
-      <div className="absolute h-[62%] w-[62%] rounded-full border border-white/10" />
-      <div className="absolute h-[44%] w-[44%] rounded-full border border-lime-300/10" />
-
-      <div className="orbit-ring absolute grid h-[72%] w-[72%] place-items-center rounded-full [--orbit-radius:96px] motion-reduce:animate-none sm:h-[76%] sm:w-[76%] sm:[--orbit-radius:150px]">
-        {orbitItems.map((item, index) => (
-          <div
-            key={item.label}
-            className="orbit-item absolute left-1/2 top-1/2"
-            style={{
-              "--angle": `${(360 / orbitItems.length) * index}deg`,
-              "--counter-angle": `${(360 / orbitItems.length) * index * -1}deg`,
-            }}
-          >
-            <div className="orbit-counter grid h-11 w-11 place-items-center rounded-full border border-white/10 bg-black/80 text-center shadow-2xl backdrop-blur-xl motion-reduce:animate-none sm:h-auto sm:w-auto sm:rounded-3xl sm:px-4 sm:py-3">
-              <p className="text-sm font-black text-lime-300 sm:text-lg">{item.symbol}</p>
-              <p className="mt-1 hidden text-[9px] font-black uppercase tracking-[0.2em] text-white/65 sm:block">{item.label}</p>
-            </div>
+    <section className="section" aria-labelledby="services-title">
+      <div className="wrap">
+        <div className="section-head reveal">
+          <div>
+            <p className="kicker">Services</p>
+            <h2 className="h2" id="services-title">Three ways I can help.</h2>
+            <p className="lead">Each service is organized around the business problem, the deliverable, and the path to launch. The tools follow the project.</p>
           </div>
-        ))}
-      </div>
-
-      <div className="relative z-10 grid aspect-square w-[43%] min-w-[126px] place-items-center rounded-full bg-black shadow-[0_0_80px_rgba(190,252,53,0.2)] ring-1 ring-lime-300/10 sm:w-[44%] sm:min-w-[165px]">
-        <div className="text-center">
-          <p className="text-[10px] font-black uppercase tracking-[0.38em] text-lime-300 sm:text-xs sm:tracking-[0.45em]">Connected</p>
-          <h3 className="mt-3 text-3xl font-black text-white sm:text-4xl">Systems</h3>
-          <p className="mt-4 text-[10px] font-black uppercase tracking-[0.18em] text-white/65 sm:text-xs sm:tracking-[0.24em]">Web / GHL / SEO</p>
+          <Link to="/services" className="link-arrow">Service details <ArrowRight aria-hidden="true" /></Link>
         </div>
+        <ServicesList />
       </div>
-    </div>
+    </section>
   );
 }
 
-function CapabilitiesMotionSection() {
+function About() {
   return (
-    <section className="site-section overflow-hidden border-b border-white/10 bg-[#0c0d0b]">
-      <div className="site-container">
-        <div className="grid min-w-0 items-center gap-12 lg:grid-cols-[1fr_0.8fr]">
-          <div className="min-w-0">
-            <p className="section-kicker">Connected toolkit</p>
-            <ScrollRevealText text="The right tools around one clear customer journey." className="section-title max-w-[13ch]" />
-            <p className="mt-6 max-w-2xl text-lg leading-8 text-white/70">
-              WordPress, GoHighLevel, frontend work, and optimization are selected around the project outcome rather than treated as separate layers.
-            </p>
+    <section className="section" aria-labelledby="about-title">
+      <div className="wrap about-grid">
+        <div className="reveal">
+          <p className="kicker">About</p>
+          <h2 className="h2" id="about-title">A designer who thinks through the build.</h2>
+          <p className="lead">Clients hire me when they need the visual and technical sides of a web project to stay connected: strategy before screens, design and implementation by the same person, and a practical handoff in WordPress or GoHighLevel.</p>
+          <div className="tools" aria-label="Tools">
+            {homeTools.map((tool) => <span key={tool}>{tool}</span>)}
           </div>
-          <OrbitingCapabilitiesVisual />
+          <Link to="/about" className="link-arrow" style={{ marginTop: "20px" }}>More about me <ArrowRight aria-hidden="true" /></Link>
         </div>
-      </div>
-      <div className="mt-12 w-full border-y border-white/10">
-        <ToolMarquee items={capabilityTools} />
+        <div className="reveal" style={{ "--delay": "120ms" }}>
+          <ExperienceList />
+        </div>
       </div>
     </section>
   );
@@ -218,13 +126,13 @@ export default function HomePage() {
     <>
       <PageMeta title="Websites and Lead Systems" path="/" />
       <PageHeader />
-      <main id="main-content" className="min-w-0 overflow-x-clip bg-[#070806] text-white">
-        <HeroSection />
-        <CredibilityStrip />
-        <FeaturedWorkSection />
-        <ServicesSection />
-        <CapabilitiesMotionSection />
-        <ProcessSection light />
+      <main id="main-content">
+        <Hero />
+        <SelectedWork />
+        <Services />
+        <ProcessSection />
+        <TestimonialsSection />
+        <About />
         <FinalCta />
       </main>
       <SiteFooter />

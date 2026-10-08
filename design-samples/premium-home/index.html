@@ -1,0 +1,841 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="robots" content="noindex">
+  <title>Janrenzo Facto | Premium redesign sample</title>
+  <script>document.documentElement.classList.add("js");</script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Geist:wght@300..700&family=Geist+Mono:wght@400..600&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg: #0a0a0a;
+      --bg-raise: #111111;
+      --line: rgba(255, 255, 255, 0.08);
+      --line-strong: rgba(255, 255, 255, 0.16);
+      --text: #ededed;
+      --muted: #a3a3a3;
+      --subtle: #8b8b8b;
+      --accent: #b8fb45;
+      --accent-ink: #0a0a0a;
+      --accent-soft: rgba(184, 251, 69, 0.14);
+      --max: 1240px;
+      --ease: cubic-bezier(0.16, 1, 0.3, 1);
+      --font: "Geist", ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
+      --mono: "Geist Mono", ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+    }
+
+    html[data-accent="orange"] {
+      --accent: #ff8a3d;
+      --accent-soft: rgba(255, 138, 61, 0.14);
+    }
+
+    *, *::before, *::after { box-sizing: border-box; }
+    html { scroll-behavior: smooth; scroll-padding-top: 88px; -webkit-text-size-adjust: 100%; }
+    body { margin: 0; background: var(--bg); color: var(--text); font: 400 16px/1.6 var(--font); -webkit-font-smoothing: antialiased; text-rendering: optimizeLegibility; }
+    img { display: block; max-width: 100%; }
+    a { color: inherit; text-decoration: none; }
+    h1, h2, h3, p { margin: 0; }
+    ul, ol { margin: 0; padding: 0; list-style: none; }
+    :focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; border-radius: 6px; }
+
+    .skip { position: fixed; left: 16px; top: -64px; z-index: 100; padding: 12px 16px; border-radius: 10px; background: var(--accent); color: var(--accent-ink); font-weight: 600; }
+    .skip:focus { top: 16px; }
+    .wrap { width: min(100% - 32px, var(--max)); margin-inline: auto; }
+
+    .kicker { display: inline-flex; align-items: center; gap: 10px; font: 500 12px/1 var(--mono); letter-spacing: 0.14em; text-transform: uppercase; color: var(--accent); }
+    .kicker::before { content: ""; width: 24px; height: 1px; background: currentColor; opacity: 0.7; }
+    .h2 { margin-top: 16px; font-size: clamp(34px, 4.6vw, 60px); line-height: 1.02; letter-spacing: -0.035em; font-weight: 600; text-wrap: balance; }
+    .lead { color: var(--muted); font-size: clamp(16px, 1.4vw, 18px); max-width: 58ch; }
+
+    .btn { display: inline-flex; align-items: center; justify-content: center; gap: 10px; min-height: 48px; padding: 0 22px; border-radius: 999px; border: 1px solid transparent; font: 600 14px/1 var(--font); letter-spacing: -0.005em; transition: background 0.25s, color 0.25s, border-color 0.25s, transform 0.4s var(--ease); }
+    .btn svg { width: 16px; height: 16px; }
+    .btn-accent { background: var(--accent); color: var(--accent-ink); }
+    .btn-accent:hover { background: #ffffff; }
+    .btn-ghost { border-color: var(--line-strong); color: var(--text); }
+    .btn-ghost:hover { border-color: rgba(255, 255, 255, 0.4); background: rgba(255, 255, 255, 0.04); }
+    .link-arrow { display: inline-flex; align-items: center; gap: 8px; min-height: 44px; font-weight: 500; color: var(--text); }
+    .link-arrow svg { width: 16px; height: 16px; transition: transform 0.35s var(--ease); }
+    .link-arrow:hover svg { transform: translateX(4px); }
+
+    /* Header */
+    .site-header { position: sticky; top: 0; z-index: 50; background: rgba(10, 10, 10, 0.72); -webkit-backdrop-filter: saturate(140%) blur(16px); backdrop-filter: saturate(140%) blur(16px); border-bottom: 1px solid transparent; transition: border-color 0.3s; }
+    .site-header.is-scrolled { border-bottom-color: var(--line); }
+    .header-inner { display: flex; align-items: center; justify-content: space-between; gap: 24px; height: 68px; }
+    .logo { display: inline-flex; align-items: center; gap: 12px; min-height: 44px; font-weight: 600; font-size: 15px; letter-spacing: -0.01em; }
+    .logo-mark { font: 500 12px/1 var(--mono); letter-spacing: 0.1em; padding: 8px 10px; border: 1px solid var(--line-strong); border-radius: 8px; }
+    .nav { display: flex; gap: 2px; }
+    .nav a { display: inline-flex; align-items: center; min-height: 44px; padding: 0 14px; border-radius: 999px; font-size: 14px; color: var(--muted); transition: color 0.2s, background 0.2s; }
+    .nav a:hover { color: var(--text); background: rgba(255, 255, 255, 0.05); }
+    .header-actions { display: flex; align-items: center; gap: 16px; }
+    .status { display: inline-flex; align-items: center; gap: 8px; font: 500 12px/1 var(--mono); letter-spacing: 0.04em; color: var(--muted); }
+    .status i { width: 8px; height: 8px; border-radius: 50%; background: var(--accent); animation: pulse 2.4s ease-out 3; }
+    .header-actions .btn { min-height: 44px; padding: 0 18px; }
+    .menu-btn { display: none; align-items: center; justify-content: center; width: 44px; height: 44px; border-radius: 12px; border: 1px solid var(--line-strong); background: transparent; color: var(--text); cursor: pointer; }
+    .menu-btn svg { width: 18px; height: 18px; }
+    .mobile-nav { border-top: 1px solid var(--line); padding: 8px 0 20px; }
+    .mobile-nav a { display: flex; align-items: center; min-height: 52px; font-size: 20px; font-weight: 500; letter-spacing: -0.02em; border-bottom: 1px solid var(--line); }
+
+    /* Hero */
+    .hero { position: relative; overflow: clip; padding: clamp(40px, 6vw, 80px) 0 40px; }
+    .hero-grid { display: grid; grid-template-columns: minmax(0, 0.92fr) minmax(0, 1.08fr); gap: clamp(32px, 6vw, 88px); align-items: center; }
+    .portrait-wrap { position: relative; isolation: isolate; }
+    .halo { position: absolute; inset: -14% -16% -8%; z-index: -1; background-image: radial-gradient(circle, rgba(255, 255, 255, 0.34) 1.1px, transparent 1.7px); background-size: 13px 13px; -webkit-mask: radial-gradient(closest-side, #000 45%, transparent 100%); mask: radial-gradient(closest-side, #000 45%, transparent 100%); opacity: 0.85; }
+    .halo::after { content: ""; position: absolute; inset: 20%; border-radius: 50%; background: radial-gradient(circle, var(--accent-soft), transparent 70%); }
+    .portrait { position: relative; aspect-ratio: 4 / 5; border-radius: 24px; overflow: hidden; background: #2a2b2d; border: 1px solid var(--line); }
+    .portrait img { width: 100%; height: 100%; object-fit: cover; object-position: 50% 14%; }
+    .portrait::after { content: ""; position: absolute; inset: 0; background: linear-gradient(180deg, transparent 52%, rgba(10, 10, 10, 0.88) 100%), radial-gradient(120% 80% at 50% 0%, transparent 58%, rgba(10, 10, 10, 0.4) 100%); }
+    .portrait-meta { position: absolute; left: 18px; right: 18px; bottom: 18px; z-index: 1; display: flex; align-items: flex-end; justify-content: space-between; gap: 12px; }
+    .portrait-meta p { font-size: 14px; color: var(--muted); }
+    .portrait-meta strong { display: block; color: var(--text); font-weight: 600; }
+    .glass { display: inline-flex; align-items: center; gap: 8px; padding: 9px 13px; border-radius: 999px; background: rgba(20, 20, 20, 0.6); -webkit-backdrop-filter: blur(12px); backdrop-filter: blur(12px); border: 1px solid rgba(255, 255, 255, 0.12); font: 500 12px/1 var(--mono); color: var(--text); white-space: nowrap; }
+    .glass i { width: 7px; height: 7px; border-radius: 50%; background: var(--accent); }
+    .hero h1 { margin-top: 20px; font-size: clamp(52px, 7.4vw, 100px); line-height: 0.92; letter-spacing: -0.05em; font-weight: 600; }
+    .hero .value { margin-top: 22px; max-width: 26ch; font-size: clamp(20px, 2vw, 27px); line-height: 1.22; letter-spacing: -0.02em; font-weight: 500; }
+    .hero .lead { margin-top: 18px; }
+    .hero .lead strong { color: var(--text); font-weight: 500; text-decoration: underline; text-decoration-color: var(--line-strong); text-underline-offset: 4px; }
+    .ctas { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 32px; }
+    .reply { margin-top: 16px; font: 400 13px/1.5 var(--mono); color: var(--subtle); }
+
+    .stats { margin-top: clamp(56px, 7vw, 96px); display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); border-top: 1px solid var(--line); }
+    .stat { padding: 28px 24px 8px 0; }
+    .stat + .stat { padding-left: 24px; border-left: 1px solid var(--line); }
+    .stat b { display: block; font-size: clamp(42px, 4.8vw, 64px); line-height: 1; letter-spacing: -0.05em; font-weight: 500; font-variant-numeric: tabular-nums; }
+    .stat b sup { position: relative; top: 0.15em; margin-left: 3px; font-size: 0.42em; color: var(--accent); vertical-align: top; }
+    .stat > span { display: block; margin-top: 12px; max-width: 22ch; color: var(--muted); font-size: 14px; line-height: 1.45; }
+
+    /* Sections */
+    .section { padding: clamp(88px, 10vw, 140px) 0; border-top: 1px solid var(--line); }
+    .section-head { display: flex; flex-wrap: wrap; align-items: flex-end; justify-content: space-between; gap: 24px; }
+    .section-head .h2 { max-width: 16ch; }
+    .section-head .lead { margin-top: 18px; }
+
+    /* Work */
+    .feature { margin-top: 56px; display: grid; grid-template-columns: minmax(0, 0.8fr) minmax(0, 1.2fr); border: 1px solid var(--line); border-radius: 24px; overflow: hidden; background: var(--bg-raise); }
+    .feature-copy { display: flex; flex-direction: column; gap: 18px; padding: clamp(28px, 4vw, 48px); }
+    .feature-copy h3 { font-size: clamp(26px, 2.6vw, 38px); line-height: 1.08; letter-spacing: -0.035em; font-weight: 600; text-wrap: balance; }
+    .feature-copy p { color: var(--muted); }
+    .feature-copy .link-arrow { margin-top: auto; }
+    .feature .stage { min-height: 460px; border: 0; border-left: 1px solid var(--line); border-radius: 0; aspect-ratio: auto; }
+    .work-grid { margin-top: 48px; display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 48px 24px; }
+    .work-card { display: block; border-radius: 20px; }
+    .stage { position: relative; aspect-ratio: 16 / 11; border-radius: 20px; overflow: hidden; border: 1px solid var(--line); background: radial-gradient(110% 80% at 50% -10%, #242426 0%, #121213 55%, #0d0d0e 100%); }
+    .stage::before { content: ""; position: absolute; inset: 0; background-image: radial-gradient(circle, rgba(255, 255, 255, 0.07) 1px, transparent 1.4px); background-size: 18px 18px; -webkit-mask: linear-gradient(180deg, #000, transparent 85%); mask: linear-gradient(180deg, #000, transparent 85%); }
+    .stage::after { content: ""; position: absolute; left: 8%; right: 8%; bottom: -34%; height: 64%; background: radial-gradient(closest-side, var(--accent-soft), transparent); pointer-events: none; opacity: 0.8; transition: opacity 0.6s; }
+    .work-card:hover .stage::after, .work-card:focus-visible .stage::after, .feature:hover .stage::after { opacity: 1.6; }
+    .device { position: absolute; left: 8%; right: 8%; top: 9%; z-index: 1; transition: transform 0.8s var(--ease); }
+    .work-card:hover .device, .work-card:focus-visible .device, .feature:hover .device { transform: translateY(-8px); }
+    .browser { overflow: hidden; border-radius: 12px; background: #161618; border: 1px solid rgba(255, 255, 255, 0.1); box-shadow: 0 40px 80px -24px rgba(0, 0, 0, 0.85); }
+    .browser-bar { display: flex; align-items: center; gap: 6px; height: 34px; padding: 0 12px; background: #1b1b1d; border-bottom: 1px solid rgba(255, 255, 255, 0.06); }
+    .browser-bar i { width: 9px; height: 9px; flex: none; border-radius: 50%; background: rgba(255, 255, 255, 0.16); }
+    .browser-bar span { margin: 0 auto; max-width: 72%; padding: 5px 12px; border-radius: 999px; background: rgba(255, 255, 255, 0.05); font: 400 11px/1 var(--mono); color: var(--subtle); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    /* height: auto lets aspect-ratio win over the image's height attribute. */
+    .shot { width: 100%; height: auto; aspect-ratio: 16 / 10; object-fit: cover; object-position: 50% 0; }
+    /* Full-page captures scroll inside their window on hover. */
+    .shot.scrolls { transition: object-position 1.2s var(--ease); }
+    .work-card:hover .shot.scrolls, .work-card:focus-visible .shot.scrolls, .feature:hover .shot.scrolls { object-position: 50% 100%; transition: object-position 9s linear; }
+    .laptop { position: absolute; left: 11%; right: 11%; top: 13%; z-index: 1; transition: transform 0.8s var(--ease); }
+    .work-card:hover .laptop, .work-card:focus-visible .laptop { transform: translateY(-8px); }
+    .laptop-screen { overflow: hidden; border: 10px solid #1d1d20; border-bottom-width: 14px; border-radius: 14px 14px 4px 4px; background: #000; box-shadow: 0 40px 80px -24px rgba(0, 0, 0, 0.85); }
+    .laptop-screen img { width: 100%; height: auto; aspect-ratio: 16 / 10; object-fit: cover; object-position: 0 0; }
+    .laptop-base { position: relative; height: 12px; margin: 0 -7%; border-radius: 0 0 12px 12px; background: linear-gradient(180deg, #2c2c30, #161618); }
+    .laptop-base::before { content: ""; position: absolute; left: 50%; top: 0; width: 18%; height: 5px; transform: translateX(-50%); border-radius: 0 0 6px 6px; background: #0f0f11; }
+    .card-meta { display: grid; gap: 8px; margin-top: 20px; }
+    .card-label { display: flex; align-items: center; justify-content: space-between; gap: 12px; font: 500 12px/1 var(--mono); letter-spacing: 0.12em; text-transform: uppercase; color: var(--accent); }
+    .chip { flex: none; padding: 6px 10px; border-radius: 999px; border: 1px solid var(--line-strong); font: 500 11px/1 var(--mono); letter-spacing: 0.06em; text-transform: uppercase; color: var(--muted); }
+    .card-title { margin-top: 4px; font-size: clamp(20px, 1.8vw, 25px); line-height: 1.2; letter-spacing: -0.02em; font-weight: 600; text-wrap: balance; }
+    .card-sub { color: var(--subtle); font-size: 14px; }
+
+    .also { margin-top: 88px; display: grid; grid-template-columns: minmax(0, 0.75fr) minmax(0, 1.6fr); gap: 32px; align-items: center; padding-top: 40px; border-top: 1px solid var(--line); }
+    .also h3 { margin-top: 14px; font-size: clamp(22px, 2.2vw, 30px); line-height: 1.15; letter-spacing: -0.03em; font-weight: 600; }
+    .also p { margin-top: 12px; color: var(--muted); font-size: 15px; }
+    .also .link-arrow { margin-top: 12px; }
+    .tiles { display: grid; grid-template-columns: 1.35fr 0.65fr 1.35fr; gap: 12px; }
+    .tile { position: relative; height: 220px; overflow: hidden; border-radius: 16px; border: 1px solid var(--line); background: #141414; }
+    .tile img { width: 100%; height: 100%; object-fit: cover; transition: transform 0.9s var(--ease); }
+    .tile:hover img { transform: scale(1.05); }
+    .tile .glass { position: absolute; left: 10px; bottom: 10px; }
+
+    /* Services */
+    .svc-list { margin-top: 56px; border-top: 1px solid var(--line); }
+    .svc { display: grid; grid-template-columns: 64px minmax(0, 1fr) minmax(0, 1.25fr) 140px 150px 24px; gap: 24px; align-items: center; padding: 30px 12px; border-bottom: 1px solid var(--line); transition: background 0.3s; }
+    .svc:hover { background: rgba(255, 255, 255, 0.025); }
+    .svc .num { font: 500 13px/1 var(--mono); color: var(--subtle); }
+    .svc h3 { font-size: clamp(20px, 1.9vw, 26px); line-height: 1.15; letter-spacing: -0.025em; font-weight: 600; }
+    .svc p { color: var(--muted); font-size: 15px; }
+    .svc .time { font: 400 13px/1.45 var(--mono); color: var(--muted); }
+    .svc .price { font-size: 18px; font-weight: 600; color: var(--accent); font-variant-numeric: tabular-nums; }
+    .svc .price small { display: block; margin-top: 4px; font: 400 11px/1 var(--mono); letter-spacing: 0.08em; text-transform: uppercase; color: var(--subtle); }
+    .svc .arrow { width: 20px; height: 20px; color: var(--subtle); transition: transform 0.35s var(--ease), color 0.3s; }
+    .svc:hover .arrow { transform: translateX(4px); color: var(--accent); }
+    .svc-note { margin-top: 16px; color: var(--subtle); font-size: 13px; }
+
+    /* Process */
+    .steps { margin-top: 56px; display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 20px; }
+    .step { padding: 28px 24px 30px; border: 1px solid var(--line); border-radius: 20px; background: linear-gradient(180deg, rgba(255, 255, 255, 0.03), transparent 70%); }
+    .step-icon { display: grid; place-items: center; width: 54px; height: 54px; border-radius: 14px; border: 1px solid var(--line-strong); background: #141414; color: var(--text); }
+    .step-icon svg { width: 28px; height: 28px; fill: none; stroke: currentColor; stroke-width: 1.6; stroke-linecap: round; stroke-linejoin: round; }
+    .step-icon .accent-stroke { stroke: var(--accent); }
+    .step .n { display: block; margin-top: 28px; font: 500 12px/1 var(--mono); color: var(--subtle); }
+    .step h3 { margin: 10px 0 8px; font-size: 22px; letter-spacing: -0.02em; font-weight: 600; }
+    .step p { color: var(--muted); font-size: 15px; }
+    .js .draw * { stroke-dasharray: 1; stroke-dashoffset: 1; }
+    .js .in .draw * { animation: draw 1.3s var(--ease) forwards; animation-delay: var(--delay, 0ms); }
+
+    /* Testimonials */
+    .quote-slot { position: relative; margin-top: 48px; display: grid; gap: 24px; padding: clamp(28px, 5vw, 56px); border: 1px dashed var(--line-strong); border-radius: 24px; }
+    .quote-slot .mark { height: 36px; font-size: 76px; line-height: 0.7; font-weight: 600; color: var(--accent); }
+    .quote-slot blockquote { margin: 0; max-width: 32ch; font-size: clamp(22px, 2.6vw, 34px); line-height: 1.3; letter-spacing: -0.02em; font-weight: 500; color: var(--subtle); }
+    .quote-slot figcaption { font: 400 14px/1.5 var(--mono); color: var(--subtle); }
+    .slot-tag { position: absolute; top: 18px; right: 18px; padding: 7px 10px; border-radius: 999px; border: 1px solid var(--line-strong); font: 500 11px/1 var(--mono); letter-spacing: 0.1em; text-transform: uppercase; color: var(--muted); }
+
+    /* About */
+    .about-grid { display: grid; grid-template-columns: minmax(0, 0.9fr) minmax(0, 1.1fr); gap: clamp(32px, 6vw, 96px); }
+    .about-grid .lead { margin-top: 20px; }
+    .tools { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 28px; }
+    .tools span { padding: 9px 12px; border-radius: 999px; border: 1px solid var(--line); font: 400 12px/1 var(--mono); color: var(--muted); }
+    .xp { border-top: 1px solid var(--line); }
+    .xp li { display: grid; grid-template-columns: 150px minmax(0, 1fr); gap: 20px; padding: 22px 0; border-bottom: 1px solid var(--line); }
+    .xp .when { font: 400 13px/1.6 var(--mono); color: var(--subtle); }
+    .xp .role { font-weight: 600; letter-spacing: -0.01em; }
+    .xp .org { margin-top: 4px; color: var(--muted); font-size: 14px; }
+
+    /* Contact */
+    .cta { position: relative; overflow: hidden; padding: clamp(100px, 12vw, 170px) 0; border-top: 1px solid var(--line); text-align: center; }
+    .cta::before { content: ""; position: absolute; left: 10%; right: 10%; bottom: -40%; height: 80%; background: radial-gradient(closest-side, var(--accent-soft), transparent); pointer-events: none; }
+    .cta .wrap { position: relative; }
+    .cta h2 { max-width: 14ch; margin: 20px auto 0; font-size: clamp(42px, 6.6vw, 96px); line-height: 0.98; letter-spacing: -0.05em; font-weight: 600; text-wrap: balance; }
+    .cta-text { max-width: 48ch; margin: 22px auto 0; color: var(--muted); }
+    .cta .ctas { justify-content: center; }
+    .mail { display: inline-block; margin-top: 28px; padding-bottom: 6px; border-bottom: 1px solid var(--line-strong); font: 500 clamp(16px, 1.6vw, 20px)/1.2 var(--mono); transition: border-color 0.3s; }
+    .mail:hover { border-color: var(--accent); }
+
+    .site-footer { border-top: 1px solid var(--line); padding: 32px 0 96px; }
+    .footer-inner { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 16px; color: var(--subtle); font-size: 14px; }
+    .footer-inner nav { display: flex; flex-wrap: wrap; gap: 4px 20px; }
+    .footer-inner nav a { display: inline-flex; align-items: center; min-height: 44px; }
+    .footer-inner nav a:hover { color: var(--text); }
+
+    /* Sample-only controls */
+    .sample-bar { position: fixed; right: 16px; bottom: 16px; z-index: 60; display: flex; align-items: center; gap: 4px; padding: 4px 4px 4px 14px; border-radius: 999px; background: rgba(18, 18, 18, 0.88); -webkit-backdrop-filter: blur(12px); backdrop-filter: blur(12px); border: 1px solid var(--line-strong); box-shadow: 0 20px 40px -20px rgba(0, 0, 0, 0.8); font: 500 11px/1 var(--mono); letter-spacing: 0.08em; text-transform: uppercase; color: var(--muted); }
+    .sample-bar span { margin-right: 6px; }
+    .sample-bar button { display: inline-flex; align-items: center; gap: 8px; min-height: 44px; padding: 0 14px; border-radius: 999px; border: 1px solid transparent; background: transparent; color: var(--muted); font: inherit; letter-spacing: inherit; text-transform: inherit; cursor: pointer; }
+    .sample-bar button[aria-pressed="true"] { background: rgba(255, 255, 255, 0.08); border-color: var(--line-strong); color: var(--text); }
+    .sample-bar i { width: 10px; height: 10px; border-radius: 50%; }
+
+    /* Pointer effects: desktop mouse only, switched on by the script. */
+    main, .site-footer { position: relative; z-index: 1; }
+    .fx-layer { position: fixed; inset: 0; z-index: 0; pointer-events: none; opacity: 0; transition: opacity 0.8s var(--ease); }
+    .has-pointer .fx-layer { opacity: 1; }
+    .fx-glow { background: radial-gradient(640px circle at var(--px, 50%) var(--py, 30%), var(--accent-soft), transparent 62%); }
+    .fx-dots { background-image: radial-gradient(circle, rgba(255, 255, 255, 0.18) 1px, transparent 1.5px); background-size: 26px 26px; -webkit-mask: radial-gradient(240px circle at var(--px, 50%) var(--py, 30%), #000, transparent 72%); mask: radial-gradient(240px circle at var(--px, 50%) var(--py, 30%), #000, transparent 72%); }
+    .hero-orbs { position: absolute; inset: 0; z-index: 0; pointer-events: none; }
+    .hero > .wrap { position: relative; z-index: 1; }
+    .orb { position: absolute; border-radius: 50%; filter: blur(64px); will-change: transform; }
+    .orb-a { top: -80px; right: -60px; width: 440px; height: 440px; background: var(--accent-soft); }
+    .orb-b { bottom: -180px; left: 28%; width: 380px; height: 380px; background: rgba(255, 255, 255, 0.05); }
+    [data-depth] { will-change: transform; }
+    .portrait-wrap { perspective: 1200px; }
+    .glare { position: absolute; inset: 0; z-index: 2; pointer-events: none; background: radial-gradient(380px circle at var(--gx, 50%) var(--gy, 40%), rgba(255, 255, 255, 0.11), transparent 62%); opacity: 0; transition: opacity 0.5s; }
+    .has-pointer .portrait .glare, .work-card:hover .glare, .feature:hover .glare { opacity: 1; }
+    .stage { transition: transform 0.7s var(--ease); }
+    .work-card:hover .stage { transition-duration: 0.25s; }
+    .work-card:hover .device, .work-card:hover .laptop, .feature:hover .device { transition-duration: 0.3s; }
+    a.stage { display: block; }
+    .cursor-ring { position: fixed; left: 0; top: 0; z-index: 90; display: grid; place-items: center; width: 34px; height: 34px; margin: -17px 0 0 -17px; border-radius: 50%; border: 1px solid rgba(255, 255, 255, 0.35); pointer-events: none; opacity: 0; will-change: transform; transition: width 0.4s var(--ease), height 0.4s var(--ease), margin 0.4s var(--ease), background 0.3s, border-color 0.3s, opacity 0.3s; }
+    .has-pointer .cursor-ring { opacity: 1; }
+    .cursor-ring span { font: 600 13px/1 var(--font); color: var(--accent-ink); opacity: 0; transform: scale(0.6); transition: opacity 0.25s, transform 0.4s var(--ease); }
+    .cursor-ring.is-link { width: 54px; height: 54px; margin: -27px 0 0 -27px; border-color: var(--accent); }
+    .cursor-ring.is-view { width: 92px; height: 92px; margin: -46px 0 0 -46px; border-color: transparent; background: var(--accent); }
+    .cursor-ring.is-view span { opacity: 1; transform: none; }
+    .step { position: relative; }
+    .step::before, .step::after { content: ""; position: absolute; border-radius: inherit; pointer-events: none; opacity: 0; transition: opacity 0.4s; }
+    .step::before { inset: -1px; padding: 1px; background: radial-gradient(260px circle at var(--sx, 50%) var(--sy, 50%), var(--accent), transparent 65%); -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0); -webkit-mask-composite: xor; mask-composite: exclude; }
+    .step::after { inset: 0; background: radial-gradient(320px circle at var(--sx, 50%) var(--sy, 50%), rgba(255, 255, 255, 0.05), transparent 60%); }
+    .has-pointer .steps:hover .step::before { opacity: 0.9; }
+    .has-pointer .steps:hover .step::after { opacity: 1; }
+
+    /* Motion */
+    .js .reveal { opacity: 0; transform: translateY(28px); transition: opacity 0.9s var(--ease), transform 0.9s var(--ease); transition-delay: var(--delay, 0ms); }
+    .js .reveal.in { opacity: 1; transform: none; }
+    .rise { animation: rise 1s var(--ease) both; animation-delay: var(--d, 0ms); }
+    @keyframes rise { from { opacity: 0; transform: translateY(24px); } to { opacity: 1; transform: none; } }
+    @keyframes draw { to { stroke-dashoffset: 0; } }
+    @keyframes pulse { 0% { box-shadow: 0 0 0 0 var(--accent-soft); } 100% { box-shadow: 0 0 0 10px transparent; } }
+
+    @media (max-width: 1060px) {
+      .svc { grid-template-columns: 48px minmax(0, 1fr); gap: 10px 16px; }
+      .svc p, .svc .time, .svc .price { grid-column: 2; }
+      .svc .arrow { display: none; }
+    }
+    @media (max-width: 960px) {
+      .nav, .status { display: none; }
+      .menu-btn { display: inline-flex; }
+      .feature { grid-template-columns: 1fr; }
+      .feature .stage { min-height: 0; aspect-ratio: 16 / 11; border-left: 0; border-top: 1px solid var(--line); }
+      .steps { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+      .also { grid-template-columns: 1fr; }
+      .about-grid { grid-template-columns: 1fr; }
+    }
+    @media (max-width: 900px) {
+      .hero-grid { grid-template-columns: 1fr; }
+      .portrait-wrap { order: 2; width: min(100%, 460px); }
+    }
+    @media (max-width: 760px) {
+      .stats { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+      .stat { padding-bottom: 24px; }
+      .stat:nth-child(3) { padding-left: 0; border-left: 0; }
+      .stat:nth-child(n + 3) { border-top: 1px solid var(--line); }
+      .work-grid { grid-template-columns: 1fr; }
+      .tiles { grid-template-columns: 1fr 1fr; }
+      .tile { height: 180px; }
+      .tile:last-child { grid-column: 1 / -1; }
+      .header-actions .btn { display: none; }
+    }
+    @media (max-width: 560px) {
+      .steps { grid-template-columns: 1fr; }
+      .xp li { grid-template-columns: 1fr; gap: 6px; }
+      .sample-bar { right: auto; left: 50%; transform: translateX(-50%); }
+      .sample-bar span { display: none; }
+    }
+    @media (prefers-reduced-motion: reduce) {
+      html { scroll-behavior: auto; }
+      *, *::before, *::after { animation-duration: 0.01ms !important; animation-iteration-count: 1 !important; transition-duration: 0.01ms !important; }
+      .js .reveal { opacity: 1; transform: none; }
+      .js .draw * { stroke-dashoffset: 0; }
+      .fx-layer, .cursor-ring, .glare { display: none; }
+    }
+  </style>
+</head>
+<body>
+  <a class="skip" href="#main">Skip to content</a>
+  <div class="fx" aria-hidden="true"><div class="fx-layer fx-glow"></div><div class="fx-layer fx-dots"></div></div>
+  <div class="cursor-ring" aria-hidden="true"><span>View</span></div>
+
+  <header class="site-header" id="top">
+    <div class="wrap header-inner">
+      <a class="logo" href="#top" aria-label="Janrenzo Facto, back to top"><span class="logo-mark">J—F</span><span>Janrenzo Facto</span></a>
+      <nav class="nav" aria-label="Primary">
+        <a href="#work">Work</a>
+        <a href="#services">Services</a>
+        <a href="#process">Process</a>
+        <a href="#about">About</a>
+        <a href="#contact">Contact</a>
+      </nav>
+      <div class="header-actions">
+        <span class="status"><i aria-hidden="true"></i>Available for projects</span>
+        <a class="btn btn-accent" href="/contact" data-magnetic>Start a project</a>
+        <button class="menu-btn" type="button" aria-expanded="false" aria-controls="mobile-nav" aria-label="Open menu">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><path d="M4 8h16M4 16h16"/></svg>
+        </button>
+      </div>
+    </div>
+    <nav class="wrap mobile-nav" id="mobile-nav" aria-label="Mobile" hidden>
+      <a href="#work">Work</a>
+      <a href="#services">Services</a>
+      <a href="#process">Process</a>
+      <a href="#about">About</a>
+      <a href="#contact">Contact</a>
+    </nav>
+  </header>
+
+  <main id="main">
+    <section class="hero" aria-labelledby="hero-title">
+      <div class="hero-orbs" aria-hidden="true"><span class="orb orb-a" data-depth="46"></span><span class="orb orb-b" data-depth="-34"></span></div>
+      <div class="wrap">
+        <div class="hero-grid">
+          <div class="portrait-wrap rise" style="--d: 120ms">
+            <div class="halo" aria-hidden="true" data-depth="-22"></div>
+            <figure class="portrait" style="margin: 0">
+              <span class="glare" aria-hidden="true"></span>
+              <img src="/brand/janrenzo-hero.webp" alt="Janrenzo Facto in a light gray suit" width="1200" height="1461" fetchpriority="high">
+              <figcaption class="portrait-meta">
+                <p><strong>Janrenzo Facto</strong>WordPress / GoHighLevel / Frontend</p>
+                <span class="glass"><i aria-hidden="true"></i>Remote, worldwide</span>
+              </figcaption>
+            </figure>
+          </div>
+
+          <div>
+            <p class="kicker rise">Freelance web designer</p>
+            <h1 id="hero-title" class="rise" style="--d: 80ms">Janrenzo Facto</h1>
+            <p class="value rise" style="--d: 160ms">Websites and lead systems for businesses ready to grow.</p>
+            <p class="lead rise" style="--d: 220ms">I design and build fast WordPress websites, landing pages, and GoHighLevel funnels that make your offer clearer, build trust, and generate better inquiries. Most recently I built WordPress service pages and supported GoHighLevel funnels at <strong>Clinic Envy</strong>, after Elementor and SEO work for a <strong>real-estate brand</strong> and 5+ years of freelance WordPress projects.</p>
+            <div class="ctas rise" style="--d: 280ms">
+              <a class="btn btn-accent" href="/contact" data-magnetic>Start a project
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+              </a>
+              <a class="btn btn-ghost" href="#work">View selected work</a>
+            </div>
+            <p class="reply rise" style="--d: 320ms">Usually replies within 1–2 business days</p>
+          </div>
+        </div>
+
+        <ul class="stats reveal" aria-label="At a glance">
+          <li class="stat"><b><span data-count="5">5</span><sup>+</sup></b><span>years building WordPress websites</span></li>
+          <li class="stat"><b><span data-count="29">29</span></b><span>projects in the portfolio</span></li>
+          <li class="stat"><b><span data-count="9">9</span></b><span>live Amazon listings with my A+ content</span></li>
+          <li class="stat"><b>3–6</b><span>weeks for a typical website build</span></li>
+        </ul>
+      </div>
+    </section>
+
+    <section class="section" id="work" aria-labelledby="work-title">
+      <div class="wrap">
+        <div class="section-head reveal">
+          <div>
+            <p class="kicker">Selected work</p>
+            <h2 class="h2" id="work-title">Websites built to make the next step obvious.</h2>
+          </div>
+          <a class="link-arrow" href="/portfolio">All work
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+          </a>
+        </div>
+
+        <article class="feature reveal" data-tilt="flat">
+          <div class="feature-copy">
+            <p class="card-label">A+ Junk N Tow <span class="chip">Live preview</span></p>
+            <h3>A cash-for-cars website built around one repeated estimate action.</h3>
+            <p>A long-form service site that leads with the offer, repeats the estimate action, and explains pickup and payment in a simple three-step flow.</p>
+            <p class="card-sub">WordPress · Lead-generation website · Responsive build</p>
+            <a class="link-arrow" href="/portfolio/junk-n-tow-website">View case study
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+            </a>
+          </div>
+          <a class="stage" href="/portfolio/junk-n-tow-website" tabindex="-1" aria-hidden="true" data-cursor="view">
+            <span class="glare"></span>
+            <div class="device">
+              <div class="browser">
+                <div class="browser-bar"><i></i><i></i><i></i><span>dev-janrenzofacto.pantheonsite.io</span></div>
+                <img class="shot scrolls" src="/portfolio/junk-n-tow-website-preview.webp" alt="" width="1280" height="3728" loading="lazy">
+              </div>
+            </div>
+          </a>
+        </article>
+
+        <div class="work-grid">
+          <a class="work-card reveal" data-tilt data-cursor="view" href="/portfolio/vital-factory-supplement-funnel">
+            <div class="stage">
+              <span class="glare" aria-hidden="true"></span>
+              <div class="device">
+                <div class="browser">
+                  <div class="browser-bar" aria-hidden="true"><i></i><i></i><i></i><span>dev-vital-factory.pantheonsite.io</span></div>
+                  <img class="shot" src="/portfolio/vital-factory-preview.webp" alt="Vital Factory supplement landing page hero" width="1280" height="890" loading="lazy">
+                </div>
+              </div>
+            </div>
+            <div class="card-meta">
+              <p class="card-label">Vital Factory <span class="chip">Live preview</span></p>
+              <h3 class="card-title">A direct-response supplement page that moves visitors from education to offer.</h3>
+              <p class="card-sub">WordPress · Landing page</p>
+            </div>
+          </a>
+
+          <a class="work-card reveal" data-tilt data-cursor="view" href="/portfolio/umlc-church-monitoring-dashboard" style="--delay: 80ms">
+            <div class="stage">
+              <span class="glare" aria-hidden="true"></span>
+              <div class="laptop">
+                <div class="laptop-screen">
+                  <img src="/portfolio/umlc-church-monitoring-dashboard.webp" alt="UMLC church monitoring dashboard overview" width="1600" height="786" loading="lazy">
+                </div>
+                <div class="laptop-base" aria-hidden="true"></div>
+              </div>
+            </div>
+            <div class="card-meta">
+              <p class="card-label">UMLC <span class="chip">Live app</span></p>
+              <h3 class="card-title">A church dashboard that keeps attendance, disciples, and meetings in one view.</h3>
+              <p class="card-sub">React · Supabase · Vercel</p>
+            </div>
+          </a>
+
+          <a class="work-card reveal" data-tilt data-cursor="view" href="/portfolio/seo-for-real-estate-homepage">
+            <div class="stage">
+              <span class="glare" aria-hidden="true"></span>
+              <div class="device">
+                <div class="browser">
+                  <div class="browser-bar" aria-hidden="true"><i></i><i></i><i></i><span>Figma · Homepage design</span></div>
+                  <img class="shot scrolls" src="/portfolio/seo-for-real-estate-homepage.webp" alt="Full-page SEO for Real Estate homepage design" width="960" height="4192" loading="lazy">
+                </div>
+              </div>
+            </div>
+            <div class="card-meta">
+              <p class="card-label">SEO for Real Estate <span class="chip">Figma</span></p>
+              <h3 class="card-title">A seller lead-generation homepage that keeps the offer form in view.</h3>
+              <p class="card-sub">Homepage UI design · Conversion structure</p>
+            </div>
+          </a>
+
+          <a class="work-card reveal" data-tilt data-cursor="view" href="/portfolio/beauty-rocio-cosmetic-institute" style="--delay: 80ms">
+            <div class="stage">
+              <span class="glare" aria-hidden="true"></span>
+              <div class="device">
+                <div class="browser">
+                  <div class="browser-bar" aria-hidden="true"><i></i><i></i><i></i><span>In development</span></div>
+                  <img class="shot scrolls" src="/portfolio/beauty-rocio-preview.webp" alt="Full-page preview of the Beauty Rocío website" width="1280" height="4110" loading="lazy">
+                </div>
+              </div>
+            </div>
+            <div class="card-meta">
+              <p class="card-label">Beauty Rocío <span class="chip">In development</span></p>
+              <h3 class="card-title">A cosmetic institute's services and products, organized into one clear site.</h3>
+              <p class="card-sub">WordPress · Content structure</p>
+            </div>
+          </a>
+        </div>
+
+        <div class="also reveal">
+          <div>
+            <p class="kicker">Also in the portfolio</p>
+            <h3>Ecommerce creative, video, and campaign design.</h3>
+            <p>Amazon A+ content live on nine listings, short-form video, presentations, and campaign graphics.</p>
+            <a class="link-arrow" href="/portfolio#design-motion">See design &amp; motion work
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+            </a>
+          </div>
+          <div class="tiles">
+            <a class="tile" href="/portfolio/millsco-amazon-aplus-content"><img src="/portfolio/amazon-aplus-millsco-showcase.webp" alt="MillsCo Amazon A+ content showcase" width="970" height="620" loading="lazy"><span class="glass">Amazon A+ · MillsCo</span></a>
+            <a class="tile" href="/portfolio/commercial-solar-reel"><img src="/portfolio/videos/commercial-solar-reel.webp" alt="Commercial Solar Reel poster frame" width="720" height="1280" loading="lazy"><span class="glass">Video</span></a>
+            <a class="tile" href="/portfolio/untold-story-editorial"><img src="/portfolio/untold-story.webp" alt="Untold Story editorial graphic" width="1600" height="900" loading="lazy"><span class="glass">Editorial graphic</span></a>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section" id="services" aria-labelledby="services-title">
+      <div class="wrap">
+        <div class="section-head reveal">
+          <div>
+            <p class="kicker">Services</p>
+            <h2 class="h2" id="services-title">Three ways I can help.</h2>
+            <p class="lead">Each service is organized around the business problem, the deliverable, and the path to launch. The tools follow the project.</p>
+          </div>
+        </div>
+        <div class="svc-list reveal">
+          <a class="svc" href="/services">
+            <span class="num">01</span>
+            <h3>Website Design &amp; Development</h3>
+            <p>Professional, responsive WordPress websites that make the offer clear and give visitors an obvious next step.</p>
+            <span class="time">3–6 weeks</span>
+            <span class="price">$700–$1,500+<small>Starting range</small></span>
+            <svg class="arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+          </a>
+          <a class="svc" href="/services">
+            <span class="num">02</span>
+            <h3>Landing Pages &amp; GoHighLevel Funnels</h3>
+            <p>Focused pages and follow-up systems for offers that need forms, calendars, pipelines, and a cleaner lead journey.</p>
+            <span class="time">1–3 weeks</span>
+            <span class="price">$700–$1,500+<small>Starting range</small></span>
+            <svg class="arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+          </a>
+          <a class="svc" href="/services">
+            <span class="num">03</span>
+            <h3>Website Optimization</h3>
+            <p>Targeted improvements for websites that need stronger mobile layouts, speed, SEO structure, or conversion clarity.</p>
+            <span class="time">3 days–3 weeks</span>
+            <span class="price">$300–$700+<small>Starting range</small></span>
+            <svg class="arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+          </a>
+        </div>
+        <p class="svc-note">Final quotes depend on scope, content, integrations, and revisions.</p>
+      </div>
+    </section>
+
+    <section class="section" id="process" aria-labelledby="process-title">
+      <div class="wrap">
+        <div class="section-head reveal">
+          <div>
+            <p class="kicker">Process</p>
+            <h2 class="h2" id="process-title">A clear path from idea to launch.</h2>
+            <p class="lead">Each phase has a purpose, a decision to make, and a visible deliverable before the project moves forward.</p>
+          </div>
+        </div>
+        <ol class="steps">
+          <li class="step reveal">
+            <span class="step-icon"><svg class="draw" viewBox="0 0 24 24" aria-hidden="true" style="--delay: 200ms"><circle pathLength="1" cx="10.5" cy="10.5" r="6.5"/><path pathLength="1" d="M15.5 15.5 20.5 20.5"/><path class="accent-stroke" pathLength="1" d="M7.5 10.5a3 3 0 0 1 3-3"/></svg></span>
+            <span class="n">01</span>
+            <h3>Discover</h3>
+            <p>Understand the business, offer, audience, current website, and the action the project needs to support.</p>
+          </li>
+          <li class="step reveal" style="--delay: 90ms">
+            <span class="step-icon"><svg class="draw" viewBox="0 0 24 24" aria-hidden="true" style="--delay: 320ms"><rect pathLength="1" x="9" y="3" width="6" height="4.5" rx="1"/><path pathLength="1" d="M12 7.5V10.5M6 14V10.5H18V14"/><rect pathLength="1" x="3" y="14" width="6" height="5" rx="1"/><rect class="accent-stroke" pathLength="1" x="15" y="14" width="6" height="5" rx="1"/></svg></span>
+            <span class="n">02</span>
+            <h3>Plan</h3>
+            <p>Organize the sitemap, page structure, content priorities, and conversion flow before design begins.</p>
+          </li>
+          <li class="step reveal" style="--delay: 180ms">
+            <span class="step-icon"><svg class="draw" viewBox="0 0 24 24" aria-hidden="true" style="--delay: 440ms"><rect pathLength="1" x="3" y="4" width="18" height="16" rx="2"/><path pathLength="1" d="M3 8.5H21"/><path pathLength="1" d="M9.5 12 7.5 14l2 2M14.5 12l2 2-2 2"/><path class="accent-stroke" pathLength="1" d="M12.8 11.5 11.2 16.5"/></svg></span>
+            <span class="n">03</span>
+            <h3>Build</h3>
+            <p>Design and develop the website or funnel with responsive behavior, clear hierarchy, and practical editing in mind.</p>
+          </li>
+          <li class="step reveal" style="--delay: 270ms">
+            <span class="step-icon"><svg class="draw" viewBox="0 0 24 24" aria-hidden="true" style="--delay: 560ms"><path pathLength="1" d="M12 3c3 2.4 4.1 6.1 3.5 10.5h-7C7.9 9.1 9 5.4 12 3Z"/><circle pathLength="1" cx="12" cy="9" r="1.6"/><path pathLength="1" d="M8.6 12.5 6.5 16h2.8M15.4 12.5 17.5 16h-2.8"/><path class="accent-stroke" pathLength="1" d="M12 16.5V20.5"/></svg></span>
+            <span class="n">04</span>
+            <h3>Launch</h3>
+            <p>Test mobile layouts, speed, SEO details, forms, automations, links, and final content before handoff.</p>
+          </li>
+        </ol>
+      </div>
+    </section>
+
+    <section class="section" aria-labelledby="feedback-title">
+      <div class="wrap">
+        <div class="section-head reveal">
+          <div>
+            <p class="kicker">Client feedback</p>
+            <h2 class="h2" id="feedback-title">What working together is like.</h2>
+          </div>
+        </div>
+        <figure class="quote-slot reveal" style="margin-inline: 0">
+          <span class="slot-tag">Testimonial slot</span>
+          <span class="mark" aria-hidden="true">“</span>
+          <blockquote>[Client quote: one to three sentences about working with you, shared with permission.]</blockquote>
+          <figcaption>[Client name] · [Role, Company]</figcaption>
+        </figure>
+      </div>
+    </section>
+
+    <section class="section" id="about" aria-labelledby="about-title">
+      <div class="wrap about-grid">
+        <div class="reveal">
+          <p class="kicker">About</p>
+          <h2 class="h2" id="about-title">A designer who thinks through the build.</h2>
+          <p class="lead">Clients hire me when they need the visual and technical sides of a web project to stay connected: strategy before screens, design and implementation by the same person, and a practical handoff in WordPress or GoHighLevel.</p>
+          <div class="tools" aria-label="Tools">
+            <span>WordPress</span><span>Elementor</span><span>Divi</span><span>ACF</span><span>GoHighLevel</span><span>HTML / CSS / JS</span><span>PageSpeed</span><span>SEO structure</span>
+          </div>
+        </div>
+        <ol class="xp reveal" style="--delay: 120ms" aria-label="Experience">
+          <li><span class="when">Current</span><div><p class="role">Contractor, Map + CRM Lead-Ingestion Pipeline</p><p class="org">ICW</p></div></li>
+          <li><span class="when">May–Dec 2025</span><div><p class="role">Web Developer, GoHighLevel Automation Specialist &amp; Graphic Designer</p><p class="org">Clinic Envy</p></div></li>
+          <li><span class="when">Nov–Dec 2024</span><div><p class="role">SEO &amp; Frontend Developer</p><p class="org">Real Estate Brand</p></div></li>
+          <li><span class="when">5+ years</span><div><p class="role">Freelance WordPress Website Designer</p><p class="org">Freelance projects</p></div></li>
+        </ol>
+      </div>
+    </section>
+
+    <section class="cta" id="contact" aria-labelledby="contact-title">
+      <div class="wrap reveal">
+        <p class="kicker">Start a project</p>
+        <h2 id="contact-title">Have a project in mind?</h2>
+        <p class="cta-text">Let's turn it into something clear, premium, and ready to grow. Share the goal and the context that matters, and I'll reply with a practical next step.</p>
+        <div class="ctas">
+          <a class="btn btn-accent" href="/contact" data-magnetic>Start a project
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+          </a>
+          <a class="btn btn-ghost" href="/portfolio">Review the work</a>
+        </div>
+        <a class="mail" href="mailto:janrenzofacto@gmail.com">janrenzofacto@gmail.com</a>
+        <p class="reply">Usually replies within 1–2 business days · Available worldwide</p>
+      </div>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <div class="wrap footer-inner">
+      <span>© 2026 Janrenzo Facto</span>
+      <nav aria-label="Footer">
+        <a href="#work">Work</a>
+        <a href="#services">Services</a>
+        <a href="#process">Process</a>
+        <a href="#about">About</a>
+        <a href="#contact">Contact</a>
+      </nav>
+    </div>
+  </footer>
+
+  <div class="sample-bar" role="group" aria-label="Sample accent color">
+    <span>Sample accent</span>
+    <button type="button" data-accent="lime" aria-pressed="true"><i style="background: #b8fb45" aria-hidden="true"></i>Lime</button>
+    <button type="button" data-accent="orange" aria-pressed="false"><i style="background: #ff8a3d" aria-hidden="true"></i>Orange</button>
+  </div>
+
+  <script>
+    (() => {
+      const root = document.documentElement;
+      const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+      // Reveal sections once as they scroll into view.
+      const revealItems = document.querySelectorAll(".reveal");
+      if (reduceMotion || !("IntersectionObserver" in window)) {
+        revealItems.forEach((item) => item.classList.add("in"));
+      } else {
+        const observer = new IntersectionObserver((entries) => {
+          entries.forEach((entry) => {
+            if (!entry.isIntersecting) return;
+            entry.target.classList.add("in");
+            observer.unobserve(entry.target);
+          });
+        }, { rootMargin: "0px 0px -10% 0px", threshold: 0.12 });
+        revealItems.forEach((item) => observer.observe(item));
+      }
+
+      const header = document.querySelector(".site-header");
+      const onScroll = () => header.classList.toggle("is-scrolled", window.scrollY > 8);
+      onScroll();
+      window.addEventListener("scroll", onScroll, { passive: true });
+
+      const menuButton = document.querySelector(".menu-btn");
+      const mobileNav = document.getElementById("mobile-nav");
+      const setMenu = (open) => {
+        menuButton.setAttribute("aria-expanded", String(open));
+        menuButton.setAttribute("aria-label", open ? "Close menu" : "Open menu");
+        mobileNav.hidden = !open;
+      };
+      menuButton.addEventListener("click", () => setMenu(menuButton.getAttribute("aria-expanded") !== "true"));
+      mobileNav.querySelectorAll("a").forEach((link) => link.addEventListener("click", () => setMenu(false)));
+
+      // Primary buttons lean toward the pointer on desktop.
+      if (!reduceMotion && window.matchMedia("(hover: hover) and (pointer: fine)").matches) {
+        document.querySelectorAll("[data-magnetic]").forEach((button) => {
+          button.addEventListener("pointermove", (event) => {
+            const bounds = button.getBoundingClientRect();
+            const x = (event.clientX - bounds.left - bounds.width / 2) * 0.18;
+            const y = (event.clientY - bounds.top - bounds.height / 2) * 0.3;
+            button.style.transform = `translate(${x}px, ${y}px)`;
+          });
+          button.addEventListener("pointerleave", () => { button.style.transform = ""; });
+        });
+      }
+
+      // Sample-only accent switch, remembered for this browser when storage is available.
+      const accentButtons = document.querySelectorAll(".sample-bar button");
+      const applyAccent = (accent) => {
+        if (accent === "orange") root.dataset.accent = "orange";
+        else delete root.dataset.accent;
+        accentButtons.forEach((button) => button.setAttribute("aria-pressed", String(button.dataset.accent === accent)));
+      };
+      try { applyAccent(localStorage.getItem("sample-accent") || "lime"); } catch { applyAccent("lime"); }
+      accentButtons.forEach((button) => button.addEventListener("click", () => {
+        applyAccent(button.dataset.accent);
+        try { localStorage.setItem("sample-accent", button.dataset.accent); } catch { /* storage unavailable */ }
+      }));
+
+      // Stats count up once when they scroll into view.
+      if (!reduceMotion && "IntersectionObserver" in window) {
+        const countObserver = new IntersectionObserver((entries) => {
+          entries.forEach((entry) => {
+            if (!entry.isIntersecting) return;
+            countObserver.unobserve(entry.target);
+            const counter = entry.target;
+            const end = Number(counter.dataset.count);
+            const started = performance.now();
+            const step = (now) => {
+              const progress = Math.min(1, (now - started) / 1400);
+              counter.textContent = String(Math.round(end * (1 - Math.pow(1 - progress, 3))));
+              if (progress < 1) requestAnimationFrame(step);
+            };
+            requestAnimationFrame(step);
+          });
+        }, { threshold: 0.6 });
+        document.querySelectorAll("[data-count]").forEach((counter) => {
+          counter.textContent = "0";
+          countObserver.observe(counter);
+        });
+      }
+
+      // Everything below follows a mouse; touch screens and reduced motion keep the static page.
+      if (reduceMotion || !window.matchMedia("(hover: hover) and (pointer: fine)").matches) return;
+
+      const fx = document.querySelector(".fx");
+      const ring = document.querySelector(".cursor-ring");
+      const portrait = document.querySelector(".portrait");
+      const depthLayers = [...document.querySelectorAll("[data-depth]")];
+      const pointer = { x: window.innerWidth / 2, y: window.innerHeight / 3 };
+      const glow = { ...pointer };
+      const trail = { ...pointer };
+      let heroInView = true;
+      let running = false;
+
+      new IntersectionObserver(([entry]) => { heroInView = entry.isIntersecting; }).observe(document.querySelector(".hero"));
+
+      // One eased loop moves the background glow, the cursor ring, and the hero depth layers.
+      const tick = () => {
+        glow.x += (pointer.x - glow.x) * 0.08;
+        glow.y += (pointer.y - glow.y) * 0.08;
+        trail.x += (pointer.x - trail.x) * 0.2;
+        trail.y += (pointer.y - trail.y) * 0.2;
+        fx.style.setProperty("--px", `${glow.x}px`);
+        fx.style.setProperty("--py", `${glow.y}px`);
+        ring.style.transform = `translate3d(${trail.x}px, ${trail.y}px, 0)`;
+
+        if (heroInView) {
+          const offsetX = glow.x / window.innerWidth - 0.5;
+          const offsetY = glow.y / window.innerHeight - 0.5;
+          depthLayers.forEach((layer) => {
+            const depth = Number(layer.dataset.depth);
+            layer.style.transform = `translate3d(${offsetX * depth}px, ${offsetY * depth}px, 0)`;
+          });
+          portrait.style.transform = `rotateY(${offsetX * 9}deg) rotateX(${offsetY * -7}deg)`;
+          portrait.style.setProperty("--gx", `${(offsetX + 0.5) * 100}%`);
+          portrait.style.setProperty("--gy", `${(offsetY + 0.5) * 100}%`);
+        }
+
+        const settled = Math.abs(pointer.x - glow.x) < 0.3 && Math.abs(pointer.y - glow.y) < 0.3
+          && Math.abs(pointer.x - trail.x) < 0.3 && Math.abs(pointer.y - trail.y) < 0.3;
+        running = !settled;
+        if (running) requestAnimationFrame(tick);
+      };
+      const wake = () => {
+        if (running) return;
+        running = true;
+        requestAnimationFrame(tick);
+      };
+
+      window.addEventListener("pointermove", (event) => {
+        if (event.pointerType !== "mouse") return;
+        pointer.x = event.clientX;
+        pointer.y = event.clientY;
+        if (!root.classList.contains("has-pointer")) {
+          Object.assign(glow, pointer);
+          Object.assign(trail, pointer);
+          root.classList.add("has-pointer");
+        }
+        wake();
+      }, { passive: true });
+      document.documentElement.addEventListener("mouseleave", () => root.classList.remove("has-pointer"));
+
+      // The ring grows over links and turns into a "View" bubble over project previews.
+      document.addEventListener("pointerover", (event) => {
+        const target = event.target.closest("[data-cursor], a, button");
+        const view = Boolean(target && target.dataset.cursor === "view");
+        ring.classList.toggle("is-view", view);
+        ring.classList.toggle("is-link", Boolean(target) && !view);
+      });
+
+      // Project previews tilt toward the pointer while the device inside drifts the other way.
+      document.querySelectorAll("[data-tilt]").forEach((card) => {
+        const stage = card.querySelector(".stage");
+        const device = stage.querySelector(".device, .laptop");
+        const tilts = card.dataset.tilt !== "flat";
+        card.addEventListener("pointermove", (event) => {
+          if (event.pointerType !== "mouse") return;
+          const bounds = stage.getBoundingClientRect();
+          const x = Math.min(1, Math.max(0, (event.clientX - bounds.left) / bounds.width));
+          const y = Math.min(1, Math.max(0, (event.clientY - bounds.top) / bounds.height));
+          stage.style.setProperty("--gx", `${x * 100}%`);
+          stage.style.setProperty("--gy", `${y * 100}%`);
+          if (tilts) stage.style.transform = `perspective(1100px) rotateX(${(0.5 - y) * 7}deg) rotateY(${(x - 0.5) * 9}deg)`;
+          device.style.transform = `translate3d(${(x - 0.5) * -18}px, ${(y - 0.5) * -12 - 8}px, 0)`;
+        });
+        card.addEventListener("pointerleave", () => {
+          stage.style.transform = "";
+          device.style.transform = "";
+        });
+      });
+
+      // The process cards share one spotlight, so their borders light up as the pointer crosses them.
+      const steps = document.querySelector(".steps");
+      steps.addEventListener("pointermove", (event) => {
+        steps.querySelectorAll(".step").forEach((step) => {
+          const bounds = step.getBoundingClientRect();
+          step.style.setProperty("--sx", `${event.clientX - bounds.left}px`);
+          step.style.setProperty("--sy", `${event.clientY - bounds.top}px`);
+        });
+      });
+    })();
+  </script>
+</body>
+</html>

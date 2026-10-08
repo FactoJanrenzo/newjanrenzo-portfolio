@@ -1,5 +1,7 @@
+import { ArrowRight } from "lucide-react";
 import { Link } from "react-router-dom";
 import PageHeader, { PageMeta, SiteFooter } from "../components/PageHeader";
+import { HeroOrbs } from "../components/Sections";
 
 export default function NotFoundPage() {
   return (
@@ -11,21 +13,18 @@ export default function NotFoundPage() {
         noIndex
       />
       <PageHeader />
-      <main id="main-content" className="site-grid-bg grid min-h-[calc(100svh-5rem)] place-items-center overflow-hidden bg-[#070806] px-5 py-24 text-white">
-        <section className="relative w-full max-w-6xl border-y border-white/10 py-16 sm:py-24">
-          <p className="section-kicker">404 / Off the grid</p>
-          <div className="mt-7 grid gap-10 lg:grid-cols-[1fr_auto] lg:items-end">
-            <div>
-              <h1 className="page-title max-w-4xl">This page is not part of the system.</h1>
-              <p className="mt-6 max-w-xl text-lg leading-8 text-white/65">
-                The link may be outdated, private, or mistyped. Return to the work index or start from the homepage.
-              </p>
+      <main id="main-content">
+        <section className="notfound" aria-labelledby="notfound-title">
+          <HeroOrbs />
+          <div className="wrap">
+            <span className="notfound-code rise" aria-hidden="true">404</span>
+            <p className="kicker rise" style={{ "--d": "80ms", marginTop: "32px" }}>Off the grid</p>
+            <h1 className="page-title rise" id="notfound-title" style={{ "--d": "140ms" }}>This page is not part of the system.</h1>
+            <p className="lead rise" style={{ "--d": "200ms", marginTop: "24px" }}>The link may be outdated, private, or mistyped. Return to the work index or start from the homepage.</p>
+            <div className="ctas rise" style={{ "--d": "260ms" }}>
+              <Link to="/" className="btn btn-accent">Back home <ArrowRight aria-hidden="true" /></Link>
+              <Link to="/portfolio" className="btn btn-ghost">View selected work</Link>
             </div>
-            <span aria-hidden="true" className="text-[clamp(7rem,20vw,15rem)] font-bold leading-[0.72] tracking-[-0.1em] text-lime-300/15">404</span>
-          </div>
-          <div className="mt-10 flex flex-col gap-3 sm:flex-row">
-            <Link to="/" className="button-primary">Back Home</Link>
-            <Link to="/portfolio" className="button-secondary">View Selected Work</Link>
           </div>
         </section>
       </main>
