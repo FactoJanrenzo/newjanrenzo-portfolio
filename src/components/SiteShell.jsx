@@ -1,6 +1,6 @@
 import { lazy, Suspense, useEffect, useRef } from "react";
 import { Navigate, Route, Routes, useLocation } from "react-router-dom";
-import { ScrollToTopButton } from "./PageEffects.jsx";
+import PointerEffects from "./PointerEffects.jsx";
 
 const HomePage = lazy(() => import("../pages/HomePage.jsx"));
 const AboutPage = lazy(() => import("../pages/AboutPage.jsx"));
@@ -36,14 +36,13 @@ export default function SiteShell({ prerendered = false }) {
     const registerTargets = () => {
       const root = document.getElementById("main-content");
       if (!root) return;
-      const targets = root.querySelectorAll("section:not(:first-child), article, .motion-card");
+      const targets = root.querySelectorAll(".reveal");
       const keepPainted = keepPaintedContent.current;
       keepPaintedContent.current = false;
-      Array.from(targets).forEach((target, index) => {
+      targets.forEach((target) => {
         if (registered.has(target)) return;
         registered.add(target);
         target.classList.add("reveal-on-scroll");
-        target.style.setProperty("--delay", `${Math.min(index * 30, 180)}ms`);
         if (reducedMotion || (keepPainted && isInViewport(target))) target.classList.add("is-visible");
         else observer.observe(target);
       });
@@ -94,9 +93,9 @@ export default function SiteShell({ prerendered = false }) {
   }, [location.hash, location.pathname]);
 
   return (
-    <div data-site-version="3.0.0" className="portfolio-page min-h-screen">
-      <ScrollToTopButton />
-      <Suspense fallback={<main id="main-content" className="min-h-screen bg-[#070806]" aria-busy="true" />}>
+    <div data-site-version="3.0.0" className="site">
+      <PointerEffects />
+      <Suspense fallback={<main id="main-content" className="site" aria-busy="true" />}>
         <div key={location.pathname} className="route-transition">
           <Routes>
             <Route path="/" element={<HomePage />} />

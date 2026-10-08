@@ -1,11 +1,11 @@
 import { useState } from "react";
+import { ArrowRight } from "lucide-react";
+import { siteConfig } from "../data/siteContent";
 
 function Field({ label, required = false, children }) {
   return (
-    <label className="block min-w-0">
-      <span className="mb-2 block text-xs font-bold uppercase tracking-[0.12em] text-white/60">
-        {label}{required && <span className="text-lime-300"> *</span>}
-      </span>
+    <label className="field">
+      <span className="field-label">{label}{required && <b aria-hidden="true"> *</b>}</span>
       {children}
     </label>
   );
@@ -42,7 +42,7 @@ export default function ContactForm() {
   return (
     // Netlify registers this form from the static copy in index.html; netlify attributes here would make
     // Netlify rewrite the prerendered markup and break hydration.
-    <form name="contact" method="POST" onSubmit={handleSubmit} aria-busy={formStatus === "sending"} className="grid gap-5">
+    <form name="contact" method="POST" onSubmit={handleSubmit} aria-busy={formStatus === "sending"} className="form">
       <input type="hidden" name="form-name" value="contact" />
       <p hidden>
         <label>Do not fill this field if you are human: <input name="bot-field" tabIndex="-1" autoComplete="off" /></label>
@@ -57,7 +57,7 @@ export default function ContactForm() {
         </select>
       </Field>
 
-      <div className="grid min-w-0 gap-5 sm:grid-cols-2">
+      <div className="form-row">
         <Field label="Name" required>
           <input className="field-control" name="name" autoComplete="name" maxLength="100" required placeholder="Your full name" />
         </Field>
@@ -71,9 +71,9 @@ export default function ContactForm() {
       </Field>
 
       {isProjectInquiry && (
-        <fieldset className="grid min-w-0 gap-5 border-y border-white/10 py-6">
-          <legend className="px-2 text-xs font-bold uppercase tracking-[0.12em] text-lime-300">Optional project context</legend>
-          <div className="grid min-w-0 gap-5 sm:grid-cols-3">
+        <fieldset className="fieldset">
+          <legend>Optional project context</legend>
+          <div className="form-row is-three">
             <Field label="Project type">
               <select className="field-control" name="projectType" defaultValue="">
                 <option value="">Choose one</option>
@@ -110,19 +110,21 @@ export default function ContactForm() {
       )}
 
       <Field label="Message" required>
-        <textarea className="field-control min-h-40 resize-y" name="message" maxLength="3000" required placeholder="Share the goal, relevant context, timeline, and the next step you have in mind." />
+        <textarea className="field-control" name="message" maxLength="3000" required placeholder="Share the goal, relevant context, timeline, and the next step you have in mind." />
       </Field>
 
-      <p className="text-xs leading-5 text-white/70">Your details are used only to review and respond to this inquiry.</p>
+      <p className="form-note">Your details are used only to review and respond to this inquiry.</p>
 
       <div aria-live="polite">
-        {formStatus === "success" && <p className="rounded-md border border-lime-300/30 bg-lime-300/10 px-4 py-4 text-sm text-lime-100">Your inquiry was sent. I will review the details and reply with the next step.</p>}
-        {formStatus === "error" && <p className="rounded-md border border-red-400/30 bg-red-500/10 px-4 py-4 text-sm text-red-100">The form could not be sent. Please email janrenzofacto@gmail.com directly.</p>}
+        {formStatus === "success" && <p className="form-status is-success">Your inquiry was sent. I will review the details and reply with the next step.</p>}
+        {formStatus === "error" && <p className="form-status is-error">The form could not be sent. Please email {siteConfig.email} directly.</p>}
       </div>
 
-      <button type="submit" disabled={formStatus === "sending"} className="button-primary w-full disabled:cursor-not-allowed disabled:opacity-60 sm:w-fit">
-        {formStatus === "sending" ? "Sending..." : "Send Inquiry"}
-      </button>
+      <div>
+        <button type="submit" disabled={formStatus === "sending"} className="btn btn-accent">
+          {formStatus === "sending" ? "Sending..." : "Send inquiry"} {formStatus !== "sending" && <ArrowRight aria-hidden="true" />}
+        </button>
+      </div>
     </form>
   );
 }

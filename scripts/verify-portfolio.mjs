@@ -50,10 +50,10 @@ for (const fieldName of ["inquiryType", "name", "email", "subject", "message", "
 }
 
 const globalStyles = readFileSync(join(repositoryRoot, "src", "index.css"), "utf8");
-assert(globalStyles.includes('font-family: "Space Grotesk Variable", "Space Grotesk", sans-serif;'), "The self-hosted font face must match the global font-family declaration.");
-
-const motionStyles = readFileSync(join(repositoryRoot, "src", "styles", "portfolioAnimations.css"), "utf8");
-assert(!motionStyles.includes("infinite"), "Decorative motion must be bounded rather than continuous.");
+const entryModule = readFileSync(join(repositoryRoot, "src", "main.jsx"), "utf8");
+assert(globalStyles.includes('--font: "Geist Variable"') && entryModule.includes('import "@fontsource-variable/geist";'), "The self-hosted font face must match the global font-family declaration.");
+assert(globalStyles.includes('--mono: "Geist Mono Variable"') && entryModule.includes('import "@fontsource-variable/geist-mono";'), "The self-hosted mono font must match the global mono declaration.");
+assert(!globalStyles.includes("infinite"), "Decorative motion must be bounded rather than continuous.");
 
 const publicPrivateAsset = join(repositoryRoot, "public", "portfolio", "james-christian-cosmetic-preview.webp");
 const archivedPrivateAsset = join(repositoryRoot, "private-media", "james-christian-cosmetic-preview.webp");

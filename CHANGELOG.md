@@ -2,6 +2,11 @@
 
 ## Unreleased
 
+- Redesigned every page in a premium dark style based on the approved design sample: self-hosted Geist type, browser and laptop project frames, outcome-led case-study headlines, and a lime accent used sparingly.
+- Added mouse-driven effects (background glow, cursor ring with a "View" state, hero depth, card tilt, lit process borders) and counting stats, all off for touch screens and reduced motion.
+- Replaced the dock navigation with a simple header and mobile menu, removing the `motion` library from every page load.
+- Rebuilt the case studies with a scrollable full-page browser preview, galleries, a click-to-play video, and a two-column project breakdown.
+
 - Prerendered every route to static HTML at build time with page-specific titles, descriptions, canonical URLs, and social tags, then hydrated it on the client.
 - Replaced the catch-all SPA rewrite with explicit page rewrites, legacy 301 redirects, and a real 404 status for unknown URLs.
 - Added self-drawing Lottie icons to the process steps, lazy-loaded with the CSP-safe light player, played once, replayed on hover, and shown as a still frame for reduced motion.

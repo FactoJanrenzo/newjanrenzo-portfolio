@@ -1,129 +1,133 @@
 import { useEffect, useState } from "react";
+import { ArrowLeft, ArrowUpRight, Play } from "lucide-react";
 import { Link, useParams } from "react-router-dom";
 import PageHeader, { PageMeta, SiteFooter } from "../components/PageHeader";
-import { ProjectVisual } from "../components/PortfolioShowcase";
+import { FinalCta, HeroOrbs } from "../components/Sections";
 import { publicProjects } from "../data/siteContent";
 import NotFoundPage from "./NotFoundPage";
 
+const webCategory = "Websites & Funnels";
+
 function LazyVideo({ project }) {
   const [playing, setPlaying] = useState(false);
-
-  if (!playing) {
-    return (
-      <button type="button" onClick={() => setPlaying(true)} className="group relative block w-full overflow-hidden bg-[#090a08] text-white focus-ring" aria-label={`Play ${project.title}`}>
-        <img src={project.poster} alt="" width={project.videoOrientation === "portrait" ? 900 : 1200} height={project.videoOrientation === "portrait" ? 1600 : 900} loading="lazy" decoding="async" className="max-h-[78vh] w-full object-contain" />
-        <span className="absolute inset-0 bg-black/20 transition group-hover:bg-black/10" />
-        <span className="absolute left-1/2 top-1/2 grid h-16 w-16 -translate-x-1/2 -translate-y-1/2 place-items-center rounded-full bg-lime-300 text-xl text-black shadow-2xl transition group-hover:scale-105" aria-hidden="true">&#9654;</span>
-        <span className="absolute bottom-5 left-5 text-xs font-bold uppercase tracking-[0.12em]">Load and play video</span>
-      </button>
-    );
-  }
+  const portrait = project.videoOrientation === "portrait";
 
   return (
-    <video controls autoPlay playsInline preload="none" poster={project.poster} aria-label={`${project.title} video preview`}>
-      <source src={project.video} type="video/mp4" />
-      Your browser does not support the video element.
-    </video>
-  );
-}
-
-function ProjectMedia({ project }) {
-  if (project.video) {
-    return (
-      <div className="case-study-artwork is-wide">
-        <p className="case-study-media-label">{project.videoLabel || "Video preview"}</p>
-        <div className={`case-study-video-frame ${project.videoOrientation === "portrait" ? "is-portrait" : "is-landscape"}`}>
-          <LazyVideo key={project.id} project={project} />
-        </div>
-      </div>
-    );
-  }
-
-  if (project.gallery?.length) {
-    const twoColumnGallery = project.galleryColumns === 2;
-
-    return (
-      <div className="case-study-artwork is-wide">
-        <p className="case-study-media-label">{project.galleryLabel || "Project gallery"}</p>
-        <div className={`grid min-w-0 gap-x-5 gap-y-8 sm:grid-cols-2 ${twoColumnGallery ? "" : "lg:grid-cols-3"}`}>
-          {project.gallery.map((item) => (
-            <figure key={item.src} className={`min-w-0 border-t border-black/12 pt-4 ${item.wide ? `sm:col-span-2 ${twoColumnGallery ? "" : "lg:col-span-3"}` : ""}`}>
-              <div className="overflow-hidden bg-[#090a08]">
-                <img src={item.src} alt={item.alt} width="1600" height="900" loading="lazy" decoding="async" className="h-auto w-full object-contain" />
-              </div>
-              <figcaption className="mt-3 text-xs font-bold uppercase tracking-[0.08em] text-black/65">{item.label}</figcaption>
-            </figure>
-          ))}
-        </div>
-      </div>
-    );
-  }
-
-  if (project.singlePreview) {
-    return (
-      <div className="case-study-artwork is-wide">
-        <p className="case-study-media-label">{project.mediaLabel || "Project preview"}</p>
-        <div className="case-study-media-panel">
-          <img src={project.image} alt={`${project.title} ${project.projectType} preview`} width="1600" height="1000" loading="lazy" decoding="async" className="h-auto w-full" />
-        </div>
-      </div>
-    );
-  }
-
-  if (project.scrollableImage) {
-    return (
-      <div className={`case-study-website-grid ${project.mockupOnly ? "is-single" : ""}`}>
-        <div className="min-w-0">
-          <p className="case-study-media-label">{project.mockupOnly ? "Full Figma homepage mockup" : "Full website preview"}</p>
-          <div className="case-study-preview-crop">
-            <img src={project.image} alt={`${project.title} full-page ${project.mockupOnly ? "Figma design mockup" : "website preview"}`} width="1600" height="2400" loading="lazy" decoding="async" className="h-auto w-full" />
-          </div>
-          <a href={project.image} target="_blank" rel="noopener noreferrer" className="mt-4 inline-flex min-h-11 items-center text-sm font-bold text-black underline decoration-[#568400] decoration-2 underline-offset-4 focus-ring">View Full Design <span aria-hidden="true" className="ml-2">&#8599;</span></a>
-        </div>
-        {!project.mockupOnly && (
-          <div className="min-w-0">
-            <p className="case-study-media-label">Mobile framing</p>
-            <div className="case-study-phone-frame">
-              <ProjectVisual project={project} mobile />
-            </div>
-          </div>
-        )}
-      </div>
-    );
-  }
-
-  if (project.category === "Websites & Funnels") {
-    return (
-      <div className="case-study-website-grid">
-        <div className="min-w-0">
-          <p className="case-study-media-label">{project.liveUrl ? "Website preview" : "Desktop concept"}</p>
-          <div className="case-study-media-panel">
-            <ProjectVisual project={project} />
-          </div>
-        </div>
-        <div className="min-w-0">
-          <p className="case-study-media-label">{project.liveUrl ? "Responsive framing" : "Mobile concept"}</p>
-          <div className="case-study-phone-frame">
-            <ProjectVisual project={project} mobile />
-          </div>
-        </div>
-      </div>
-    );
-  }
-
-  return (
-    <div className="case-study-artwork">
-      <p className="case-study-media-label">Project artwork</p>
-      <ProjectVisual project={project} />
+    <div className={`cs-video ${portrait ? "is-portrait" : ""}`}>
+      {playing ? (
+        <video controls autoPlay playsInline preload="none" poster={project.poster} aria-label={`${project.title} video`}>
+          <source src={project.video} type="video/mp4" />
+          Your browser does not support the video element.
+        </video>
+      ) : (
+        <button type="button" className="cs-play" onClick={() => setPlaying(true)} aria-label={`Play ${project.title}`}>
+          <img src={project.poster} alt="" width={portrait ? 900 : 1200} height={portrait ? 1600 : 900} decoding="async" />
+          <span className="play-badge" aria-hidden="true"><Play fill="currentColor" /></span>
+          <span className="glass play-label" aria-hidden="true">Load and play video</span>
+        </button>
+      )}
     </div>
   );
 }
 
-function DetailBlock({ title, children, wide = false }) {
+function BrowserBar({ label }) {
+  return <div className="browser-bar" aria-hidden="true"><i /><i /><i /><span>{label}</span></div>;
+}
+
+function ProjectMedia({ project }) {
+  const host = project.frameLabel ?? (project.liveUrl ? new URL(project.liveUrl).host : project.status);
+
+  if (project.video) {
+    return (
+      <>
+        <span className="mono-label">{project.videoLabel || "Video preview"}</span>
+        <LazyVideo key={project.id} project={project} />
+      </>
+    );
+  }
+
+  if (project.gallery?.length) {
+    return (
+      <>
+        <span className="mono-label">{project.galleryLabel || "Project gallery"}</span>
+        <div className={`cs-gallery ${project.galleryColumns === 2 ? "is-two" : ""}`}>
+          {project.gallery.map((item) => (
+            <figure key={item.src} className={`cs-figure ${item.wide ? "is-wide" : ""}`}>
+              <img src={item.src} alt={item.alt} loading="lazy" decoding="async" />
+              <figcaption>{item.label}</figcaption>
+            </figure>
+          ))}
+        </div>
+      </>
+    );
+  }
+
+  if (project.device === "laptop" || project.singlePreview) {
+    return (
+      <>
+        <span className="mono-label">{project.mediaLabel || "Project preview"}</span>
+        <div className="cs-stage is-padded">
+          <div className="browser">
+            <BrowserBar label={host} />
+            <div className="cs-shot"><img src={project.image} alt={`${project.title} ${project.projectType} preview`} decoding="async" /></div>
+          </div>
+        </div>
+      </>
+    );
+  }
+
+  if (project.category === webCategory && project.image) {
+    return (
+      <>
+        <span className="mono-label">{project.mockupOnly ? "Full Figma homepage design" : "Full website preview"} · scroll inside the window</span>
+        <div className="cs-stage">
+          <div className="browser">
+            <BrowserBar label={host} />
+            {project.scrollableImage ? (
+              <div className="cs-scroll" tabIndex={0} aria-label={`Scrollable full-page preview of ${project.title}`}>
+                <img src={project.image} alt={`${project.title} full-page ${project.mockupOnly ? "design" : "website preview"}`} decoding="async" />
+              </div>
+            ) : (
+              <div className="cs-shot"><img src={project.image} alt={`${project.title} preview`} decoding="async" /></div>
+            )}
+          </div>
+        </div>
+        {project.scrollableImage && (
+          <a href={project.image} target="_blank" rel="noopener noreferrer" className="link-arrow cs-open">Open the full image <ArrowUpRight aria-hidden="true" /></a>
+        )}
+      </>
+    );
+  }
+
+  if (project.category === webCategory) {
+    return (
+      <>
+        <span className="mono-label">Concept preview</span>
+        <div className="cs-stage is-padded">
+          <div className="browser">
+            <BrowserBar label={project.status} />
+            <div className="concept" aria-hidden="true"><strong>{project.title}</strong><span /><span /><em /></div>
+          </div>
+        </div>
+      </>
+    );
+  }
+
   return (
-    <div className={`case-study-detail ${wide ? "sm:col-span-2" : ""}`}>
+    <>
+      <span className="mono-label">Project artwork</span>
+      <div className="cs-stage">
+        <div className="cs-art"><img src={project.image} alt={`${project.title} ${project.projectType}`} decoding="async" /></div>
+      </div>
+    </>
+  );
+}
+
+function Detail({ title, children, wide = false, outcome = false }) {
+  return (
+    <div className={`cs-detail ${wide ? "is-wide" : ""} ${outcome ? "is-outcome" : ""}`}>
       <h3>{title}</h3>
-      <div>{children}</div>
+      {children}
     </div>
   );
 }
@@ -148,39 +152,29 @@ export default function ProjectCaseStudyPage() {
     <>
       <PageMeta title={project.title} description={project.description} path={`/portfolio/${project.id}`} image={project.image || project.poster} />
       <PageHeader />
-      <main id="main-content" className="min-w-0 overflow-x-clip bg-[#f3f4ee] text-[#090a08]">
-        <section className="border-b border-black/12">
-          <div className="site-container page-intro py-12 sm:py-16 lg:py-20">
-            <Link to="/portfolio" className="focus-ring inline-flex min-h-11 items-center gap-2 text-sm font-bold text-black/55 hover:text-black">
-              <span aria-hidden="true">&#8592;</span> Work Index
-            </Link>
-
-            <div className="case-study-tags mt-10 flex flex-wrap items-center gap-2">
-              <span className="tag">{project.status}</span>
-              <span className="tag">{project.category}</span>
-            </div>
-
-            <h1 className="case-study-title mt-7">{project.title}</h1>
-
-            <div className="mt-10 grid gap-8 border-t border-black/12 pt-7 lg:grid-cols-[1.15fr_0.85fr] lg:items-start">
-              <p className="max-w-3xl text-xl leading-8 text-black/72 sm:text-2xl sm:leading-9">{project.description}</p>
+      <main id="main-content">
+        <section className="cs-hero" aria-labelledby="case-title">
+          <HeroOrbs />
+          <div className="wrap">
+            <Link to="/portfolio" className="cs-back"><ArrowLeft aria-hidden="true" /> All work</Link>
+            <p className="cs-label card-label rise">
+              <span>{project.client ?? project.category}</span>
+              <span className="chip">{project.chip ?? project.status}</span>
+            </p>
+            <h1 className="cs-title rise" id="case-title" style={{ "--d": "80ms" }}>{project.headline ?? project.title}</h1>
+            <div className="cs-intro rise" style={{ "--d": "160ms" }}>
+              <p>{project.description}</p>
               <div>
-                <dl className="grid gap-5 sm:grid-cols-2">
-                  <div>
-                    <dt className="text-xs font-bold uppercase tracking-[0.12em] text-black/65">Project type</dt>
-                    <dd className="mt-2 text-sm font-semibold leading-6">{project.projectType}</dd>
-                  </div>
-                  <div>
-                    <dt className="text-xs font-bold uppercase tracking-[0.12em] text-black/65">Industry</dt>
-                    <dd className="mt-2 text-sm font-semibold leading-6">{project.industry}</dd>
-                  </div>
+                <dl className="cs-meta">
+                  <div><dt className="mono-label">Project</dt><dd>{project.headline ? project.title : project.projectType}</dd></div>
+                  <div><dt className="mono-label">Industry</dt><dd>{project.industry}</dd></div>
+                  <div><dt className="mono-label">Role</dt><dd>{project.services.join(" / ")}</dd></div>
+                  <div><dt className="mono-label">Tools</dt><dd>{project.tools.join(" / ")}</dd></div>
                 </dl>
                 {project.liveUrl && (
-                  <div className="mt-7">
-                    <a href={project.liveUrl} target="_blank" rel="noopener noreferrer" className="button-primary focus-ring">
-                      Open {project.liveLabel}
-                    </a>
-                    <p className="mt-3 text-xs font-semibold uppercase tracking-[0.08em] text-black/65">{project.liveStatus}</p>
+                  <div className="cs-live">
+                    <a href={project.liveUrl} target="_blank" rel="noopener noreferrer" className="btn btn-accent">Open {project.liveLabel} <ArrowUpRight aria-hidden="true" /></a>
+                    <span className="mono-label">{project.liveStatus}</span>
                   </div>
                 )}
               </div>
@@ -188,97 +182,80 @@ export default function ProjectCaseStudyPage() {
           </div>
         </section>
 
+        <section className="cs-media" aria-label="Project media">
+          <div className="wrap reveal"><ProjectMedia project={project} /></div>
+        </section>
+
         {project.highlights?.length > 0 && (
-          <section className="border-b border-black/12 bg-[#e5e7df]">
-            <dl className="site-container grid sm:grid-cols-3">
-              {project.highlights.map((highlight, index) => (
-                <div key={highlight.label} className={`py-6 sm:px-6 sm:py-8 ${index > 0 ? "border-t border-black/12 sm:border-l sm:border-t-0" : ""} ${index === 0 ? "sm:pl-0" : ""}`}>
-                  <dt className="text-xs font-bold uppercase tracking-[0.12em] text-black/65">{highlight.label}</dt>
-                  <dd className="mt-2 text-base font-bold leading-6 text-black/78">{highlight.value}</dd>
-                </div>
-              ))}
-            </dl>
+          <section className="section" aria-label="Highlights" style={{ paddingTop: 0, borderTop: 0 }}>
+            <div className="wrap">
+              <dl className="cs-highlights reveal">
+                {project.highlights.map((highlight) => (
+                  <div key={highlight.label}><dt className="mono-label">{highlight.label}</dt><dd>{highlight.value}</dd></div>
+                ))}
+              </dl>
+            </div>
           </section>
         )}
 
-        <section className="case-study-media-section">
-          <div className="site-container min-w-0">
-            <ProjectMedia project={project} />
-          </div>
-        </section>
-
         {project.sampleLinks?.length > 0 && (
-          <section className="border-t border-black/12 bg-[#e5e7df]">
-            <div className="site-container py-14 sm:py-16">
-              <p className="text-sm font-bold text-[#568400]">Verified live samples</p>
-              <div className="mt-4 grid gap-6 lg:grid-cols-[0.7fr_1.3fr] lg:items-start">
-                <h2 className="section-title text-black">Amazon pages using the A+ content system.</h2>
-                <div className="grid gap-8 sm:grid-cols-2">
-                  {[
-                    { label: "Primary samples", items: primarySamples },
-                    { label: "Additional verified titles", items: additionalSamples },
-                  ].map((group) => (
-                    <div key={group.label}>
-                      <p className="mb-2 text-xs font-bold uppercase tracking-[0.12em] text-black/65">{group.label}</p>
-                      {group.items.map((sample) => (
-                        <a key={sample.url} href={sample.url} target="_blank" rel="noopener noreferrer" className="focus-ring group flex min-h-14 items-center justify-between gap-4 border-t border-black/15 py-4 text-sm font-bold text-black/70 transition hover:text-black">
-                          <span>{sample.label}</span>
-                          <span aria-hidden="true" className="text-[#568400]">&#8599;</span>
-                        </a>
-                      ))}
-                    </div>
-                  ))}
+          <section className="section" aria-labelledby="samples-title">
+            <div className="wrap">
+              <div className="section-head reveal">
+                <div>
+                  <p className="kicker">Verified live samples</p>
+                  <h2 className="h2" id="samples-title">See the work on the live pages.</h2>
                 </div>
+              </div>
+              <div className="cs-samples reveal">
+                {[
+                  { label: "Primary samples", items: primarySamples },
+                  { label: "Additional verified titles", items: additionalSamples },
+                ].map((group) => (
+                  <div key={group.label}>
+                    <p className="mono-label">{group.label}</p>
+                    {group.items.map((sample) => (
+                      <a key={sample.url} href={sample.url} target="_blank" rel="noopener noreferrer">
+                        {sample.label} <ArrowUpRight aria-hidden="true" />
+                      </a>
+                    ))}
+                  </div>
+                ))}
               </div>
             </div>
           </section>
         )}
 
-        <section className="border-y border-black/12 bg-white">
-          <div className="site-container grid gap-12 py-16 lg:grid-cols-[0.62fr_1.38fr] lg:py-24">
-            <div>
-              <p className="text-sm font-bold text-[#568400]">Project breakdown</p>
-              <h2 className="section-title mt-4 text-black">Decisions behind the work.</h2>
+        <section className="section" aria-labelledby="breakdown-title">
+          <div className="wrap cs-breakdown">
+            <div className="reveal">
+              <p className="kicker">Project breakdown</p>
+              <h2 className="h2" id="breakdown-title">Decisions behind the work.</h2>
             </div>
-
-            <div className="grid gap-x-8 sm:grid-cols-2">
-              <DetailBlock title="Challenge">{project.challenge}</DetailBlock>
-              <DetailBlock title="Strategy">{project.strategy}</DetailBlock>
-              <DetailBlock title="Solution">{project.solution}</DetailBlock>
-              <DetailBlock title="Services / role">{project.services.join(" / ")}</DetailBlock>
-              <DetailBlock title="Tools used">{project.tools.join(" / ")}</DetailBlock>
-              <DetailBlock title="Deliverables">
-                <ul className="grid gap-2">
-                  {project.deliverables.map((item) => <li key={item}>- {item}</li>)}
-                </ul>
-              </DetailBlock>
-              <DetailBlock title="Outcome"><strong>{project.result}</strong></DetailBlock>
+            <div className="cs-details reveal" style={{ "--delay": "100ms" }}>
+              <Detail title="Challenge"><p>{project.challenge}</p></Detail>
+              <Detail title="Strategy"><p>{project.strategy}</p></Detail>
+              <Detail title="Solution"><p>{project.solution}</p></Detail>
+              <Detail title="Deliverables">
+                <ul>{project.deliverables.map((item) => <li key={item}>{item}</li>)}</ul>
+              </Detail>
+              <Detail title="Outcome" wide outcome><p>{project.result}</p></Detail>
             </div>
           </div>
         </section>
 
-        <nav aria-label="Case study navigation" className="border-b border-black/12">
-          <div className="site-container grid sm:grid-cols-2">
-            <Link to={`/portfolio/${previousProject.id}`} className="case-study-project-nav focus-ring border-b border-black/12 sm:border-b-0 sm:border-r">
-              <span>Previous project</span>
-              <strong>{previousProject.title}</strong>
-            </Link>
-            <Link to={`/portfolio/${nextProject.id}`} className="case-study-project-nav focus-ring sm:text-right">
-              <span>Next project</span>
-              <strong>{nextProject.title}</strong>
-            </Link>
-          </div>
+        <nav className="wrap cs-nav" aria-label="More projects">
+          <Link to={`/portfolio/${previousProject.id}`}>
+            <span className="mono-label">Previous project</span>
+            <strong>{previousProject.title}</strong>
+          </Link>
+          <Link to={`/portfolio/${nextProject.id}`}>
+            <span className="mono-label">Next project</span>
+            <strong>{nextProject.title}</strong>
+          </Link>
         </nav>
 
-        <section className="bg-[#080907] py-16 text-white sm:py-20">
-          <div className="site-container grid gap-8 lg:grid-cols-[1fr_auto] lg:items-end">
-            <div>
-              <p className="section-kicker">Start a project</p>
-              <h2 className="max-w-4xl text-4xl font-bold leading-tight sm:text-6xl">Need a website or lead system with a clearer path to action?</h2>
-            </div>
-            <Link to="/contact" className="button-primary">Start a Project</Link>
-          </div>
-        </section>
+        <FinalCta title="Need a website or lead system like this?" />
       </main>
       <SiteFooter />
     </>
